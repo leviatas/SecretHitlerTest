@@ -1,1 +1,1 @@
-web: gunicorn MainController.py --log-file -
+web: python MainController.py
