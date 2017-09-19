@@ -96,19 +96,19 @@ def nominate_chosen_chancellor(bot, update):
     cid = int(regex.group(1))
     chosen_uid = int(regex.group(2))
     #try:
-        game = GamesController.games.get(cid, None)
-        #log.info(game)
-        #log.info(game.board)
-        game.board.state.nominated_chancellor = game.playerlist[chosen_uid]
-        #log.info("President %s (%d) nominated %s (%d)" % (
-        #    game.board.state.nominated_president.name, game.board.state.nominated_president.uid,
-        #    game.board.state.nominated_chancellor.name, game.board.state.nominated_chancellor.uid))
-        bot.edit_message_text("You nominated %s as Chancellor!" % game.board.state.nominated_chancellor.name,
-                              callback.from_user.id, callback.message.message_id)
-        bot.send_message(game.cid,
-                         "President %s nominated %s as Chancellor. Please vote now!" % (
-                             game.board.state.nominated_president.name, game.board.state.nominated_chancellor.name))
-        vote(bot, game)
+    game = GamesController.games.get(cid, None)
+    #log.info(game)
+    #log.info(game.board)
+    game.board.state.nominated_chancellor = game.playerlist[chosen_uid]
+    #log.info("President %s (%d) nominated %s (%d)" % (
+    #    game.board.state.nominated_president.name, game.board.state.nominated_president.uid,
+    #    game.board.state.nominated_chancellor.name, game.board.state.nominated_chancellor.uid))
+    bot.edit_message_text("You nominated %s as Chancellor!" % game.board.state.nominated_chancellor.name,
+                          callback.from_user.id, callback.message.message_id)
+    bot.send_message(game.cid,
+                     "President %s nominated %s as Chancellor. Please vote now!" % (
+                         game.board.state.nominated_president.name, game.board.state.nominated_chancellor.name))
+    vote(bot, game)
     #except AttributeError as e:
         #log.error("nominate_chosen_chancellor: Game or board should not be None! Eror: " + str(e))
     #except Exception as e:
@@ -139,16 +139,16 @@ def handle_voting(bot, update):
     cid = int(regex.group(1))
     answer = regex.group(2)
     #try:
-        game = GamesController.games[cid]
-        uid = callback.from_user.id
-        bot.edit_message_text("Thank you for your vote: %s to a President %s and a Chancellor %s" % (
-            answer, game.board.state.nominated_president.name, game.board.state.nominated_chancellor.name), uid,
-                              callback.message.message_id)
-        #log.info("Player %s (%d) voted %s" % (callback.from_user.first_name, uid, answer))
-        if uid not in game.board.state.last_votes:
-            game.board.state.last_votes[uid] = answer
-        if len(game.board.state.last_votes) == len(game.player_sequence):
-            count_votes(bot, game)
+    game = GamesController.games[cid]
+    uid = callback.from_user.id
+    bot.edit_message_text("Thank you for your vote: %s to a President %s and a Chancellor %s" % (
+        answer, game.board.state.nominated_president.name, game.board.state.nominated_chancellor.name), uid,
+                          callback.message.message_id)
+    #log.info("Player %s (%d) voted %s" % (callback.from_user.first_name, uid, answer))
+    if uid not in game.board.state.last_votes:
+        game.board.state.last_votes[uid] = answer
+    if len(game.board.state.last_votes) == len(game.player_sequence):
+        count_votes(bot, game)
     #except:
         #log.error("handle_voting: Game or board should not be None!")
 
@@ -232,48 +232,48 @@ def choose_policy(bot, update):
     cid = int(regex.group(1))
     answer = regex.group(2)
     #try:
-        game = GamesController.games[cid]
-        strcid = str(game.cid)
-        uid = callback.from_user.id
-        if len(game.board.state.drawn_policies) == 3:
-            #log.info("Player %s (%d) discarded %s" % (callback.from_user.first_name, uid, answer))
-            bot.edit_message_text("The policy %s will be discarded!" % answer, uid,
+    game = GamesController.games[cid]
+    strcid = str(game.cid)
+    uid = callback.from_user.id
+    if len(game.board.state.drawn_policies) == 3:
+        #log.info("Player %s (%d) discarded %s" % (callback.from_user.first_name, uid, answer))
+        bot.edit_message_text("The policy %s will be discarded!" % answer, uid,
+                              callback.message.message_id)
+        # remove policy from drawn cards and add to discard pile, pass the other two policies
+        for i in range(3):
+            if game.board.state.drawn_policies[i] == answer:
+                game.board.discards.append(game.board.state.drawn_policies.pop(i))
+                break
+        pass_two_policies(bot, game)
+    elif len(game.board.state.drawn_policies) == 2:
+        if answer == "veto":
+            #log.info("Player %s (%d) suggested a veto" % (callback.from_user.first_name, uid))
+            bot.edit_message_text("You suggested a Veto to President %s" % game.board.state.president.name, uid,
                                   callback.message.message_id)
-            # remove policy from drawn cards and add to discard pile, pass the other two policies
-            for i in range(3):
-                if game.board.state.drawn_policies[i] == answer:
-                    game.board.discards.append(game.board.state.drawn_policies.pop(i))
-                    break
-            pass_two_policies(bot, game)
-        elif len(game.board.state.drawn_policies) == 2:
-            if answer == "veto":
-                #log.info("Player %s (%d) suggested a veto" % (callback.from_user.first_name, uid))
-                bot.edit_message_text("You suggested a Veto to President %s" % game.board.state.president.name, uid,
-                                      callback.message.message_id)
-                bot.send_message(game.cid,
-                                 "Chancellor %s suggested a Veto to President %s." % (
-                                     game.board.state.chancellor.name, game.board.state.president.name))
+            bot.send_message(game.cid,
+                             "Chancellor %s suggested a Veto to President %s." % (
+                                 game.board.state.chancellor.name, game.board.state.president.name))
 
-                btns = [[InlineKeyboardButton("Veto! (accept suggestion)", callback_data=strcid + "_yesveto")],
-                        [InlineKeyboardButton("No Veto! (refuse suggestion)", callback_data=strcid + "_noveto")]]
+            btns = [[InlineKeyboardButton("Veto! (accept suggestion)", callback_data=strcid + "_yesveto")],
+                    [InlineKeyboardButton("No Veto! (refuse suggestion)", callback_data=strcid + "_noveto")]]
 
-                vetoMarkup = InlineKeyboardMarkup(btns)
-                bot.send_message(game.board.state.president.uid,
-                                 "Chancellor %s suggested a Veto to you. Do you want to veto (discard) these cards?" % game.board.state.chancellor.name,
-                                 reply_markup=vetoMarkup)
-            else:
-                #log.info("Player %s (%d) chose a %s policy" % (callback.from_user.first_name, uid, answer))
-                bot.edit_message_text("The policy %s will be enacted!" % answer, uid,
-                                      callback.message.message_id)
-                # remove policy from drawn cards and enact, discard the other card
-                for i in range(2):
-                    if game.board.state.drawn_policies[i] == answer:
-                        game.board.state.drawn_policies.pop(i)
-                        break
-                game.board.discards.append(game.board.state.drawn_policies.pop(0))
-                assert len(game.board.state.drawn_policies) == 0
-                enact_policy(bot, game, answer, False)
+            vetoMarkup = InlineKeyboardMarkup(btns)
+            bot.send_message(game.board.state.president.uid,
+                             "Chancellor %s suggested a Veto to you. Do you want to veto (discard) these cards?" % game.board.state.chancellor.name,
+                             reply_markup=vetoMarkup)
         else:
+            #log.info("Player %s (%d) chose a %s policy" % (callback.from_user.first_name, uid, answer))
+            bot.edit_message_text("The policy %s will be enacted!" % answer, uid,
+                                  callback.message.message_id)
+            # remove policy from drawn cards and enact, discard the other card
+            for i in range(2):
+                if game.board.state.drawn_policies[i] == answer:
+                    game.board.state.drawn_policies.pop(i)
+                    break
+            game.board.discards.append(game.board.state.drawn_policies.pop(0))
+            assert len(game.board.state.drawn_policies) == 0
+            enact_policy(bot, game, answer, False)
+        #else:
             #log.error("choose_policy: drawn_policies should be 3 or 2, but was " + str(
              #   len(game.board.state.drawn_policies)))
     #except:
@@ -379,31 +379,31 @@ def choose_veto(bot, update):
     cid = int(regex.group(1))
     answer = regex.group(2)
     #try:
-        game = GamesController.games[cid]
-        uid = callback.from_user.id
-        if answer == "yesveto":
-            #log.info("Player %s (%d) accepted the veto" % (callback.from_user.first_name, uid))
-            bot.edit_message_text("You accepted the Veto!", uid, callback.message.message_id)
-            bot.send_message(game.cid,
-                             "President %s accepted Chancellor %s's Veto. No policy was enacted but this counts as a failed election." % (
-                                 game.board.state.president.name, game.board.state.chancellor.name))
-            game.board.discards += game.board.state.drawn_policies
-            game.board.state.drawn_policies = []
-            game.board.state.failed_votes += 1
-            if game.board.state.failed_votes == 3:
-                do_anarchy(bot, game)
-            else:
-                bot.send_message(game.cid, game.board.print_board())
-                start_next_round(bot, game)
-        elif answer == "noveto":
-           # log.info("Player %s (%d) declined the veto" % (callback.from_user.first_name, uid))
-            game.board.state.veto_refused = True
-            bot.edit_message_text("You refused the Veto!", uid, callback.message.message_id)
-            bot.send_message(game.cid,
-                             "President %s refused Chancellor %s's Veto. The Chancellor now has to choose a policy!" % (
-                                 game.board.state.president.name, game.board.state.chancellor.name))
-            pass_two_policies(bot, game)
+    game = GamesController.games[cid]
+    uid = callback.from_user.id
+    if answer == "yesveto":
+        #log.info("Player %s (%d) accepted the veto" % (callback.from_user.first_name, uid))
+        bot.edit_message_text("You accepted the Veto!", uid, callback.message.message_id)
+        bot.send_message(game.cid,
+                         "President %s accepted Chancellor %s's Veto. No policy was enacted but this counts as a failed election." % (
+                             game.board.state.president.name, game.board.state.chancellor.name))
+        game.board.discards += game.board.state.drawn_policies
+        game.board.state.drawn_policies = []
+        game.board.state.failed_votes += 1
+        if game.board.state.failed_votes == 3:
+            do_anarchy(bot, game)
         else:
+            bot.send_message(game.cid, game.board.print_board())
+            start_next_round(bot, game)
+    elif answer == "noveto":
+       # log.info("Player %s (%d) declined the veto" % (callback.from_user.first_name, uid))
+        game.board.state.veto_refused = True
+        bot.edit_message_text("You refused the Veto!", uid, callback.message.message_id)
+        bot.send_message(game.cid,
+                         "President %s refused Chancellor %s's Veto. The Chancellor now has to choose a policy!" % (
+                             game.board.state.president.name, game.board.state.chancellor.name))
+        pass_two_policies(bot, game)
+       # else:
             #log.error("choose_veto: Callback data can either be \"veto\" or \"noveto\", but not %s" % answer)
     #except:
         #log.error("choose_veto: Game or board should not be None!")
@@ -455,25 +455,25 @@ def choose_kill(bot, update):
     cid = int(regex.group(1))
     answer = int(regex.group(2))
     #try:
-        game = GamesController.games[cid]
-        chosen = game.playerlist[answer]
-        chosen.is_dead = True
-        if game.player_sequence.index(chosen) <= game.board.state.player_counter:
-            game.board.state.player_counter -= 1
-        game.player_sequence.remove(chosen)
-        game.board.state.dead += 1
-        #log.info("Player %s (%d) killed %s (%d)" % (
-        #    callback.from_user.first_name, callback.from_user.id, chosen.name, chosen.uid))
-        bot.edit_message_text("You killed %s!" % chosen.name, callback.from_user.id, callback.message.message_id)
-        if chosen.role == "Hitler":
-            bot.send_message(game.cid, "President " + game.board.state.president.name + " killed " + chosen.name + ". ")
-            end_game(bot, game, 2)
-        else:
-            bot.send_message(game.cid,
-                             "President %s killed %s who was not Hitler. %s, you are dead now and are not allowed to talk anymore!" % (
-                                 game.board.state.president.name, chosen.name, chosen.name))
-            bot.send_message(game.cid, game.board.print_board())
-            start_next_round(bot, game)
+    game = GamesController.games[cid]
+    chosen = game.playerlist[answer]
+    chosen.is_dead = True
+    if game.player_sequence.index(chosen) <= game.board.state.player_counter:
+        game.board.state.player_counter -= 1
+    game.player_sequence.remove(chosen)
+    game.board.state.dead += 1
+    #log.info("Player %s (%d) killed %s (%d)" % (
+    #    callback.from_user.first_name, callback.from_user.id, chosen.name, chosen.uid))
+    bot.edit_message_text("You killed %s!" % chosen.name, callback.from_user.id, callback.message.message_id)
+    if chosen.role == "Hitler":
+        bot.send_message(game.cid, "President " + game.board.state.president.name + " killed " + chosen.name + ". ")
+        end_game(bot, game, 2)
+    else:
+        bot.send_message(game.cid,
+                         "President %s killed %s who was not Hitler. %s, you are dead now and are not allowed to talk anymore!" % (
+                             game.board.state.president.name, chosen.name, chosen.name))
+        bot.send_message(game.cid, game.board.print_board())
+        start_next_round(bot, game)
     #except:
         #log.error("choose_kill: Game or board should not be None!")
 
@@ -502,18 +502,18 @@ def choose_choose(bot, update):
     cid = int(regex.group(1))
     answer = int(regex.group(2))
     #try:
-        game = GamesController.games[cid]
-        chosen = game.playerlist[answer]
-        game.board.state.chosen_president = chosen
-        #log.info(
-        #    "Player %s (%d) chose %s (%d) as next president" % (
-         #       callback.from_user.first_name, callback.from_user.id, chosen.name, chosen.uid))
-        bot.edit_message_text("You chose %s as the next president!" % chosen.name, callback.from_user.id,
-                              callback.message.message_id)
-        bot.send_message(game.cid,
-                         "President %s chose %s as the next president." % (
-                             game.board.state.president.name, chosen.name))
-        start_next_round(bot, game)
+    game = GamesController.games[cid]
+    chosen = game.playerlist[answer]
+    game.board.state.chosen_president = chosen
+    #log.info(
+    #    "Player %s (%d) chose %s (%d) as next president" % (
+     #       callback.from_user.first_name, callback.from_user.id, chosen.name, chosen.uid))
+    bot.edit_message_text("You chose %s as the next president!" % chosen.name, callback.from_user.id,
+                          callback.message.message_id)
+    bot.send_message(game.cid,
+                     "President %s chose %s as the next president." % (
+                         game.board.state.president.name, chosen.name))
+    start_next_round(bot, game)
     #except:
         #log.error("choose_choose: Game or board should not be None!")
 
@@ -541,17 +541,17 @@ def choose_inspect(bot, update):
     cid = int(regex.group(1))
     answer = int(regex.group(2))
     #try:
-        game = GamesController.games[cid]
-        chosen = game.playerlist[answer]
-        #log.info(
-        #    "Player %s (%d) inspects %s (%d)'s party membership (%s)" % (
-        #        callback.from_user.first_name, callback.from_user.id, chosen.name, chosen.uid,
-         #       chosen.party))
-        bot.edit_message_text("The party membership of %s is %s" % (chosen.name, chosen.party),
-                              callback.from_user.id,
-                              callback.message.message_id)
-        bot.send_message(game.cid, "President %s inspected %s." % (game.board.state.president.name, chosen.name))
-        start_next_round(bot, game)
+    game = GamesController.games[cid]
+    chosen = game.playerlist[answer]
+    #log.info(
+    #    "Player %s (%d) inspects %s (%d)'s party membership (%s)" % (
+    #        callback.from_user.first_name, callback.from_user.id, chosen.name, chosen.uid,
+     #       chosen.party))
+    bot.edit_message_text("The party membership of %s is %s" % (chosen.name, chosen.party),
+                          callback.from_user.id,
+                          callback.message.message_id)
+    bot.send_message(game.cid, "President %s inspected %s." % (game.board.state.president.name, chosen.name))
+    start_next_round(bot, game)
     #except:
         #log.error("choose_inspect: Game or board should not be None!")
 
@@ -673,7 +673,7 @@ def inform_fascists(bot, game, player_number):
                 bot.send_message(uid, "Your fellow fascist is: %s" % fascists[0].name)
         elif role == "Liberal":
             pass
-        else:
+        #else:
             #log.error("inform_fascists: can\'t handle the role %s" % role)
 
 
