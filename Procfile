@@ -1,3 +1,1 @@
-bot: python MainController.py
-heroku ps:scale web=0
-heroku ps:scale bot=1
+web: python MainController.py $PORT
