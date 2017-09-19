@@ -20,11 +20,11 @@ from Boardgamebox.Player import Player
 import GamesController
 
 # Enable logging
-log.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-                level=log.INFO,
-                filename='../logging.log')
+#log.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+#                level=log.INFO,
+#                filename='../logging.log')
 
-logger = log.getLogger(__name__)
+#logger = log.getLogger(__name__)
 
 
 def initialize_testdata():
@@ -42,7 +42,7 @@ def initialize_testdata():
 ##
 
 def start_round(bot, game):
-    log.info('start_round called')
+    #log.info('start_round called')
     if game.board.state.chosen_president is None:
         game.board.state.nominated_president = game.player_sequence[game.board.state.player_counter]
     else:
@@ -57,7 +57,7 @@ def start_round(bot, game):
 
 
 def choose_chancellor(bot, game):
-    log.info('choose_chancellor called')
+    #log.info('choose_chancellor called')
     strcid = str(game.cid)
     pres_uid = 0
     chan_uid = 0
@@ -89,34 +89,34 @@ def choose_chancellor(bot, game):
 
 
 def nominate_chosen_chancellor(bot, update):
-    log.info('nominate_chosen_chancellor called')
-    log.info(GamesController.games.keys())
+    #log.info('nominate_chosen_chancellor called')
+    #log.info(GamesController.games.keys())
     callback = update.callback_query
     regex = re.search("(-[0-9]*)_chan_([0-9]*)", callback.data)
     cid = int(regex.group(1))
     chosen_uid = int(regex.group(2))
-    try:
+    #try:
         game = GamesController.games.get(cid, None)
-        log.info(game)
-        log.info(game.board)
+        #log.info(game)
+        #log.info(game.board)
         game.board.state.nominated_chancellor = game.playerlist[chosen_uid]
-        log.info("President %s (%d) nominated %s (%d)" % (
-            game.board.state.nominated_president.name, game.board.state.nominated_president.uid,
-            game.board.state.nominated_chancellor.name, game.board.state.nominated_chancellor.uid))
+        #log.info("President %s (%d) nominated %s (%d)" % (
+        #    game.board.state.nominated_president.name, game.board.state.nominated_president.uid,
+        #    game.board.state.nominated_chancellor.name, game.board.state.nominated_chancellor.uid))
         bot.edit_message_text("You nominated %s as Chancellor!" % game.board.state.nominated_chancellor.name,
                               callback.from_user.id, callback.message.message_id)
         bot.send_message(game.cid,
                          "President %s nominated %s as Chancellor. Please vote now!" % (
                              game.board.state.nominated_president.name, game.board.state.nominated_chancellor.name))
         vote(bot, game)
-    except AttributeError as e:
-        log.error("nominate_chosen_chancellor: Game or board should not be None! Eror: " + str(e))
-    except Exception as e:
-        log.error("Unknown error: " + str(e))
+    #except AttributeError as e:
+        #log.error("nominate_chosen_chancellor: Game or board should not be None! Eror: " + str(e))
+    #except Exception as e:
+        #log.error("Unknown error: " + str(e))
 
 
 def vote(bot, game):
-    log.info('vote called')
+    #log.info('vote called')
     strcid = str(game.cid)
     btns = [[InlineKeyboardButton("Ja", callback_data=strcid + "_Ja"),
              InlineKeyboardButton("Nein", callback_data=strcid + "_Nein")]]
@@ -134,27 +134,27 @@ def vote(bot, game):
 
 def handle_voting(bot, update):
     callback = update.callback_query
-    log.info('handle_voting called: %s' % callback.data)
+    #log.info('handle_voting called: %s' % callback.data)
     regex = re.search("(-[0-9]*)_(.*)", callback.data)
     cid = int(regex.group(1))
     answer = regex.group(2)
-    try:
+    #try:
         game = GamesController.games[cid]
         uid = callback.from_user.id
         bot.edit_message_text("Thank you for your vote: %s to a President %s and a Chancellor %s" % (
             answer, game.board.state.nominated_president.name, game.board.state.nominated_chancellor.name), uid,
                               callback.message.message_id)
-        log.info("Player %s (%d) voted %s" % (callback.from_user.first_name, uid, answer))
+        #log.info("Player %s (%d) voted %s" % (callback.from_user.first_name, uid, answer))
         if uid not in game.board.state.last_votes:
             game.board.state.last_votes[uid] = answer
         if len(game.board.state.last_votes) == len(game.player_sequence):
             count_votes(bot, game)
-    except:
-        log.error("handle_voting: Game or board should not be None!")
+    #except:
+        #log.error("handle_voting: Game or board should not be None!")
 
 
 def count_votes(bot, game):
-    log.info('count_votes called')
+    #log.info('count_votes called')
     voting_text = ""
     voting_success = False
     for player in game.player_sequence:
@@ -165,7 +165,7 @@ def count_votes(bot, game):
     if list(game.board.state.last_votes.values()).count("Ja") > (
         len(game.player_sequence) / 2):  # because player_sequence doesnt include dead
         # VOTING WAS SUCCESSFUL
-        log.info("Voting successful")
+        #log.info("Voting successful")
         voting_text += "Hail President %s! Hail Chancellor %s!" % (
             game.board.state.nominated_president.name, game.board.state.nominated_chancellor.name)
         game.board.state.chancellor = game.board.state.nominated_chancellor
@@ -176,7 +176,7 @@ def count_votes(bot, game):
         bot.send_message(game.cid, voting_text)
         voting_aftermath(bot, game, voting_success)
     else:
-        log.info("Voting failed")
+        #log.info("Voting failed")
         voting_text += "The people didn't like the two candidates!"
         game.board.state.nominated_president = None
         game.board.state.nominated_chancellor = None
@@ -189,7 +189,7 @@ def count_votes(bot, game):
 
 
 def voting_aftermath(bot, game, voting_success):
-    log.info('voting_aftermath called')
+    #log.info('voting_aftermath called')
     game.board.state.last_votes = {}
     if voting_success:
         if game.board.state.fascist_track >= 3 and game.board.state.chancellor.role == "Hitler":
@@ -208,7 +208,7 @@ def voting_aftermath(bot, game, voting_success):
 
 
 def draw_policies(bot, game):
-    log.info('draw_policies called')
+    #log.info('draw_policies called')
     strcid = str(game.cid)
     game.board.state.veto_refused = False
     # shuffle discard pile with rest if rest < 3
@@ -226,17 +226,17 @@ def draw_policies(bot, game):
 
 
 def choose_policy(bot, update):
-    log.info('choose_policy called')
+    #log.info('choose_policy called')
     callback = update.callback_query
     regex = re.search("(-[0-9]*)_(.*)", callback.data)
     cid = int(regex.group(1))
     answer = regex.group(2)
-    try:
+    #try:
         game = GamesController.games[cid]
         strcid = str(game.cid)
         uid = callback.from_user.id
         if len(game.board.state.drawn_policies) == 3:
-            log.info("Player %s (%d) discarded %s" % (callback.from_user.first_name, uid, answer))
+            #log.info("Player %s (%d) discarded %s" % (callback.from_user.first_name, uid, answer))
             bot.edit_message_text("The policy %s will be discarded!" % answer, uid,
                                   callback.message.message_id)
             # remove policy from drawn cards and add to discard pile, pass the other two policies
@@ -247,7 +247,7 @@ def choose_policy(bot, update):
             pass_two_policies(bot, game)
         elif len(game.board.state.drawn_policies) == 2:
             if answer == "veto":
-                log.info("Player %s (%d) suggested a veto" % (callback.from_user.first_name, uid))
+                #log.info("Player %s (%d) suggested a veto" % (callback.from_user.first_name, uid))
                 bot.edit_message_text("You suggested a Veto to President %s" % game.board.state.president.name, uid,
                                       callback.message.message_id)
                 bot.send_message(game.cid,
@@ -262,7 +262,7 @@ def choose_policy(bot, update):
                                  "Chancellor %s suggested a Veto to you. Do you want to veto (discard) these cards?" % game.board.state.chancellor.name,
                                  reply_markup=vetoMarkup)
             else:
-                log.info("Player %s (%d) chose a %s policy" % (callback.from_user.first_name, uid, answer))
+                #log.info("Player %s (%d) chose a %s policy" % (callback.from_user.first_name, uid, answer))
                 bot.edit_message_text("The policy %s will be enacted!" % answer, uid,
                                       callback.message.message_id)
                 # remove policy from drawn cards and enact, discard the other card
@@ -274,14 +274,14 @@ def choose_policy(bot, update):
                 assert len(game.board.state.drawn_policies) == 0
                 enact_policy(bot, game, answer, False)
         else:
-            log.error("choose_policy: drawn_policies should be 3 or 2, but was " + str(
-                len(game.board.state.drawn_policies)))
-    except:
-        log.error("choose_policy: Game or board should not be None!")
+            #log.error("choose_policy: drawn_policies should be 3 or 2, but was " + str(
+             #   len(game.board.state.drawn_policies)))
+    #except:
+        #log.error("choose_policy: Game or board should not be None!")
 
 
 def pass_two_policies(bot, game):
-    log.info('pass_two_policies called')
+    #log.info('pass_two_policies called')
     strcid = str(game.cid)
     btns = []
     for policy in game.board.state.drawn_policies:
@@ -308,7 +308,7 @@ def pass_two_policies(bot, game):
 
 
 def enact_policy(bot, game, policy, anarchy):
-    log.info('enact_policy called')
+    #log.info('enact_policy called')
     if policy == "liberal":
         game.board.state.liberal_track += 1
     elif policy == "fascist":
@@ -373,16 +373,16 @@ def enact_policy(bot, game, policy, anarchy):
 
 
 def choose_veto(bot, update):
-    log.info('choose_veto called')
+    #log.info('choose_veto called')
     callback = update.callback_query
     regex = re.search("(-[0-9]*)_(.*)", callback.data)
     cid = int(regex.group(1))
     answer = regex.group(2)
-    try:
+    #try:
         game = GamesController.games[cid]
         uid = callback.from_user.id
         if answer == "yesveto":
-            log.info("Player %s (%d) accepted the veto" % (callback.from_user.first_name, uid))
+            #log.info("Player %s (%d) accepted the veto" % (callback.from_user.first_name, uid))
             bot.edit_message_text("You accepted the Veto!", uid, callback.message.message_id)
             bot.send_message(game.cid,
                              "President %s accepted Chancellor %s's Veto. No policy was enacted but this counts as a failed election." % (
@@ -396,7 +396,7 @@ def choose_veto(bot, update):
                 bot.send_message(game.cid, game.board.print_board())
                 start_next_round(bot, game)
         elif answer == "noveto":
-            log.info("Player %s (%d) declined the veto" % (callback.from_user.first_name, uid))
+           # log.info("Player %s (%d) declined the veto" % (callback.from_user.first_name, uid))
             game.board.state.veto_refused = True
             bot.edit_message_text("You refused the Veto!", uid, callback.message.message_id)
             bot.send_message(game.cid,
@@ -404,13 +404,13 @@ def choose_veto(bot, update):
                                  game.board.state.president.name, game.board.state.chancellor.name))
             pass_two_policies(bot, game)
         else:
-            log.error("choose_veto: Callback data can either be \"veto\" or \"noveto\", but not %s" % answer)
-    except:
-        log.error("choose_veto: Game or board should not be None!")
+            #log.error("choose_veto: Callback data can either be \"veto\" or \"noveto\", but not %s" % answer)
+    #except:
+        #log.error("choose_veto: Game or board should not be None!")
 
 
 def do_anarchy(bot, game):
-    log.info('do_anarchy called')
+    #log.info('do_anarchy called')
     bot.send_message(game.cid, game.board.print_board())
     bot.send_message(game.cid, "ANARCHY!!")
     game.board.state.president = None
@@ -421,7 +421,7 @@ def do_anarchy(bot, game):
 
 
 def action_policy(bot, game):
-    log.info('action_policy called')
+    #log.info('action_policy called')
     topPolicies = ""
     # shuffle discard pile with rest if rest < 3
     shuffle_policy_pile(bot, game)
@@ -433,7 +433,7 @@ def action_policy(bot, game):
 
 
 def action_kill(bot, game):
-    log.info('action_kill called')
+    #log.info('action_kill called')
     strcid = str(game.cid)
     btns = []
     for uid in game.playerlist:
@@ -449,12 +449,12 @@ def action_kill(bot, game):
 
 
 def choose_kill(bot, update):
-    log.info('choose_kill called')
+    #log.info('choose_kill called')
     callback = update.callback_query
     regex = re.search("(-[0-9]*)_kill_(.*)", callback.data)
     cid = int(regex.group(1))
     answer = int(regex.group(2))
-    try:
+    #try:
         game = GamesController.games[cid]
         chosen = game.playerlist[answer]
         chosen.is_dead = True
@@ -462,8 +462,8 @@ def choose_kill(bot, update):
             game.board.state.player_counter -= 1
         game.player_sequence.remove(chosen)
         game.board.state.dead += 1
-        log.info("Player %s (%d) killed %s (%d)" % (
-            callback.from_user.first_name, callback.from_user.id, chosen.name, chosen.uid))
+        #log.info("Player %s (%d) killed %s (%d)" % (
+        #    callback.from_user.first_name, callback.from_user.id, chosen.name, chosen.uid))
         bot.edit_message_text("You killed %s!" % chosen.name, callback.from_user.id, callback.message.message_id)
         if chosen.role == "Hitler":
             bot.send_message(game.cid, "President " + game.board.state.president.name + " killed " + chosen.name + ". ")
@@ -474,12 +474,12 @@ def choose_kill(bot, update):
                                  game.board.state.president.name, chosen.name, chosen.name))
             bot.send_message(game.cid, game.board.print_board())
             start_next_round(bot, game)
-    except:
-        log.error("choose_kill: Game or board should not be None!")
+    #except:
+        #log.error("choose_kill: Game or board should not be None!")
 
 
 def action_choose(bot, game):
-    log.info('action_choose called')
+    #log.info('action_choose called')
     strcid = str(game.cid)
     btns = []
 
@@ -496,30 +496,30 @@ def action_choose(bot, game):
 
 
 def choose_choose(bot, update):
-    log.info('choose_choose called')
+   # log.info('choose_choose called')
     callback = update.callback_query
     regex = re.search("(-[0-9]*)_choo_(.*)", callback.data)
     cid = int(regex.group(1))
     answer = int(regex.group(2))
-    try:
+    #try:
         game = GamesController.games[cid]
         chosen = game.playerlist[answer]
         game.board.state.chosen_president = chosen
-        log.info(
-            "Player %s (%d) chose %s (%d) as next president" % (
-                callback.from_user.first_name, callback.from_user.id, chosen.name, chosen.uid))
+        #log.info(
+        #    "Player %s (%d) chose %s (%d) as next president" % (
+         #       callback.from_user.first_name, callback.from_user.id, chosen.name, chosen.uid))
         bot.edit_message_text("You chose %s as the next president!" % chosen.name, callback.from_user.id,
                               callback.message.message_id)
         bot.send_message(game.cid,
                          "President %s chose %s as the next president." % (
                              game.board.state.president.name, chosen.name))
         start_next_round(bot, game)
-    except:
-        log.error("choose_choose: Game or board should not be None!")
+    #except:
+        #log.error("choose_choose: Game or board should not be None!")
 
 
 def action_inspect(bot, game):
-    log.info('action_inspect called')
+    #log.info('action_inspect called')
     strcid = str(game.cid)
     btns = []
     for uid in game.playerlist:
@@ -535,29 +535,29 @@ def action_inspect(bot, game):
 
 
 def choose_inspect(bot, update):
-    log.info('choose_inspect called')
+    #log.info('choose_inspect called')
     callback = update.callback_query
     regex = re.search("(-[0-9]*)_insp_(.*)", callback.data)
     cid = int(regex.group(1))
     answer = int(regex.group(2))
-    try:
+    #try:
         game = GamesController.games[cid]
         chosen = game.playerlist[answer]
-        log.info(
-            "Player %s (%d) inspects %s (%d)'s party membership (%s)" % (
-                callback.from_user.first_name, callback.from_user.id, chosen.name, chosen.uid,
-                chosen.party))
+        #log.info(
+        #    "Player %s (%d) inspects %s (%d)'s party membership (%s)" % (
+        #        callback.from_user.first_name, callback.from_user.id, chosen.name, chosen.uid,
+         #       chosen.party))
         bot.edit_message_text("The party membership of %s is %s" % (chosen.name, chosen.party),
                               callback.from_user.id,
                               callback.message.message_id)
         bot.send_message(game.cid, "President %s inspected %s." % (game.board.state.president.name, chosen.name))
         start_next_round(bot, game)
-    except:
-        log.error("choose_inspect: Game or board should not be None!")
+    #except:
+        #log.error("choose_inspect: Game or board should not be None!")
 
 
 def start_next_round(bot, game):
-    log.info('start_next_round called')
+    #log.info('start_next_round called')
     # start next round if there is no winner (or /cancel)
     if game.board.state.game_endcode == 0:
         # start new round
@@ -575,7 +575,7 @@ def start_next_round(bot, game):
 ##
 
 def end_game(bot, game, game_endcode):
-    log.info('end_game called')
+    #log.info('end_game called')
     ##
     # game_endcode:
     #   -2  fascists win by electing Hitler as chancellor
@@ -622,7 +622,7 @@ def end_game(bot, game, game_endcode):
 
 
 def inform_players(bot, game, cid, player_number):
-    log.info('inform_players called')
+   # log.info('inform_players called')
     bot.send_message(cid,
                      "Let's start the game with %d players!\n%s\nGo to your private chat and look at your secret role!" % (
                          player_number, print_player_info(player_number)))
@@ -652,7 +652,7 @@ def print_player_info(player_number):
 
 
 def inform_fascists(bot, game, player_number):
-    log.info('inform_fascists called')
+    #log.info('inform_fascists called')
 
     for uid in game.playerlist:
         role = game.playerlist[uid].role
@@ -674,11 +674,11 @@ def inform_fascists(bot, game, player_number):
         elif role == "Liberal":
             pass
         else:
-            log.error("inform_fascists: can\'t handle the role %s" % role)
+            #log.error("inform_fascists: can\'t handle the role %s" % role)
 
 
 def get_membership(role):
-    log.info('get_membership called')
+    #log.info('get_membership called')
     if role == "Fascist" or role == "Hitler":
         return "fascist"
     elif role == "Liberal":
@@ -688,7 +688,7 @@ def get_membership(role):
 
 
 def increment_player_counter(game):
-    log.info('increment_player_counter called')
+    #log.info('increment_player_counter called')
     if game.board.state.player_counter < len(game.player_sequence) - 1:
         game.board.state.player_counter += 1
     else:
@@ -696,7 +696,7 @@ def increment_player_counter(game):
 
 
 def shuffle_policy_pile(bot, game):
-    log.info('shuffle_policy_pile called')
+    #log.info('shuffle_policy_pile called')
     if len(game.board.policies) < 3:
         game.board.discards += game.board.policies
         game.board.policies = random.sample(game.board.discards, len(game.board.discards))
