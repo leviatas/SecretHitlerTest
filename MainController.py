@@ -62,7 +62,7 @@ def choose_chancellor(bot, game):
     pres_uid = 0
     chan_uid = 0
     btns = []
-    if game.board.state.president is not None:
+        if game.board.state.president is not None:
         pres_uid = game.board.state.president.uid
     if game.board.state.chancellor is not None:
         chan_uid = game.board.state.chancellor.uid
