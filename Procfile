@@ -1,1 +1,1 @@
-web: python MainController.py $PORT
+web: python MainController.py
