@@ -219,7 +219,7 @@ def command_showhistory(bot, update):
       #Check if there is a current game 
       if cid in GamesController.games.keys():
         game = GamesController.games.get(cid, None)    
-        history.append(1)
+        game.history.append(1)
         history_text = "The following commands are available:\n"
         for i in game.history:
             history_text += i + "\n"
