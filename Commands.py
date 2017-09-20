@@ -229,7 +229,7 @@ def command_votes(bot, update):
           start = game.dateinitvote
           stop = datetime.datetime.now()          
           elapsed = stop - start
-          if elapsed > datetime.timedelta(minutes=5):
+          if elapsed > datetime.timedelta(minutes=1):
             history_text = "Vote history:\n"
             for i in game.history[game.currentround]:
                 history_text += i + "\n"
@@ -250,6 +250,14 @@ def command_showhistory(bot, update):
       if cid in GamesController.games.keys():
         game = GamesController.games.get(cid, None)    
         bot.send_message(cid, "Soon new feature")
+        bot.send_message(cid, "Debug info")
+        bot.send_message(cid, str(game.currentround))
+        for x in range(0, game.currentround):
+          for i in game.history[x]:
+            history_text += i + "\n"
+        
+        #for i in game.history[game.currentround]:
+        #        history_text += i + "\n"
         #Simulating start of voting
         #game.currentround
         '''
