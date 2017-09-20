@@ -206,11 +206,10 @@ def command_cancelgame(bot, update):
     else:
         bot.send_message(cid, "There is no game in this chat. Create a new game with /newgame")
 
-def command_showhistory(bot, update):   
+def command_showhistory(bot, update):
     #Check if there is a current game
     if cid in GamesController.games.keys():
       game = GamesController.games.get(cid, None)    
-      cid = update.message.chat_id
       history.append(1)
       history_text = "The following commands are available:\n"
       for i in game.history:
