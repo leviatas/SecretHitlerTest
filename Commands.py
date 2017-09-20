@@ -1,6 +1,6 @@
 import json
 import logging as log
-from datetime import datetime
+import datetime
 
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 
@@ -224,14 +224,14 @@ def command_showhistory(bot, update):
         
         if not game.dateinitvote:
           # If date of init vote is null, assign it.
-          game.dateinitvote = datetime.now()
+          game.dateinitvote = datetime.datetime.now()
           bot.send_message(cid, "Se ha comenzado a contar.")
         else:
           #If there is a time, compare it and send minutes.
           start = game.dateinitvote
-          stop = datetime.now()          
+          stop = datetime.datetime.now()          
           elapsed = stop - start
-          if elapsed > timedelta(minutes=2):
+          if elapsed > datetime.timedelta(minutes=2):
             bot.send_message(cid, "Han pasado mas de 2 minutos")
                 
         #history_text = "Historial para el partido actual:\n"
