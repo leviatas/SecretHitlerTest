@@ -29,7 +29,8 @@ commands = [  # command description used in the "help" command
     '/startgame - Starts an existing game when all players have joined',
     '/cancelgame - Cancels an existing game. All data of the game will be lost',
     '/board - Prints the current board with fascist and liberals tracks, presidential order and election counter',
-    '/history - Prints a History of the current game'
+    '/history - Prints a History of the current game',
+    '/votes - Prints who voted'
 ]
 
 symbols = [
@@ -212,6 +213,34 @@ def command_cancelgame(bot, update):
     else:
         bot.send_message(cid, "There is no game in this chat. Create a new game with /newgame")
 
+def command_votes(bot, update):
+    try:
+      #Send message of executing command   
+      cid = update.message.chat_id
+      bot.send_message(cid, "Looking for history...")
+      #Check if there is a current game 
+      if cid in GamesController.games.keys():
+        game = GamesController.games.get(cid, None)
+        if not game.dateinitvote:
+          # If date of init vote is null, then the voting didnt start          
+          bot.send_message(cid, "The voting didn't start yet.")
+        else:
+          #If there is a time, compare it and send history of votes.
+          start = game.dateinitvote
+          stop = datetime.datetime.now()          
+          elapsed = stop - start
+          if elapsed > datetime.timedelta(minutes=5):
+            history_text = "Vote history:\n"
+            for i in game.history[game.currentround]:
+                history_text += i + "\n"
+            bot.send_message(cid, history_text)
+          else:
+            bot.send_message(cid, "Five minutes must pass to see the votes") 
+      else:
+        bot.send_message(cid, "There is no game in this chat. Create a new game with /newgame")
+    except Exception as e:
+      bot.send_message(cid, str(e))
+        
 def command_showhistory(bot, update):
     try:
       #Send message of executing command   
@@ -220,9 +249,10 @@ def command_showhistory(bot, update):
       #Check if there is a current game 
       if cid in GamesController.games.keys():
         game = GamesController.games.get(cid, None)    
-        
+        bot.send_message(cid, "Soon new feature")
         #Simulating start of voting
         #game.currentround
+        '''
         if game.currentround == 0:
           # I create a new list for each game round
           game.history.append([])
@@ -238,7 +268,7 @@ def command_showhistory(bot, update):
           for i in game.history[0]:
               history_text += i + "\n"
           bot.send_message(cid, history_text)
-        
+        '''
         
         
         
