@@ -222,8 +222,8 @@ def command_showhistory(bot, update):
         game = GamesController.games.get(cid, None)    
         #game.history.append("1")
         
-        if game.dateinitvote:
-          # If date of init vote is not null, assign it.
+        if not game.dateinitvote:
+          # If date of init vote is null, assign it.
           game.dateinitvote = datetime.now()
           bot.send_message(cid, "Se ha comenzado a contar.")
         else:
