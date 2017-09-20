@@ -1,5 +1,6 @@
 import json
 import logging as log
+import datetime
 
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 
@@ -219,11 +220,24 @@ def command_showhistory(bot, update):
       #Check if there is a current game 
       if cid in GamesController.games.keys():
         game = GamesController.games.get(cid, None)    
-        game.history.append("1")
-        history_text = "The following commands are available:\n"
-        for i in game.history:
-            history_text += i + "\n"
-        bot.send_message(cid, history_text)
+        #game.history.append("1")
+        
+        if game.dateinitvote:
+          # If date of init vote is not null, assign it.
+          game.dateinitvote = datetime.datetime.now()
+          bot.send_message(cid, "Se ha comenzado a contar.")
+        else:
+          #If there is a time, compare it and send minutes.
+          start = game.dateinitvote
+          stop = datetime.datetime.now()          
+          elapsed = stop - start
+          if elapsed > datetime.timedelta(minutes=2):
+            bot.send_message(cid, "Han pasado mas de 2 minutos")
+                
+        #history_text = "Historial para el partido actual:\n"
+        #for i in game.history:
+        #    history_text += i + "\n"
+        #bot.send_message(cid, history_text)
       else:
         bot.send_message(cid, "There is no game in this chat. Create a new game with /newgame")
     except Exception as e:
