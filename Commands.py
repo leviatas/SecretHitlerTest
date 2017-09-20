@@ -207,18 +207,22 @@ def command_cancelgame(bot, update):
         bot.send_message(cid, "There is no game in this chat. Create a new game with /newgame")
 
 def command_showhistory(bot, update):
-    #Send message of executing command   
-    cid = update.message.chat_id
-    bot.send_message(cid, "Looking for history...")
-    #Check if there is a current game 
-    #if cid in GamesController.games.keys():
-    game = GamesController.games.get(cid, None)    
-    history.append(1)
-    history_text = "The following commands are available:\n"
-    for i in game.history:
-        history_text += i + "\n"
-    bot.send_message(cid, history_text)
-    #else:
-    #  bot.send_message(cid, "There is no game in this chat. Create a new game with /newgame")
+    try:
+      #Send message of executing command   
+      cid = update.message.chat_id
+      bot.send_message(cid, "Looking for history...")
+      #Check if there is a current game 
+      #if cid in GamesController.games.keys():
+      game = GamesController.games.get(cid, None)    
+      history.append(1)
+      history_text = "The following commands are available:\n"
+      for i in game.history:
+          history_text += i + "\n"
+      bot.send_message(cid, history_text)
+      #else:
+      #  bot.send_message(cid, "There is no game in this chat. Create a new game with /newgame")
+    except Exception as e:
+      bot.send_message(cid, str(e))
+        #log.error("Unknown error: " + str(e))
         
         
