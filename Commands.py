@@ -216,7 +216,7 @@ def command_showhistory(bot, update):
       for i in game.history:
           history_text += i + "\n"
       bot.send_message(cid, history_text)
-    else
+    else:
       bot.send_message(cid, "There is no game in this chat. Create a new game with /newgame")
         
         
