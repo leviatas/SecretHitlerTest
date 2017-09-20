@@ -7,6 +7,7 @@ class Game(object):
         self.cid = cid
         self.board = None
         self.initiator = initiator
+        self.history = []
 
     def add_player(self, uid, player):
         self.playerlist[uid] = player
