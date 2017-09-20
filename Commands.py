@@ -229,7 +229,7 @@ def command_showhistory(bot, update):
         else:
           #If there is a time, compare it and send minutes.
           start = game.dateinitvote
-          stop = datetime.datetime.now()          
+          stop = datetime.now()          
           elapsed = stop - start
           if elapsed > datetime.timedelta(minutes=2):
             bot.send_message(cid, "Han pasado mas de 2 minutos")
