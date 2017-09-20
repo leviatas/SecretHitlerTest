@@ -1,3 +1,4 @@
+import datetime
 from random import shuffle
 
 class Game(object):
@@ -8,6 +9,7 @@ class Game(object):
         self.board = None
         self.initiator = initiator
         self.history = []
+        self.dateinitvote = None
 
     def add_player(self, uid, player):
         self.playerlist[uid] = player
