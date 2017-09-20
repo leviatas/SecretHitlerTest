@@ -231,7 +231,7 @@ def command_showhistory(bot, update):
           start = game.dateinitvote
           stop = datetime.now()          
           elapsed = stop - start
-          if elapsed > datetime.timedelta(minutes=2):
+          if elapsed > timedelta(minutes=2):
             bot.send_message(cid, "Han pasado mas de 2 minutos")
                 
         #history_text = "Historial para el partido actual:\n"
