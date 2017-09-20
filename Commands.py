@@ -27,7 +27,8 @@ commands = [  # command description used in the "help" command
     '/join - Joins an existing game',
     '/startgame - Starts an existing game when all players have joined',
     '/cancelgame - Cancels an existing game. All data of the game will be lost',
-    '/board - Prints the current board with fascist and liberals tracks, presidential order and election counter'
+    '/board - Prints the current board with fascist and liberals tracks, presidential order and election counter',
+    '/history - Prints a History of the current game
 ]
 
 symbols = [
@@ -204,3 +205,18 @@ def command_cancelgame(bot, update):
             bot.send_message(cid, "Only the initiator of the game or a group admin can cancel the game with /cancelgame")
     else:
         bot.send_message(cid, "There is no game in this chat. Create a new game with /newgame")
+
+def command_showhistory(bot, update):   
+    #Check if there is a current game
+    if cid in GamesController.games.keys():
+      game = GamesController.games.get(cid, None)    
+      cid = update.message.chat_id
+      history.append(1)
+      history_text = "The following commands are available:\n"
+      for i in game.history:
+          history_text += i + "\n"
+      bot.send_message(cid, history_text)
+    else
+      bot.send_message(cid, "There is no game in this chat. Create a new game with /newgame")
+        
+        
