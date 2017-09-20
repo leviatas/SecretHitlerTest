@@ -101,7 +101,7 @@ def command_stats(bot, update):
                     "Games cancelled: " + str(stats.get("cancelled")) + "\n\n" + \
                     "Total amount of groups: " + str(len(stats.get("groups"))) + "\n" + \
                     "Games running right now: "
-        bot.send_message(cid, stattext)
+        bot.send_message(cid, stattext)       
 
 
 # help page
@@ -113,23 +113,26 @@ def command_help(bot, update):
     bot.send_message(cid, help_text)
 
 
-def command_newgame(bot, update):
-    cid = update.message.chat_id
-    game = GamesController.games.get(cid, None)
-    groupType = update.message.chat.type
-    if groupType not in ['group', 'supergroup']:
-        bot.send_message(cid, "You have to add me to a group first and type /newgame there!")
-    elif game:
-        bot.send_message(cid, "There is currently a game running. If you want to end it please type /cancelgame!")
-    else:
-        GamesController.games[cid] = Game(cid, update.message.from_user.id)
-        with open(STATS, 'r') as f:
-            stats = json.load(f)
-        if cid not in stats.get("groups"):
-            stats.get("groups").append(cid)
-            with open(STATS, 'w') as f:
-                json.dump(stats, f)
-        bot.send_message(cid, "New game created! Each player has to /join the game.\nThe initiator of this game (or the admin) can /join too and type /startgame when everyone has joined the game!")
+def command_newgame(bot, update):  
+      cid = update.message.chat_id
+    try:
+      game = GamesController.games.get(cid, None)
+      groupType = update.message.chat.type
+      if groupType not in ['group', 'supergroup']:
+          bot.send_message(cid, "You have to add me to a group first and type /newgame there!")
+      elif game:
+          bot.send_message(cid, "There is currently a game running. If you want to end it please type /cancelgame!")
+      else:
+          GamesController.games[cid] = Game(cid, update.message.from_user.id)
+          with open(STATS, 'r') as f:
+              stats = json.load(f)
+          if cid not in stats.get("groups"):
+              stats.get("groups").append(cid)
+              with open(STATS, 'w') as f:
+                  json.dump(stats, f)
+          bot.send_message(cid, "New game created! Each player has to /join the game.\nThe initiator of this game (or the admin) can /join too and type /startgame when everyone has joined the game!")
+    except Exception as e:
+      bot.send_message(cid, str(e))
 
 
 def command_join(bot, update):
