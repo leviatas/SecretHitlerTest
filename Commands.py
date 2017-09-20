@@ -114,7 +114,7 @@ def command_help(bot, update):
 
 
 def command_newgame(bot, update):  
-      cid = update.message.chat_id
+    cid = update.message.chat_id
     try:
       game = GamesController.games.get(cid, None)
       groupType = update.message.chat.type
