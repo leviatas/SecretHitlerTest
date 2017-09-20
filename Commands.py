@@ -225,12 +225,12 @@ def command_showhistory(bot, update):
         #game.currentround
         if game.currentround == 0:
           # I create a new list for each game round
-          game.history[game.currentround] = []
+          game.history.append([])
           # Change game round so it starts adding votes in this simulation
           game.currentround = 1
         else:
           # If voting round started. update.message.from_user.id
-          game.history[game.currentround].append("Pepe voto %s" % (game.currentround))
+          game.history[0].append("Pepe voto %s" % (game.currentround))
           game.currentround += 1
           
         if game.currentround == 5:
