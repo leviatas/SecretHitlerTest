@@ -1,6 +1,6 @@
 import json
 import logging as log
-import datetime
+from datetime import datetime
 
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 
