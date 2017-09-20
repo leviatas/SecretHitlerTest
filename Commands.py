@@ -28,7 +28,7 @@ commands = [  # command description used in the "help" command
     '/startgame - Starts an existing game when all players have joined',
     '/cancelgame - Cancels an existing game. All data of the game will be lost',
     '/board - Prints the current board with fascist and liberals tracks, presidential order and election counter',
-    '/history - Prints a History of the current game
+    '/history - Prints a History of the current game'
 ]
 
 symbols = [
