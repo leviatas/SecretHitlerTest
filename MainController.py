@@ -18,6 +18,7 @@ from Constants.Config import TOKEN, STATS
 from Boardgamebox.Game import Game
 from Boardgamebox.Player import Player
 import GamesController
+import datetime
 
 # Enable logging
 #log.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -43,6 +44,13 @@ def initialize_testdata():
 
 def start_round(bot, game):
     #log.info('start_round called')
+    # Starting a new round makes the current round to go up and add to the history list.
+    # We set game.dateinitvote to None 
+    game.currentround += 1
+    game.history.append([])    
+    game.dateinitvote = None
+    # Starting a new round makes the current round to go up and add to the history list.
+    
     if game.board.state.chosen_president is None:
         game.board.state.nominated_president = game.player_sequence[game.board.state.player_counter]
     else:
@@ -117,6 +125,9 @@ def nominate_chosen_chancellor(bot, update):
 
 def vote(bot, game):
     #log.info('vote called')
+    #When voting starts we start the counter to see later with the vote command if we can see you voted.
+    game.dateinitvote = datetime.datetime.now()
+    
     strcid = str(game.cid)
     btns = [[InlineKeyboardButton("Ja", callback_data=strcid + "_Ja"),
              InlineKeyboardButton("Nein", callback_data=strcid + "_Nein")]]
@@ -145,8 +156,13 @@ def handle_voting(bot, update):
         answer, game.board.state.nominated_president.name, game.board.state.nominated_chancellor.name), uid,
                           callback.message.message_id)
     #log.info("Player %s (%d) voted %s" % (callback.from_user.first_name, uid, answer))
+    ''' /Send to the bot that someone voted
     bot.send_message(game.cid, "%s registered a vote for President %s and Chancellor %s." % (
         callback.from_user.first_name, game.board.state.nominated_president.name, game.board.state.nominated_chancellor.name))
+    '''
+    game.history[game.currentround].append(game.cid, "%s registered a vote for President %s and Chancellor %s." % (
+        callback.from_user.first_name, game.board.state.nominated_president.name, game.board.state.nominated_chancellor.name))
+    
     if uid not in game.board.state.last_votes:
         game.board.state.last_votes[uid] = answer
     if len(game.board.state.last_votes) == len(game.player_sequence):
@@ -733,6 +749,7 @@ def main():
     dp.add_handler(CommandHandler("cancelgame", Commands.command_cancelgame))
     dp.add_handler(CommandHandler("join", Commands.command_join))
     dp.add_handler(CommandHandler("history", Commands.command_showhistory))
+    dp.add_handler(CommandHandler("votes", Commands.command_votes))
 
     dp.add_handler(CallbackQueryHandler(pattern="(-[0-9]*)_chan_(.*)", callback=nominate_chosen_chancellor))
     dp.add_handler(CallbackQueryHandler(pattern="(-[0-9]*)_insp_(.*)", callback=choose_inspect))
