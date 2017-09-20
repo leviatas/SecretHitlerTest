@@ -160,9 +160,10 @@ def handle_voting(bot, update):
     bot.send_message(game.cid, "%s registered a vote for President %s and Chancellor %s." % (
         callback.from_user.first_name, game.board.state.nominated_president.name, game.board.state.nominated_chancellor.name))
     '''
-    game.history[game.currentround].append(game.cid, "%s registered a vote for President %s and Chancellor %s." % (
-        callback.from_user.first_name, game.board.state.nominated_president.name, game.board.state.nominated_chancellor.name))
-    
+    try:
+        game.history[game.currentround].append("%s registered a vote for President %s and Chancellor %s." % (callback.from_user.first_name, game.board.state.nominated_president.name, game.board.state.nominated_chancellor.name))
+    except Exception as e:
+        bot.send_message(cid, str(e))
     if uid not in game.board.state.last_votes:
         game.board.state.last_votes[uid] = answer
     if len(game.board.state.last_votes) == len(game.player_sequence):
@@ -603,39 +604,39 @@ def end_game(bot, game, game_endcode):
     #   2   liberals win by killing Hitler
     #   99  game cancelled
     #
-    with open(STATS, 'r') as f:
+    '''with open(STATS, 'r') as f:
         stats = json.load(f)
-
+    '''
     if game_endcode == 99:
         if GamesController.games[game.cid].board is not None:
             bot.send_message(game.cid,
                              "Game cancelled!\n\n%s" % game.print_roles())
             # bot.send_message(ADMIN, "Game of Secret Hitler canceled in group %d" % game.cid)
-            stats['cancelled'] = stats['cancelled'] + 1
+            #stats['cancelled'] = stats['cancelled'] + 1
         else:
             bot.send_message(game.cid, "Game cancelled!")
     else:
         if game_endcode == -2:
             bot.send_message(game.cid,
                              "Game over! The fascists win by electing Hitler as Chancellor!\n\n%s" % game.print_roles())
-            stats['fascwin_hitler'] = stats['fascwin_hitler'] + 1
+            #stats['fascwin_hitler'] = stats['fascwin_hitler'] + 1
         if game_endcode == -1:
             bot.send_message(game.cid,
                              "Game over! The fascists win by enacting 6 fascist policies!\n\n%s" % game.print_roles())
-            stats['fascwin_policies'] = stats['fascwin_policies'] + 1
+            #stats['fascwin_policies'] = stats['fascwin_policies'] + 1
         if game_endcode == 1:
             bot.send_message(game.cid,
                              "Game over! The liberals win by enacting 5 liberal policies!\n\n%s" % game.print_roles())
-            stats['libwin_policies'] = stats['libwin_policies'] + 1
+            #stats['libwin_policies'] = stats['libwin_policies'] + 1
         if game_endcode == 2:
             bot.send_message(game.cid,
                              "Game over! The liberals win by killing Hitler!\n\n%s" % game.print_roles())
-            stats['libwin_kill'] = stats['libwin_kill'] + 1
+            #stats['libwin_kill'] = stats['libwin_kill'] + 1
 
             # bot.send_message(ADMIN, "Game of Secret Hitler ended in group %d" % game.cid)
 
-    with open(STATS, 'w') as f:
-        json.dump(stats, f)
+    '''with open(STATS, 'w') as f:
+        json.dump(stats, f)'''
     del GamesController.games[game.cid]
 
 
