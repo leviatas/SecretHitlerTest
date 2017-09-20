@@ -9,7 +9,7 @@ class Game(object):
         self.board = None
         self.initiator = initiator
         self.history = []
-        self.dateinitvote = dateinitvote;
+        self.dateinitvote = None;
 
     def add_player(self, uid, player):
         self.playerlist[uid] = player
