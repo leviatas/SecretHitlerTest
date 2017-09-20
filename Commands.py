@@ -235,7 +235,7 @@ def command_showhistory(bot, update):
           
         if game.currentround == 5:
           history_text = "Historial para el partido actual:\n"
-          for i in game.history[game.currentround]:
+          for i in game.history[0]:
               history_text += i + "\n"
           bot.send_message(cid, history_text)
         
