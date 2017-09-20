@@ -732,6 +732,7 @@ def main():
     dp.add_handler(CommandHandler("startgame", Commands.command_startgame))
     dp.add_handler(CommandHandler("cancelgame", Commands.command_cancelgame))
     dp.add_handler(CommandHandler("join", Commands.command_join))
+    dp.add_handler(CommandHandler("history", Commands.command_showhistory))
 
     dp.add_handler(CallbackQueryHandler(pattern="(-[0-9]*)_chan_(.*)", callback=nominate_chosen_chancellor))
     dp.add_handler(CallbackQueryHandler(pattern="(-[0-9]*)_insp_(.*)", callback=choose_inspect))
