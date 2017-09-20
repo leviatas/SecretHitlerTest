@@ -224,7 +224,7 @@ def command_showhistory(bot, update):
         
         if game.dateinitvote:
           # If date of init vote is not null, assign it.
-          game.dateinitvote = datetime.datetime.now()
+          game.dateinitvote = datetime.now()
           bot.send_message(cid, "Se ha comenzado a contar.")
         else:
           #If there is a time, compare it and send minutes.
