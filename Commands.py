@@ -220,8 +220,31 @@ def command_showhistory(bot, update):
       #Check if there is a current game 
       if cid in GamesController.games.keys():
         game = GamesController.games.get(cid, None)    
-        #game.history.append("1")
         
+        #Simulating start of voting
+        #game.currentround
+        if game.currentround == 0:
+          # I create a new list for each game round
+          game.history[game.currentround] = []
+          # Change game round so it starts adding votes in this simulation
+          game.currentround = 1
+        else:
+          # If voting round started. update.message.from_user.id
+          game.history[game.currentround].append("Pepe voto %s" % (game.currentround))
+          game.currentround += 1
+          
+        if game.currentround == 5:
+          history_text = "Historial para el partido actual:\n"
+          for i in game.history[game.currentround]:
+              history_text += i + "\n"
+          bot.send_message(cid, history_text)
+        
+        
+        
+        
+        
+        '''
+        # Time managment to handle the voting command
         if not game.dateinitvote:
           # If date of init vote is null, assign it.
           game.dateinitvote = datetime.datetime.now()
@@ -233,11 +256,9 @@ def command_showhistory(bot, update):
           elapsed = stop - start
           if elapsed > datetime.timedelta(minutes=2):
             bot.send_message(cid, "Han pasado mas de 2 minutos")
-                
-        #history_text = "Historial para el partido actual:\n"
-        #for i in game.history:
-        #    history_text += i + "\n"
-        #bot.send_message(cid, history_text)
+        '''   
+        
+        
       else:
         bot.send_message(cid, "There is no game in this chat. Create a new game with /newgame")
     except Exception as e:
