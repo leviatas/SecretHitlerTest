@@ -249,13 +249,15 @@ def command_showhistory(bot, update):
       #Check if there is a current game 
       if cid in GamesController.games.keys():
         game = GamesController.games.get(cid, None)    
-        bot.send_message(cid, "Soon new feature")
+        #bot.send_message(cid, "Soon new feature")
         bot.send_message(cid, "Debug info")
-        bot.send_message(cid, str(game.currentround))
+        bot.send_message(cid, "Current round: " + str(game.currentround))
+        bot.send_message(cid, "Current chat id: " + str(cid))
+        history_text = "Historial del partido actual:\n"
         for x in range(0, game.currentround):
           for i in game.history[x]:
             history_text += i + "\n"
-        
+        bot.send_message(cid, history_text)
         #for i in game.history[game.currentround]:
         #        history_text += i + "\n"
         #Simulating start of voting
