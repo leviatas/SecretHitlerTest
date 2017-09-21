@@ -276,30 +276,29 @@ def command_calltovote(bot, update):
 		bot.send_message(cid, str(e))
         
 def command_showhistory(bot, update):
-    #game.pedrote = 3
-    try:
-      #Send message of executing command   
-      cid = update.message.chat_id
-      
-      #bot.send_message(cid, "Looking for history...")
-      bot.send_message(cid, "Debug info")
-      bot.send_message(cid, "Current chat id: " + str(cid))
-      #Check if there is a current game 
-      if cid in GamesController.games.keys():
-        game = GamesController.games.get(cid, None)  
-        bot.send_message(cid, "Current round: " + str(game.currentround))        
-        history_text = "Historial del partido actual:\n"
-        for x in range(0, game.currentround):
-          for i in game.history[x]:
-            history_text += i + "\n"
-            bot.send_message(cid, history_text)
-	    bot.send_message(cid, "This players are playing the game\n")
-	for player in game.player_sequence:
-	  bot.send_message(cid, text="[%s](tg://user?id=%d) *bold* _italic_ `fixed width font` [link](http://google.com).\n" % 
-		(game.playerlist[player.uid].name, uid), parse_mode=telegram.ParseMode.MARKDOWN)
-      else:
-        bot.send_message(cid, "There is no game in this chat. Create a new game with /newgame")
-    except Exception as e:
-      bot.send_message(cid, str(e))
-      log.error("Unknown error: " + str(e))      
+	#game.pedrote = 3
+	try:
+		#Send message of executing command   
+		cid = update.message.chat_id
+		#bot.send_message(cid, "Looking for history...")
+		bot.send_message(cid, "Debug info")
+		bot.send_message(cid, "Current chat id: " + str(cid))
+		#Check if there is a current game 
+		if cid in GamesController.games.keys():
+			game = GamesController.games.get(cid, None)  
+			bot.send_message(cid, "Current round: " + str(game.currentround))        
+			history_text = "Historial del partido actual:\n"
+			for x in range(0, game.currentround):
+				for i in game.history[x]:
+					history_text += i + "\n"
+			bot.send_message(cid, history_text)
+			bot.send_message(cid, "This players are playing the game\n")
+				for player in game.player_sequence:
+					bot.send_message(cid, text="[%s](tg://user?id=%d) *bold* _italic_ `fixed width font` [link](http://google.com).\n" % 
+						(game.playerlist[player.uid].name, uid), parse_mode=telegram.ParseMode.MARKDOWN)
+		else:
+			bot.send_message(cid, "There is no game in this chat. Create a new game with /newgame")
+	except Exception as e:
+		bot.send_message(cid, str(e))
+		log.error("Unknown error: " + str(e))      
         
