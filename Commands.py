@@ -226,24 +226,24 @@ def command_votes(bot, update):
           # If date of init vote is null, then the voting didnt start          
           bot.send_message(cid, "The voting didn't start yet.")
         else:
-					#If there is a time, compare it and send history of votes.
-					start = game.dateinitvote
-					stop = datetime.datetime.now()
-					elapsed = stop - start
-					if elapsed > datetime.timedelta(minutes=1):
-						history_text = "Vote history for President %s and Chancellor %s:\n" % (game.board.state.nominated_president.name, game.board.state.nominated_chancellor.name)
-						for player in game.player_sequence:# If the player is in the history (AKA: He voted), mark him as he registered a vote
-							if any(game.playerlist[player.uid].name in s for s in game.history[game.currentround]):
-								history_text += "%s registered a vote." % (game.playerlist[player.uid].name)
-							else:
-								history_text += "%s didn't registered a vote." % (game.playerlist[player.uid].name)
-							bot.send_message(cid, history_text)
-					else:
-						bot.send_message(cid, "Five minutes must pass to see the votes") 
-		 else:
-			 bot.send_message(cid, "There is no game in this chat. Create a new game with /newgame")
-		except Exception as e:
-			bot.send_message(cid, str(e))
+#If there is a time, compare it and send history of votes.
+start = game.dateinitvote
+stop = datetime.datetime.now()
+elapsed = stop - start
+if elapsed > datetime.timedelta(minutes=1):
+history_text = "Vote history for President %s and Chancellor %s:\n" % (game.board.state.nominated_president.name, game.board.state.nominated_chancellor.name)
+for player in game.player_sequence:# If the player is in the history (AKA: He voted), mark him as he registered a vote
+if any(game.playerlist[player.uid].name in s for s in game.history[game.currentround]):
+history_text += "%s registered a vote." % (game.playerlist[player.uid].name)
+else:
+history_text += "%s didn't registered a vote." % (game.playerlist[player.uid].name)
+bot.send_message(cid, history_text)
+else:
+bot.send_message(cid, "Five minutes must pass to see the votes") 
+else:
+bot.send_message(cid, "There is no game in this chat. Create a new game with /newgame")
+except Exception as e:
+bot.send_message(cid, str(e))
 
 def command_calltovote(bot, update):
     try:
