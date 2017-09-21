@@ -294,7 +294,7 @@ def command_showhistory(bot, update):
 
 			bot.send_message(cid, "This players are playing the game\n")
 			for uid in game.playerlist:
-				bot.send_message(cid, text="[%s](tg://user?id=%d) *bold* _italic_ `fixed width font` [link](http://google.com).\n" % 
+				bot.send_message(cid, text="[%s](tg://user?id=%d)\n" % 
 					(game.playerlist[uid].name, uid), parse_mode=ParseMode.MARKDOWN)
 		else:
 			bot.send_message(cid, "There is no game in this chat. Create a new game with /newgame")
