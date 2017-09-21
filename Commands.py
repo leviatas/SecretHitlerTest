@@ -238,9 +238,9 @@ def command_votes(bot, update):
 						history_text += "%s registered a vote." % (game.playerlist[player.uid].name)
 					else:
 						history_text += "%s didn't registered a vote." % (game.playerlist[player.uid].name)
-				bot.send_message(cid, history_text)
-		  else:
-			bot.send_message(cid, "Five minutes must pass to see the votes") 
+						bot.send_message(cid, history_text)
+					else:
+						bot.send_message(cid, "Five minutes must pass to see the votes") 
       else:
         bot.send_message(cid, "There is no game in this chat. Create a new game with /newgame")
     except Exception as e:
