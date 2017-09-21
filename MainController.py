@@ -21,11 +21,12 @@ import GamesController
 import datetime
 
 # Enable logging
-#log.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-#                level=log.INFO,
+logging.basicConfig(
+        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+        level=logging.INFO)
 #                filename='../logging.log')
 
-#logger = log.getLogger(__name__)
+logger = log.getLogger(__name__)
 
 
 def initialize_testdata():
