@@ -230,7 +230,7 @@ def command_votes(bot, update):
           stop = datetime.datetime.now()          
           elapsed = stop - start
           if elapsed > datetime.timedelta(minutes=1):
-            history_text = "Vote history:\n"
+            history_text = "Vote history for President %s and Chancellor %s:\n" % (game.board.state.nominated_president.name, game.board.state.nominated_chancellor.name) 
             for i in game.history[game.currentround]:
                 history_text += i + "\n"
             bot.send_message(cid, history_text)
