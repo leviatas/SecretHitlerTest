@@ -163,7 +163,7 @@ def handle_voting(bot, update):
         callback.from_user.first_name, game.board.state.nominated_president.name, game.board.state.nominated_chancellor.name))
     '''
     try:
-        game.history[game.currentround].append("%s registered a vote for President %s and Chancellor %s." % (callback.from_user.first_name, game.board.state.nominated_president.name, game.board.state.nominated_chancellor.name))
+        game.history[game.currentround].append("%s registered a vote." % (callback.from_user.first_name))
     except Exception as e:
         bot.send_message(cid, str(e))
     if uid not in game.board.state.last_votes:
