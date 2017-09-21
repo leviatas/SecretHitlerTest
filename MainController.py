@@ -21,13 +21,14 @@ import GamesController
 import datetime
 
 # Enable logging
+'''
 log.basicConfig(
         format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
         level=log.INFO)
-#                filename='../logging.log')
+
 
 logger = log.getLogger(__name__)
-
+'''
 
 def initialize_testdata():
     # Sample game for quicker tests
@@ -728,7 +729,7 @@ def shuffle_policy_pile(bot, game):
 
 def error(bot, update, error):
     bot.send_message(387393551, 'Update "%s" caused error "%s"' % (update, error) ) 
-    logger.warning('Update "%s" caused error "%s"' % (update, error))
+    #logger.warning('Update "%s" caused error "%s"' % (update, error))
 
 
 def main():
