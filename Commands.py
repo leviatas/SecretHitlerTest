@@ -165,7 +165,7 @@ def command_join(bot, update):
         except Exception:
             bot.send_message(game.cid,
                              fname + ", I can\'t send you a private message. Please go to @thesecrethitlerbot and click \"Start\".\nYou then need to send /join again.")
-        #log.info("%s (%d) joined a game in %d" % (fname, uid, game.cid))
+        log.info("%s (%d) joined a game in %d" % (fname, uid, game.cid))
         if len(game.playerlist) > 4:
             bot.send_message(game.cid, fname + " has joined the game. Type /startgame if this was the last player and you want to start with %d players!" % len(game.playerlist))
         elif len(game.playerlist) == 1:
@@ -175,7 +175,7 @@ def command_join(bot, update):
 
 
 def command_startgame(bot, update):
-    #log.info('command_startgame called')
+    log.info('command_startgame called')
     cid = update.message.chat_id
     game = GamesController.games.get(cid, None)
     if not game:
@@ -191,8 +191,8 @@ def command_startgame(bot, update):
         MainController.inform_players(bot, game, game.cid, player_number)
         MainController.inform_fascists(bot, game, player_number)
         game.board = Board(player_number, game)
-        #log.info(game.board)
-        #log.info("len(games) Command_startgame: " + str(len(GamesController.games)))
+        log.info(game.board)
+        log.info("len(games) Command_startgame: " + str(len(GamesController.games)))
         game.shuffle_player_sequence()
         game.board.state.player_counter = 0
         bot.send_message(game.cid, game.board.print_board())
@@ -201,7 +201,7 @@ def command_startgame(bot, update):
         MainController.start_round(bot, game)
 
 def command_cancelgame(bot, update):
-    #log.info('command_cancelgame called')
+    log.info('command_cancelgame called')
     cid = update.message.chat_id
     if cid in GamesController.games.keys():
         game = GamesController.games[cid]
@@ -307,6 +307,6 @@ def command_showhistory(bot, update):
         bot.send_message(cid, "There is no game in this chat. Create a new game with /newgame")
     except Exception as e:
       bot.send_message(cid, str(e))
-        #log.error("Unknown error: " + str(e))
+      log.error("Unknown error: " + str(e))
         
         
