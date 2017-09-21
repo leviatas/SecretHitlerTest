@@ -268,9 +268,9 @@ def command_calltovote(bot, update):
 							# If the player is in the History list (AKA: He voted) don't send him a reminder
 							if not any(game.playerlist[player.uid].name in s for s in game.history[game.currentround]):
 								bot.send_message(cid, text="It's time to vote [%s](tg://user?id=%d).\n" % 
-								 	(game.playerlist[player.uid].name, uid), parse_mode=telegram.ParseMode.MARKDOWN)							
-          else:
-          	bot.send_message(cid, "Five minutes must pass to see call to vote") 
+									(game.playerlist[player.uid].name, uid), parse_mode=telegram.ParseMode.MARKDOWN)							
+										else:
+											bot.send_message(cid, "Five minutes must pass to see call to vote") 
       else:
         bot.send_message(cid, "There is no game in this chat. Create a new game with /newgame")
     except Exception as e:
