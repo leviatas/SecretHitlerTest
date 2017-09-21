@@ -22,7 +22,7 @@ import datetime
 
 import os
 import psycopg2
-import urlparse
+import urllib.parse
 
 # Enable logging
 
