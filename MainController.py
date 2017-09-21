@@ -21,7 +21,7 @@ import GamesController
 import datetime
 
 # Enable logging
-logging.basicConfig(
+log.basicConfig(
         format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
         level=logging.INFO)
 #                filename='../logging.log')
