@@ -196,7 +196,8 @@ def count_votes(bot, game):
         voting_aftermath(bot, game, voting_success)
     else:
         #log.info("Voting failed")
-        voting_text += "The people didn't like the two candidates!"
+        voting_text += "The people didn't like President %s and Chancellor %s!" % (
+            game.board.state.nominated_president.name, game.board.state.nominated_chancellor.name)
         game.board.state.nominated_president = None
         game.board.state.nominated_chancellor = None
         game.board.state.failed_votes += 1
