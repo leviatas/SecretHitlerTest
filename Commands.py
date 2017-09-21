@@ -13,12 +13,12 @@ from Boardgamebox.Player import Player
 from Constants.Config import ADMIN
 
 # Enable logging
-'''log.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-                level=log.INFO,
-                filename='logs/logging.log')
 
+log.basicConfig(
+        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+        level=log.INFO)
 logger = log.getLogger(__name__)
-'''
+
 commands = [  # command description used in the "help" command
     '/help - Gives you information about the available commands',
     '/start - Gives you a short piece of information about Secret Hitler',
