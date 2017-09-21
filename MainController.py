@@ -20,6 +20,10 @@ from Boardgamebox.Player import Player
 import GamesController
 import datetime
 
+import os
+import psycopg2
+import urlparse
+
 # Enable logging
 
 log.basicConfig(
@@ -29,6 +33,23 @@ log.basicConfig(
 
 logger = log.getLogger(__name__)
 
+#DB Connection I made a Haroku Postgres database first
+urlparse.uses_netloc.append("postgres")
+url = urlparse.urlparse(os.environ["DATABASE_URL"])
+
+conn = psycopg2.connect(
+    database=url.path[1:],
+    user=url.username,
+    password=url.password,
+    host=url.hostname,
+    port=url.port
+)
+'''
+cur = conn.cursor()
+
+query = "SELECT ...."
+cur.execute(query)
+'''
 
 def initialize_testdata():
     # Sample game for quicker tests
@@ -50,7 +71,7 @@ def start_round(bot, game):
     # We set game.dateinitvote to None 
     game.currentround += 1
     game.history.append([])    
-    game.dateinitvote = None
+    #game.dateinitvote = None Moved to after voting.
     # Starting a new round makes the current round to go up and add to the history list.
     
     if game.board.state.chosen_president is None:
@@ -159,9 +180,9 @@ def handle_voting(bot, update):
                         callback.message.message_id)
         log.info("Player %s (%d) voted %s" % (callback.from_user.first_name, uid, answer))    
         try:
-                game.history[game.currentround].append("%s registered a vote." % (callback.from_user.first_name))
+            game.history[game.currentround].append(callback.from_user.first_name)
         except Exception as e:
-                bot.send_message(cid, str(e))
+            bot.send_message(cid, str(e))
         if uid not in game.board.state.last_votes:
                 game.board.state.last_votes[uid] = answer
         if len(game.board.state.last_votes) == len(game.player_sequence):
@@ -171,6 +192,9 @@ def handle_voting(bot, update):
 
 
 def count_votes(bot, game):
+    # La votacion ha finalizado.
+    game.dateinitvote = None
+    # La votacion ha finalizado.
     log.info('count_votes called')
     voting_text = ""
     voting_success = False
@@ -751,6 +775,7 @@ def main():
     dp.add_handler(CommandHandler("join", Commands.command_join))
     dp.add_handler(CommandHandler("history", Commands.command_showhistory))
     dp.add_handler(CommandHandler("votes", Commands.command_votes))
+    dp.add_handler(CommandHandler("calltovote", Commands.command_calltovote))
 
     dp.add_handler(CallbackQueryHandler(pattern="(-[0-9]*)_chan_(.*)", callback=nominate_chosen_chancellor))
     dp.add_handler(CallbackQueryHandler(pattern="(-[0-9]*)_insp_(.*)", callback=choose_inspect))
@@ -759,6 +784,7 @@ def main():
     dp.add_handler(CallbackQueryHandler(pattern="(-[0-9]*)_(yesveto|noveto)", callback=choose_veto))
     dp.add_handler(CallbackQueryHandler(pattern="(-[0-9]*)_(liberal|fascist|veto)", callback=choose_policy))
     dp.add_handler(CallbackQueryHandler(pattern="(-[0-9]*)_(Ja|Nein)", callback=handle_voting))
+    
 
     # log all errors
     dp.add_error_handler(error)
