@@ -21,14 +21,14 @@ import GamesController
 import datetime
 
 # Enable logging
-'''
+
 log.basicConfig(
         format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
         level=log.INFO)
 
 
 logger = log.getLogger(__name__)
-'''
+
 
 def initialize_testdata():
     # Sample game for quicker tests
