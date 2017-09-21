@@ -30,7 +30,8 @@ commands = [  # command description used in the "help" command
     '/cancelgame - Cancels an existing game. All data of the game will be lost',
     '/board - Prints the current board with fascist and liberals tracks, presidential order and election counter',
     '/history - Prints a History of the current game',
-    '/votes - Prints who voted'
+    '/votes - Prints who voted',
+    '/calltovote - Calls the players to vote'    
 ]
 
 symbols = [
@@ -230,12 +231,49 @@ def command_votes(bot, update):
           stop = datetime.datetime.now()          
           elapsed = stop - start
           if elapsed > datetime.timedelta(minutes=1):
-            history_text = "Vote history for President %s and Chancellor %s:\n" % (game.board.state.nominated_president.name, game.board.state.nominated_chancellor.name) 
-            for i in game.history[game.currentround]:
+            history_text = "Vote history for President %s and Chancellor %s:\n" % (game.board.state.nominated_president.name, game.board.state.nominated_chancellor.name)            
+						for player in game.player_sequence:
+							# If the player is in the history (AKA: He voted), mark him as he registered a vote
+							if any(game.playerlist[player.uid].name in s for s in game.history[game.currentround]):
+								history_text += "%s registered a vote." % (game.playerlist[player.uid].name)
+							else:
+								history_text += "%s didn't registered a vote." % (game.playerlist[player.uid].name)
+						
+						for i in game.history[game.currentround]:
                 history_text += i + "\n"
             bot.send_message(cid, history_text)
           else:
             bot.send_message(cid, "Five minutes must pass to see the votes") 
+      else:
+        bot.send_message(cid, "There is no game in this chat. Create a new game with /newgame")
+    except Exception as e:
+      bot.send_message(cid, str(e))
+
+def command_calltovote(bot, update):
+    try:
+      #Send message of executing command   
+      cid = update.message.chat_id
+      bot.send_message(cid, "Looking for history...")
+      #Check if there is a current game 
+      if cid in GamesController.games.keys():
+        game = GamesController.games.get(cid, None)
+        if not game.dateinitvote:
+          # If date of init vote is null, then the voting didnt start          
+          bot.send_message(cid, "The voting didn't start yet.")
+        else:
+          #If there is a time, compare it and send history of votes.
+          start = game.dateinitvote
+          stop = datetime.datetime.now()          
+          elapsed = stop - start
+          if elapsed > datetime.timedelta(minutes=1):						              
+						# Only remember to vote to players that are still in the game
+						for player in game.player_sequence:
+							# If the player is in the History list (AKA: He voted) don't send him a reminder
+							if not any(game.playerlist[player.uid].name in s for s in game.history[game.currentround]):
+								bot.send_message(cid, text="It's time to vote [%s](tg://user?id=%d).\n" % 
+								 	(game.playerlist[player.uid].name, uid), parse_mode=telegram.ParseMode.MARKDOWN)							
+          else:
+          	bot.send_message(cid, "Five minutes must pass to see call to vote") 
       else:
         bot.send_message(cid, "There is no game in this chat. Create a new game with /newgame")
     except Exception as e:
@@ -252,57 +290,17 @@ def command_showhistory(bot, update):
       bot.send_message(cid, "Current chat id: " + str(cid))
       #Check if there is a current game 
       if cid in GamesController.games.keys():
-        game = GamesController.games.get(cid, None)    
-
-        
-        bot.send_message(cid, "Current round: " + str(game.currentround))
-        
+        game = GamesController.games.get(cid, None)  
+        bot.send_message(cid, "Current round: " + str(game.currentround))        
         history_text = "Historial del partido actual:\n"
         for x in range(0, game.currentround):
           for i in game.history[x]:
             history_text += i + "\n"
         bot.send_message(cid, history_text)
-        #for i in game.history[game.currentround]:
-        #        history_text += i + "\n"
-        #Simulating start of voting
-        #game.currentround
-        '''
-        if game.currentround == 0:
-          # I create a new list for each game round
-          game.history.append([])
-          # Change game round so it starts adding votes in this simulation
-          game.currentround = 1
-        else:
-          # If voting round started. update.message.from_user.id
-          game.history[0].append("Pepe voto %s" % (game.currentround))
-          game.currentround += 1
-          
-        if game.currentround == 5:
-          history_text = "Historial para el partido actual:\n"
-          for i in game.history[0]:
-              history_text += i + "\n"
-          bot.send_message(cid, history_text)
-        '''
-        
-        
-        
-        
-        '''
-        # Time managment to handle the voting command
-        if not game.dateinitvote:
-          # If date of init vote is null, assign it.
-          game.dateinitvote = datetime.datetime.now()
-          bot.send_message(cid, "Se ha comenzado a contar.")
-        else:
-          #If there is a time, compare it and send minutes.
-          start = game.dateinitvote
-          stop = datetime.datetime.now()          
-          elapsed = stop - start
-          if elapsed > datetime.timedelta(minutes=2):
-            bot.send_message(cid, "Han pasado mas de 2 minutos")
-        '''   
-        
-        
+				bot.send_message(cid, "This players are playing the game\n")
+				for player in game.player_sequence:
+					bot.send_message(cid, text="[%s](tg://user?id=%d) *bold* _italic_ `fixed width font` [link](http://google.com).\n" % 
+						(game.playerlist[player.uid].name, uid), parse_mode=telegram.ParseMode.MARKDOWN)
       else:
         bot.send_message(cid, "There is no game in this chat. Create a new game with /newgame")
     except Exception as e:
