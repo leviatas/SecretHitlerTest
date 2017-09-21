@@ -242,10 +242,11 @@ def command_votes(bot, update):
       bot.send_message(cid, str(e))
         
 def command_showhistory(bot, update):
+    game.pedrote = 3
     try:
       #Send message of executing command   
       cid = update.message.chat_id
-      game.pedrote = 3
+      
       #bot.send_message(cid, "Looking for history...")
       bot.send_message(cid, "Debug info")
       bot.send_message(cid, "Current chat id: " + str(cid))
