@@ -227,7 +227,7 @@ def command_votes(bot, update):
           bot.send_message(cid, "The voting didn't start yet.")
         else:
 	  			#If there is a time, compare it and send history of votes.
-	  			start = game.dateinitvote
+					start = game.dateinitvote
 					stop = datetime.datetime.now()          
 					elapsed = stop - start
 					if elapsed > datetime.timedelta(minutes=1):
