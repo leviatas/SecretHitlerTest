@@ -141,46 +141,46 @@ def command_newgame(bot, update):
 
 
 def command_join(bot, update, args):
-    # I use args for testing. // Remove after?
-    groupName = update.message.chat.title
-    cid = update.message.chat_id
-    groupType = update.message.chat.type
-    game = GamesController.games.get(cid, None)
-    if len(args) <= 0:
+	# I use args for testing. // Remove after?
+	groupName = update.message.chat.title
+	cid = update.message.chat_id
+	groupType = update.message.chat.type
+	game = GamesController.games.get(cid, None)
+	if len(args) <= 0:
 		# if not args, use normal behaviour
 		fname = update.message.from_user.first_name
 		uid = update.message.from_user.id
-    else:
+	else:
 		# If args, testing behaviour
 		fname = str(args[0])
 		uid = int(args[1])
 
-    if groupType not in ['group', 'supergroup']:
-        bot.send_message(cid, "You have to add me to a group first and type /newgame there!")
-    elif not game:
-        bot.send_message(cid, "There is no game in this chat. Create a new game with /newgame")
-    elif game.board:
-        bot.send_message(cid, "The game has started. Please wait for the next game!")
-    elif uid in game.playerlist:
-        bot.send_message(game.cid, "You already joined the game, %s!" % fname)
-    elif len(game.playerlist) >= 10:
-        bot.send_message(game.cid, "You have reached the maximum amount of players. Please start the game with /startgame!")
-    else:
-        #uid = update.message.from_user.id
-        player = Player(fname, uid)
-        try:
-            bot.send_message(uid, "You joined a game in %s. I will soon tell you your secret role." % groupName)
-            game.add_player(uid, player)
-        except Exception:
-            bot.send_message(game.cid,
-                             fname + ", I can\'t send you a private message. Please go to @thesecrethitlerbot and click \"Start\".\nYou then need to send /join again.")
-        log.info("%s (%d) joined a game in %d" % (fname, uid, game.cid))
-        if len(game.playerlist) > 4:
-            bot.send_message(game.cid, fname + " has joined the game. Type /startgame if this was the last player and you want to start with %d players!" % len(game.playerlist))
-        elif len(game.playerlist) == 1:
-            bot.send_message(game.cid, "%s has joined the game. There is currently %d player in the game and you need 5-10 players." % (fname, len(game.playerlist)))
-        else:
-            bot.send_message(game.cid, "%s has joined the game. There are currently %d players in the game and you need 5-10 players." % (fname, len(game.playerlist)))
+	if groupType not in ['group', 'supergroup']:
+		bot.send_message(cid, "You have to add me to a group first and type /newgame there!")
+	elif not game:
+		bot.send_message(cid, "There is no game in this chat. Create a new game with /newgame")
+	elif game.board:
+		bot.send_message(cid, "The game has started. Please wait for the next game!")
+	elif uid in game.playerlist:
+		bot.send_message(game.cid, "You already joined the game, %s!" % fname)
+	elif len(game.playerlist) >= 10:
+		bot.send_message(game.cid, "You have reached the maximum amount of players. Please start the game with /startgame!")
+	else:
+		#uid = update.message.from_user.id
+		player = Player(fname, uid)
+		try:
+			bot.send_message(uid, "You joined a game in %s. I will soon tell you your secret role." % groupName)
+			game.add_player(uid, player)
+		except Exception:
+		bot.send_message(game.cid,
+		fname + ", I can\'t send you a private message. Please go to @thesecrethitlerbot and click \"Start\".\nYou then need to send /join again.")
+		log.info("%s (%d) joined a game in %d" % (fname, uid, game.cid))
+		if len(game.playerlist) > 4:
+			bot.send_message(game.cid, fname + " has joined the game. Type /startgame if this was the last player and you want to start with %d players!" % len(game.playerlist))
+		elif len(game.playerlist) == 1:
+			bot.send_message(game.cid, "%s has joined the game. There is currently %d player in the game and you need 5-10 players." % (fname, len(game.playerlist)))
+		else:
+			bot.send_message(game.cid, "%s has joined the game. There are currently %d players in the game and you need 5-10 players." % (fname, len(game.playerlist)))
 
 
 def command_startgame(bot, update):
