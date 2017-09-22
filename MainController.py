@@ -772,7 +772,7 @@ def main():
     dp.add_handler(CommandHandler("newgame", Commands.command_newgame))
     dp.add_handler(CommandHandler("startgame", Commands.command_startgame))
     dp.add_handler(CommandHandler("cancelgame", Commands.command_cancelgame))
-    dp.add_handler(CommandHandler("join", Commands.command_join))
+    dp.add_handler(CommandHandler("join", Commands.command_join, pass_args = True))
     dp.add_handler(CommandHandler("history", Commands.command_showhistory))
     dp.add_handler(CommandHandler("votes", Commands.command_votes))
     dp.add_handler(CommandHandler("calltovote", Commands.command_calltovote))
