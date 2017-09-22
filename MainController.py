@@ -69,7 +69,7 @@ def start_round(bot, game):
     log.info('start_round called')
     # Starting a new round makes the current round to go up and add to the history list.
     # We set game.dateinitvote to None 
-    game.board.currentround += 1
+    game.board.state.currentround += 1
     game.history.append([])    
     #game.dateinitvote = None Moved to after voting.
     # Starting a new round makes the current round to go up and add to the history list.
