@@ -294,7 +294,7 @@ def command_showhistory(bot, update):
 		#Check if there is a current game 
 		if cid in GamesController.games.keys():
 			game = GamesController.games.get(cid, None)  
-			bot.send_message(cid, "Current round: " + str(game.board.currentround))
+			bot.send_message(cid, "Current round: " + str(game.board.state.currentround))
 			bot.send_message(cid, "This players are playing the game\n")
 			for uid in game.playerlist:
 				bot.send_message(cid, text="[%s](tg://user?id=%d)\n" % 
