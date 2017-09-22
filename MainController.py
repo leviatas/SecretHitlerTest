@@ -667,9 +667,9 @@ def inform_players(bot, game, cid, player_number):
     available_roles = list(playerSets[player_number]["roles"])  # copy not reference because we need it again later
     for uid in game.playerlist:
         random_index = randrange(len(available_roles))
-        log.info(str(random_index))
+        #log.info(str(random_index))
         role = available_roles.pop(random_index)
-        log.info(str(role))
+        #log.info(str(role))
         party = get_membership(role)
         game.playerlist[uid].role = role
         game.playerlist[uid].party = party
