@@ -69,7 +69,7 @@ def start_round(bot, game):
     log.info('start_round called')
     # Starting a new round makes the current round to go up and add to the history list.
     # We set game.dateinitvote to None 
-    game.currentround += 1
+    game.board.currentround += 1
     game.history.append([])    
     #game.dateinitvote = None Moved to after voting.
     # Starting a new round makes the current round to go up and add to the history list.
@@ -178,11 +178,7 @@ def handle_voting(bot, update):
         bot.edit_message_text("Thank you for your vote: %s to a President %s and a Chancellor %s" % (
                 answer, game.board.state.nominated_president.name, game.board.state.nominated_chancellor.name), uid,
                         callback.message.message_id)
-        log.info("Player %s (%d) voted %s" % (callback.from_user.first_name, uid, answer))    
-        try:
-            game.history[game.currentround].append(callback.from_user.first_name)
-        except Exception as e:
-            bot.send_message(cid, str(e))
+        log.info("Player %s (%d) voted %s" % (callback.from_user.first_name, uid, answer))
         if uid not in game.board.state.last_votes:
                 game.board.state.last_votes[uid] = answer
         if len(game.board.state.last_votes) == len(game.player_sequence):
