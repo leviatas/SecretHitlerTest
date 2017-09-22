@@ -257,7 +257,7 @@ def command_calltovote(bot, update):
 	try:
 		#Send message of executing command   
 		cid = update.message.chat_id
-		bot.send_message(cid, "Looking for history...")
+		#bot.send_message(cid, "Looking for history...")
 		#Check if there is a current game 
 		if cid in GamesController.games.keys():
 			game = GamesController.games.get(cid, None)
