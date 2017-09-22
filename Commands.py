@@ -239,8 +239,9 @@ def command_votes(bot, update):
 				elapsed = stop - start
 				if elapsed > datetime.timedelta(minutes=1):
 					history_text = "Vote history for President %s and Chancellor %s:\n" % (game.board.state.nominated_president.name, game.board.state.nominated_chancellor.name)
-					for player in game.player_sequence:# If the player is in the history (AKA: He voted), mark him as he registered a vote
-						if any(game.playerlist[player.uid].name in s for s in game.history[game.currentround]):
+					for player in game.player_sequence:
+						# If the player is in the last_votes (He voted), mark him as he registered a vote
+						if player.uid in game.board.state.last_votes:
 							history_text += "%s registered a vote." % (game.playerlist[player.uid].name)
 						else:
 							history_text += "%s didn't registered a vote." % (game.playerlist[player.uid].name)
@@ -271,8 +272,8 @@ def command_calltovote(bot, update):
 				if elapsed > datetime.timedelta(minutes=1):
 					# Only remember to vote to players that are still in the game
 					for player in game.player_sequence:
-						# If the player is in the History list (AKA: He voted) don't send him a reminder
-						if not any(game.playerlist[player.uid].name in s for s in game.history[game.currentround]):
+						# If the player is not in last_votes send him reminder
+						if player.uid not in game.board.state.last_votes:
 							bot.send_message(cid, text="It's time to vote [%s](tg://user?id=%d).\n" % 
 								(game.playerlist[player.uid].name, uid), parse_mode=ParseMode.MARKDOWN)							
 				else:
@@ -293,12 +294,7 @@ def command_showhistory(bot, update):
 		#Check if there is a current game 
 		if cid in GamesController.games.keys():
 			game = GamesController.games.get(cid, None)  
-			bot.send_message(cid, "Current round: " + str(game.currentround))        
-			
-			
-
-
-
+			bot.send_message(cid, "Current round: " + str(game.board.currentround))
 			bot.send_message(cid, "This players are playing the game\n")
 			for uid in game.playerlist:
 				bot.send_message(cid, text="[%s](tg://user?id=%d)\n" % 
