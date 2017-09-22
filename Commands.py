@@ -275,8 +275,7 @@ def command_calltovote(bot, update):
 					for player in game.player_sequence:
 						# If the player is not in last_votes send him reminder
 						if player.uid not in game.board.state.last_votes:
-							history_text += "It's time to vote [%s](tg://user?id=%d).\n" % 
-								(game.playerlist[player.uid].name, player.uid)
+							history_text += "It's time to vote [%s](tg://user?id=%d).\n" % (game.playerlist[player.uid].name, player.uid)
 					bot.send_message(cid, text=history_text, parse_mode=ParseMode.MARKDOWN)
 				else:
 					bot.send_message(cid, "Five minutes must pass to see call to vote") 
