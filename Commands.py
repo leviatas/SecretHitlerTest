@@ -147,13 +147,13 @@ def command_join(bot, update, args):
     groupType = update.message.chat.type
     game = GamesController.games.get(cid, None)
     if len(args) <= 0:
-	# if not args, use normal behaviour
-	fname = update.message.from_user.first_name
-	uid = update.message.from_user.id
+		# if not args, use normal behaviour
+		fname = update.message.from_user.first_name
+		uid = update.message.from_user.id
     else:
-	# If args, testing behaviour
-	fname = str(args[0])
-	uid = int(args[1])
+		# If args, testing behaviour
+		fname = str(args[0])
+		uid = int(args[1])
 
     if groupType not in ['group', 'supergroup']:
         bot.send_message(cid, "You have to add me to a group first and type /newgame there!")
