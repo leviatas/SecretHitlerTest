@@ -140,12 +140,21 @@ def command_newgame(bot, update):
       bot.send_message(cid, str(e))
 
 
-def command_join(bot, update):
-    groupName = update.message.chat.title
+def command_join(bot, update, args):
+    # I use args for testing. // Remove after?
+	groupName = update.message.chat.title
     cid = update.message.chat_id
     groupType = update.message.chat.type
     game = GamesController.games.get(cid, None)
-    fname = update.message.from_user.first_name
+    
+	if len(args) <= 0:
+		# if not args, use normal behaviour
+		fname = update.message.from_user.first_name
+		uid = update.message.from_user.id
+	else:
+		# If args, testing behaviour
+		fname = str(args[0])
+		uid = int(args[1])
 
     if groupType not in ['group', 'supergroup']:
         bot.send_message(cid, "You have to add me to a group first and type /newgame there!")
@@ -153,12 +162,12 @@ def command_join(bot, update):
         bot.send_message(cid, "There is no game in this chat. Create a new game with /newgame")
     elif game.board:
         bot.send_message(cid, "The game has started. Please wait for the next game!")
-    elif update.message.from_user.id in game.playerlist:
+    elif uid in game.playerlist:
         bot.send_message(game.cid, "You already joined the game, %s!" % fname)
     elif len(game.playerlist) >= 10:
         bot.send_message(game.cid, "You have reached the maximum amount of players. Please start the game with /startgame!")
     else:
-        uid = update.message.from_user.id
+        #uid = update.message.from_user.id
         player = Player(fname, uid)
         try:
             bot.send_message(uid, "You joined a game in %s. I will soon tell you your secret role." % groupName)
