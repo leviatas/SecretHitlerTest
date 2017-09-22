@@ -172,9 +172,9 @@ def command_join(bot, update, args):
 			bot.send_message(uid, "You joined a game in %s. I will soon tell you your secret role." % groupName)
 			game.add_player(uid, player)
 		except Exception:
-		bot.send_message(game.cid,
-		fname + ", I can\'t send you a private message. Please go to @thesecrethitlerbot and click \"Start\".\nYou then need to send /join again.")
-		log.info("%s (%d) joined a game in %d" % (fname, uid, game.cid))
+			bot.send_message(game.cid,
+				fname + ", I can\'t send you a private message. Please go to @secrethitlertestlbot and click \"Start\".\nYou then need to send /join again.")
+			log.info("%s (%d) joined a game in %d" % (fname, uid, game.cid))
 		if len(game.playerlist) > 4:
 			bot.send_message(game.cid, fname + " has joined the game. Type /startgame if this was the last player and you want to start with %d players!" % len(game.playerlist))
 		elif len(game.playerlist) == 1:
