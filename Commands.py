@@ -242,9 +242,9 @@ def command_votes(bot, update):
 					for player in game.player_sequence:
 						# If the player is in the last_votes (He voted), mark him as he registered a vote
 						if player.uid in game.board.state.last_votes:
-							history_text += "%s registered a vote." % (game.playerlist[player.uid].name)
+							history_text += "%s registered a vote.\n" % (game.playerlist[player.uid].name)
 						else:
-							history_text += "%s didn't registered a vote." % (game.playerlist[player.uid].name)
+							history_text += "%s didn't registered a vote.\n" % (game.playerlist[player.uid].name)
 					bot.send_message(cid, history_text)
 				else:
 					bot.send_message(cid, "Five minutes must pass to see the votes") 
@@ -275,7 +275,7 @@ def command_calltovote(bot, update):
 						# If the player is not in last_votes send him reminder
 						if player.uid not in game.board.state.last_votes:
 							bot.send_message(cid, text="It's time to vote [%s](tg://user?id=%d).\n" % 
-								(game.playerlist[player.uid].name, uid), parse_mode=ParseMode.MARKDOWN)							
+								(game.playerlist[player.uid].name, player.uid), parse_mode=ParseMode.MARKDOWN)							
 				else:
 					bot.send_message(cid, "Five minutes must pass to see call to vote") 
 		else:
