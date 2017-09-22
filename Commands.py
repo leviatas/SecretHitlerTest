@@ -172,17 +172,16 @@ def command_join(bot, update, args):
 			bot.send_message(uid, "You joined a game in %s. I will soon tell you your secret role." % groupName)			 
 			game.add_player(uid, player)
 			log.info("%s (%d) joined a game in %d" % (fname, uid, game.cid))
+			if len(game.playerlist) > 4:
+				bot.send_message(game.cid, fname + " has joined the game. Type /startgame if this was the last player and you want to start with %d players!" % len(game.playerlist))
+			elif len(game.playerlist) == 1:
+				bot.send_message(game.cid, "%s has joined the game. There is currently %d player in the game and you need 5-10 players." % (fname, len(game.playerlist)))
+			else:
+				bot.send_message(game.cid, "%s has joined the game. There are currently %d players in the game and you need 5-10 players." % (fname, len(game.playerlist)))
 		except Exception:
 			bot.send_message(game.cid,
 				fname + ", I can\'t send you a private message. Please go to @secrethitlertestlbot and click \"Start\".\nYou then need to send /join again.")
-		if len(game.playerlist) > 4:
-			bot.send_message(game.cid, fname + " has joined the game. Type /startgame if this was the last player and you want to start with %d players!" % len(game.playerlist))
-		elif len(game.playerlist) == 1:
-			bot.send_message(game.cid, "%s has joined the game. There is currently %d player in the game and you need 5-10 players." % (fname, len(game.playerlist)))
-		else:
-			bot.send_message(game.cid, "%s has joined the game. There are currently %d players in the game and you need 5-10 players." % (fname, len(game.playerlist)))
-
-
+		
 def command_startgame(bot, update):
     log.info('command_startgame called')
     cid = update.message.chat_id
