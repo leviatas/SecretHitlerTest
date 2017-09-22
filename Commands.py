@@ -225,7 +225,7 @@ def command_votes(bot, update):
 	try:
 		#Send message of executing command   
 		cid = update.message.chat_id
-		bot.send_message(cid, "Looking for history...")
+		#bot.send_message(cid, "Looking for history...")
 		#Check if there is a current game 
 		if cid in GamesController.games.keys():
 			game = GamesController.games.get(cid, None)
@@ -238,7 +238,7 @@ def command_votes(bot, update):
 				stop = datetime.datetime.now()
 				elapsed = stop - start
 				if elapsed > datetime.timedelta(minutes=1):
-					history_text = "Vote history for President %s and Chancellor %s:\n" % (game.board.state.nominated_president.name, game.board.state.nominated_chancellor.name)
+					history_text = "Vote history for President %s and Chancellor %s:\n\n" % (game.board.state.nominated_president.name, game.board.state.nominated_chancellor.name)
 					for player in game.player_sequence:
 						# If the player is in the last_votes (He voted), mark him as he registered a vote
 						if player.uid in game.board.state.last_votes:
@@ -271,11 +271,13 @@ def command_calltovote(bot, update):
 				elapsed = stop - start
 				if elapsed > datetime.timedelta(minutes=1):
 					# Only remember to vote to players that are still in the game
+					history_text = ""
 					for player in game.player_sequence:
 						# If the player is not in last_votes send him reminder
 						if player.uid not in game.board.state.last_votes:
-							bot.send_message(cid, text="It's time to vote [%s](tg://user?id=%d).\n" % 
-								(game.playerlist[player.uid].name, player.uid), parse_mode=ParseMode.MARKDOWN)							
+							history_text += "It's time to vote [%s](tg://user?id=%d).\n" % 
+								(game.playerlist[player.uid].name, player.uid)
+					bot.send_message(cid, text=history_text, parse_mode=ParseMode.MARKDOWN)
 				else:
 					bot.send_message(cid, "Five minutes must pass to see call to vote") 
 		else:
