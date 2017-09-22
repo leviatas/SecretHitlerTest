@@ -244,7 +244,7 @@ def command_votes(bot, update):
 						if player.uid in game.board.state.last_votes:
 							history_text += "%s registered a vote.\n" % (game.playerlist[player.uid].name)
 						else:
-							history_text += "%s didn't registered a vote.\n" % (game.playerlist[player.uid].name)
+							history_text += "%s didn't register a vote.\n" % (game.playerlist[player.uid].name)
 					bot.send_message(cid, history_text)
 				else:
 					bot.send_message(cid, "Five minutes must pass to see the votes") 
@@ -295,10 +295,12 @@ def command_showhistory(bot, update):
 		if cid in GamesController.games.keys():
 			game = GamesController.games.get(cid, None)  
 			bot.send_message(cid, "Current round: " + str(game.board.state.currentround))
-			bot.send_message(cid, "This players are playing the game\n")
+			
+			'''bot.send_message(cid, "This players are playing the game\n")
 			for uid in game.playerlist:
 				bot.send_message(cid, text="[%s](tg://user?id=%d)\n" % 
 					(game.playerlist[uid].name, uid), parse_mode=ParseMode.MARKDOWN)
+			'''
 		else:
 			bot.send_message(cid, "There is no game in this chat. Create a new game with /newgame")
 	except Exception as e:
