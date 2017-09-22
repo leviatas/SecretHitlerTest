@@ -10,7 +10,6 @@ class Game(object):
         self.initiator = initiator
         self.history = []
         self.dateinitvote = None
-        self.currentround = -1
 
     def add_player(self, uid, player):
         self.playerlist[uid] = player
