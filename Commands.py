@@ -14,6 +14,7 @@ from Constants.Config import STATS
 from Boardgamebox.Board import Board
 from Boardgamebox.Game import Game
 from Boardgamebox.Player import Player
+from Boardgamebox.State import State
 from Constants.Config import ADMIN
 
 # Enable logging
