@@ -203,7 +203,9 @@ def encode_all(obj):
         if isinstance(obj, Player):
             return obj.__dict__
         if isinstance(obj, Board):
-            return obj.__dict__            
+            return obj.__dict__    
+	if isinstance(obj, State):
+            return obj.__dict__    
         return str(obj)
 			
 def command_startgame(bot, update):
