@@ -707,11 +707,11 @@ def inform_fascists(bot, game, player_number):
                 fstring = fstring[:-2]
                 bot.send_message(uid, "Your fellow fascists are: %s" % fstring)
             hitler = game.get_hitler()
-            bot.send_message(uid, "Hitler is: %s" % hitler.name)
+            #bot.send_message(uid, "Hitler is: %s" % hitler.name) #Uncoomend on production
         elif role == "Hitler":
             if player_number <= 6:
                 fascists = game.get_fascists()
-                bot.send_message(uid, "Your fellow fascist is: %s" % fascists[0].name)
+                #bot.send_message(uid, "Your fellow fascist is: %s" % fascists[0].name) // Uncoommend on production
         elif role == "Liberal":
             pass
         else:
