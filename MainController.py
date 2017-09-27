@@ -751,49 +751,58 @@ def error(bot, update, error):
 
 
 def main():
-    GamesController.init() #Call only once
-    #initialize_testdata()
+        GamesController.init() #Call only once
+        #initialize_testdata()
+        
+        #Init DB    
+        conn.autocommit = True
+        cur = conn.cursor()
+        cur.execute(open("DBCreate.sql", "r").read())
+        '''
+        query = "SELECT ...."
+        cur.execute(query)
+        '''
+        
+        updater = Updater(TOKEN)
 
-    updater = Updater(TOKEN)
+        # Get the dispatcher to register handlers
+        dp = updater.dispatcher
 
-    # Get the dispatcher to register handlers
-    dp = updater.dispatcher
+        # on different commands - answer in Telegram
+        dp.add_handler(CommandHandler("start", Commands.command_start))
+        dp.add_handler(CommandHandler("help", Commands.command_help))
+        dp.add_handler(CommandHandler("board", Commands.command_board))
+        dp.add_handler(CommandHandler("rules", Commands.command_rules))
+        dp.add_handler(CommandHandler("ping", Commands.command_ping))
+        dp.add_handler(CommandHandler("symbols", Commands.command_symbols))
+        dp.add_handler(CommandHandler("stats", Commands.command_stats))
+        dp.add_handler(CommandHandler("newgame", Commands.command_newgame))
+        dp.add_handler(CommandHandler("startgame", Commands.command_startgame))
+        dp.add_handler(CommandHandler("cancelgame", Commands.command_cancelgame))
+        dp.add_handler(CommandHandler("join", Commands.command_join, pass_args = True))
+        dp.add_handler(CommandHandler("history", Commands.command_showhistory))
+        dp.add_handler(CommandHandler("votes", Commands.command_votes))
+        dp.add_handler(CommandHandler("calltovote", Commands.command_calltovote))
 
-    # on different commands - answer in Telegram
-    dp.add_handler(CommandHandler("start", Commands.command_start))
-    dp.add_handler(CommandHandler("help", Commands.command_help))
-    dp.add_handler(CommandHandler("board", Commands.command_board))
-    dp.add_handler(CommandHandler("rules", Commands.command_rules))
-    dp.add_handler(CommandHandler("ping", Commands.command_ping))
-    dp.add_handler(CommandHandler("symbols", Commands.command_symbols))
-    dp.add_handler(CommandHandler("stats", Commands.command_stats))
-    dp.add_handler(CommandHandler("newgame", Commands.command_newgame))
-    dp.add_handler(CommandHandler("startgame", Commands.command_startgame))
-    dp.add_handler(CommandHandler("cancelgame", Commands.command_cancelgame))
-    dp.add_handler(CommandHandler("join", Commands.command_join, pass_args = True))
-    dp.add_handler(CommandHandler("history", Commands.command_showhistory))
-    dp.add_handler(CommandHandler("votes", Commands.command_votes))
-    dp.add_handler(CommandHandler("calltovote", Commands.command_calltovote))
+        dp.add_handler(CallbackQueryHandler(pattern="(-[0-9]*)_chan_(.*)", callback=nominate_chosen_chancellor))
+        dp.add_handler(CallbackQueryHandler(pattern="(-[0-9]*)_insp_(.*)", callback=choose_inspect))
+        dp.add_handler(CallbackQueryHandler(pattern="(-[0-9]*)_choo_(.*)", callback=choose_choose))
+        dp.add_handler(CallbackQueryHandler(pattern="(-[0-9]*)_kill_(.*)", callback=choose_kill))
+        dp.add_handler(CallbackQueryHandler(pattern="(-[0-9]*)_(yesveto|noveto)", callback=choose_veto))
+        dp.add_handler(CallbackQueryHandler(pattern="(-[0-9]*)_(liberal|fascist|veto)", callback=choose_policy))
+        dp.add_handler(CallbackQueryHandler(pattern="(-[0-9]*)_(Ja|Nein)", callback=handle_voting))
 
-    dp.add_handler(CallbackQueryHandler(pattern="(-[0-9]*)_chan_(.*)", callback=nominate_chosen_chancellor))
-    dp.add_handler(CallbackQueryHandler(pattern="(-[0-9]*)_insp_(.*)", callback=choose_inspect))
-    dp.add_handler(CallbackQueryHandler(pattern="(-[0-9]*)_choo_(.*)", callback=choose_choose))
-    dp.add_handler(CallbackQueryHandler(pattern="(-[0-9]*)_kill_(.*)", callback=choose_kill))
-    dp.add_handler(CallbackQueryHandler(pattern="(-[0-9]*)_(yesveto|noveto)", callback=choose_veto))
-    dp.add_handler(CallbackQueryHandler(pattern="(-[0-9]*)_(liberal|fascist|veto)", callback=choose_policy))
-    dp.add_handler(CallbackQueryHandler(pattern="(-[0-9]*)_(Ja|Nein)", callback=handle_voting))
-    
 
-    # log all errors
-    dp.add_error_handler(error)
+        # log all errors
+        dp.add_error_handler(error)
 
-    # Start the Bot
-    updater.start_polling()
+        # Start the Bot
+        updater.start_polling()
 
-    # Run the bot until the you presses Ctrl-C or the process receives SIGINT,
-    # SIGTERM or SIGABRT. This should be used most of the time, since
-    # start_polling() is non-blocking and will stop the bot gracefully.
-    updater.idle()
+        # Run the bot until the you presses Ctrl-C or the process receives SIGINT,
+        # SIGTERM or SIGABRT. This should be used most of the time, since
+        # start_polling() is non-blocking and will stop the bot gracefully.
+        updater.idle()
 
 
 if __name__ == '__main__':
