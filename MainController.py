@@ -758,9 +758,11 @@ def main():
         conn.autocommit = True
         cur = conn.cursor()
         cur.execute(open("DBCreate.sql", "r").read())
-                
-        query = "INSERT INTO users(facebook_id, name , access_token , created) values ('1','2','3',1) RETURNING id;"
-        cur.execute(sql, (facebook_id, name, access_token, created))        
+        
+        log.info('Insertando')
+        query = "INSERT INTO users(facebook_id, name , access_token , created) values ('2','3','4',1) RETURNING id;"
+        log.info('Por ejecutar')
+        cur.execute(sql)       
         user_id = cur.fetchone()[0]        
         log.info(user_id)
         
