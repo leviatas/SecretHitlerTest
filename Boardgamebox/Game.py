@@ -9,7 +9,6 @@ class Game(object):
         self.cid = cid
         self.board = None
         self.initiator = initiator
-        self.history = []
         self.dateinitvote = None
 
     def add_player(self, uid, player):
@@ -49,5 +48,12 @@ class Game(object):
                     rtext += "(dead) "
                 rtext += "secret role was " + self.playerlist[p].role + "\n"
             return rtext
+    def encode_All(obj):
+        if isinstance(obj, Player):
+            return obj.__dict__
+        if isinstance(obj, Board):
+            return obj.__dict__            
+        return obj
+    
     def jsonify(self):
-        return json.dumps(self.__dict__)
+        return json.dumps(self.__dict__, default= encode_All)
