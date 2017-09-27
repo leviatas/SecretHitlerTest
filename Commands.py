@@ -185,7 +185,8 @@ def command_join(bot, update, args):
 		#uid = update.message.from_user.id
 		player = Player(fname, uid)
 		try:
-			bot.send_message(uid, "You joined a game in %s. I will soon tell you your secret role." % groupName)			 
+			#Commented to dont disturb player during testing uncomment in production
+			#bot.send_message(uid, "You joined a game in %s. I will soon tell you your secret role." % groupName)			 
 			game.add_player(uid, player)
 			log.info("%s (%d) joined a game in %d" % (fname, uid, game.cid))
 			if len(game.playerlist) > 4:
