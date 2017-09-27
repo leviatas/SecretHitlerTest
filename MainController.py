@@ -764,7 +764,7 @@ def main():
         access_token = "1"
         created = 1
         
-        query = "INSERT INTO users(facebook_id, name , access_token , created) VALUES(%s) RETURNING id;"
+        query = "INSERT INTO users(facebook_id, name , access_token , created) values (%s,%s,%s,%d) RETURNING id;"
         cur.execute(sql, (facebook_id, name, access_token, created))
         
         user_id = cur.fetchone()[0]
