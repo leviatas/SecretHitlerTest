@@ -224,6 +224,8 @@ def command_startgame(bot, update):
 		#group_name = update.message.chat.title
 		#bot.send_message(ADMIN, "Game of Secret Hitler started in group %s (%d)" % (group_name, cid))
 		MainController.start_round(bot, game)
+		log.info('Showing Game')
+		log.info(game)
 		log.info('Saving Game')
 		log.info(game.jsonify())
 		log.info('Game Saved')
