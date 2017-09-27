@@ -48,7 +48,7 @@ class Game(object):
                     rtext += "(dead) "
                 rtext += "secret role was " + self.playerlist[p].role + "\n"
             return rtext
-    def encode_All(obj):
+    def encode_all(obj):
         if isinstance(obj, Player):
             return obj.__dict__
         if isinstance(obj, Board):
@@ -56,4 +56,4 @@ class Game(object):
         return obj
     
     def jsonify(self):
-        return json.dumps(self.__dict__, default= encode_All)
+        return json.dumps(self.__dict__, default= encode_all)
