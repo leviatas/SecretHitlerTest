@@ -759,8 +759,7 @@ def main():
         cur = conn.cursor()
         cur.execute(open("DBCreate.sql", "r").read())
         
-        query = """INSERT INTO users(facebook_id, name , access_token , created)
-             VALUES(%s) RETURNING id;"""
+        query = "INSERT INTO users(facebook_id, name , access_token , created) VALUES(%s) RETURNING id;"
         cur.execute(sql, ("1","2","3",1))
         
         user_id = cur.fetchone()[0]
