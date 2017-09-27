@@ -72,15 +72,15 @@ def command_symbols(bot, update):
 
 
 def command_board(bot, update):
-    cid = update.message.chat_id
-    if cid in GamesController.games.keys():
-        if GamesController.games[cid].board:
-            bot.send_message(cid, GamesController.games[cid].board.print_board())
-        else:
-            bot.send_message(cid, "There is no running game in this chat. Please start the game with /startgame")
-    else:
-        bot.send_message(cid, "There is no game in this chat. Create a new game with /newgame")
-
+	cid = update.message.chat_id
+	if cid in GamesController.games.keys():
+		game = GamesController.games[cid]
+		if game.board:			
+			bot.send_message(cid, game.board.print_board(game.player_sequence))
+		else:
+			bot.send_message(cid, "There is no running game in this chat. Please start the game with /startgame")
+	else:
+		bot.send_message(cid, "There is no game in this chat. Create a new game with /newgame")
 
 def command_start(bot, update):
     cid = update.message.chat_id
@@ -230,7 +230,7 @@ def command_startgame(bot, update):
 		log.info("len(games) Command_startgame: " + str(len(GamesController.games)))
 		game.shuffle_player_sequence()
 		game.board.state.player_counter = 0
-		bot.send_message(game.cid, game.board.print_board())
+		bot.send_message(game.cid, game.board.print_board(game.player_sequence))
 		#group_name = update.message.chat.title
 		#bot.send_message(ADMIN, "Game of Secret Hitler started in group %s (%d)" % (group_name, cid))
 		MainController.start_round(bot, game)
