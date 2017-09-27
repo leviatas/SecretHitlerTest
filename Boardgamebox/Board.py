@@ -9,11 +9,11 @@ class Board(object):
         self.num_players = playercount
         self.fascist_track_actions = playerSets[self.num_players]["track"]
         self.policies = random.sample(policies, len(policies))
-        self.game = game
+        #self.game = game
         self.discards = []
         self.previous = []
 
-    def print_board(self):
+    def print_board(self, player_sequence):
         board = "--- Liberal acts ---\n"
         for i in range(5):
             if i < self.state.liberal_track:
@@ -49,7 +49,7 @@ class Board(object):
                 board += u"\u25FB\uFE0F" + " " #empty
 
         board += "\n--- Presidential order  ---\n"
-        for player in self.game.player_sequence:
+        for player in player_sequence:
             board += player.name + " " + u"\u27A1\uFE0F" + " "
         board = board[:-3]
         board += u"\U0001F501"
