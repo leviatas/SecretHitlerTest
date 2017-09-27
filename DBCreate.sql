@@ -1,7 +1,15 @@
-CREATE TABLE IF NOT EXISTS users2 (
-    id SERIAL PRIMARY KEY,
-    facebook_id TEXT NOT NULL,
-    name TEXT NOT NULL,
-    access_token TEXT,
-    created INTEGER NOT NULL
+drop table if exists users
+drop table if exists users2
+drop table if exists games
+
+CREATE TABLE IF NOT EXISTS users (
+    uid bigint PRIMARY KEY,
+    name text NOT NULL
 );
+
+CREATE TABLE IF NOT EXISTS games (
+    cid bigint PRIMARY KEY,
+    groupName TEXT NOT NULL,
+    data json NOT NULL
+);
+
