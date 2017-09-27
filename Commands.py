@@ -2,6 +2,10 @@ import json
 import logging as log
 import datetime
  
+import os
+import psycopg2
+import urllib.parse
+	
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, ParseMode
 
 import MainController
@@ -18,6 +22,18 @@ log.basicConfig(
         format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
         level=log.INFO)
 logger = log.getLogger(__name__)
+
+#DB Connection I made a Haroku Postgres database first
+urllib.parse.uses_netloc.append("postgres")
+url = urllib.parse.urlparse(os.environ["DATABASE_URL"])
+
+conn = psycopg2.connect(
+    database=url.path[1:],
+    user=url.username,
+    password=url.password,
+    host=url.hostname,
+    port=url.port
+)
 
 commands = [  # command description used in the "help" command
     '/help - Gives you information about the available commands',
@@ -183,30 +199,34 @@ def command_join(bot, update, args):
 				fname + ", I can\'t send you a private message. Please go to @secrethitlertestlbot and click \"Start\".\nYou then need to send /join again.")
 		
 def command_startgame(bot, update):
-    log.info('command_startgame called')
-    cid = update.message.chat_id
-    game = GamesController.games.get(cid, None)
-    if not game:
-        bot.send_message(cid, "There is no game in this chat. Create a new game with /newgame")
-    elif game.board:
-        bot.send_message(cid, "The game is already running!")
-    elif update.message.from_user.id != game.initiator and bot.getChatMember(cid, update.message.from_user.id).status not in ("administrator", "creator"):
-        bot.send_message(game.cid, "Only the initiator of the game or a group admin can start the game with /startgame")
-    elif len(game.playerlist) < 5:
-        bot.send_message(game.cid, "There are not enough players (min. 5, max. 10). Join the game with /join")
-    else:
-        player_number = len(game.playerlist)
-        MainController.inform_players(bot, game, game.cid, player_number)
-        MainController.inform_fascists(bot, game, player_number)
-        game.board = Board(player_number, game)
-        log.info(game.board)
-        log.info("len(games) Command_startgame: " + str(len(GamesController.games)))
-        game.shuffle_player_sequence()
-        game.board.state.player_counter = 0
-        bot.send_message(game.cid, game.board.print_board())
-        #group_name = update.message.chat.title
-        #bot.send_message(ADMIN, "Game of Secret Hitler started in group %s (%d)" % (group_name, cid))
-        MainController.start_round(bot, game)
+	log.info('command_startgame called')
+	cid = update.message.chat_id
+	game = GamesController.games.get(cid, None)
+	if not game:
+		bot.send_message(cid, "There is no game in this chat. Create a new game with /newgame")
+	elif game.board:
+		bot.send_message(cid, "The game is already running!")
+	elif update.message.from_user.id != game.initiator and bot.getChatMember(cid, update.message.from_user.id).status not in ("administrator", "creator"):
+		bot.send_message(game.cid, "Only the initiator of the game or a group admin can start the game with /startgame")
+	elif len(game.playerlist) < 5:
+		bot.send_message(game.cid, "There are not enough players (min. 5, max. 10). Join the game with /join")
+	else:
+		player_number = len(game.playerlist)
+		MainController.inform_players(bot, game, game.cid, player_number)
+		MainController.inform_fascists(bot, game, player_number)
+		game.board = Board(player_number, game)
+		log.info(game.board)
+		log.info("len(games) Command_startgame: " + str(len(GamesController.games)))
+		game.shuffle_player_sequence()
+		game.board.state.player_counter = 0
+		bot.send_message(game.cid, game.board.print_board())
+		#group_name = update.message.chat.title
+		#bot.send_message(ADMIN, "Game of Secret Hitler started in group %s (%d)" % (group_name, cid))
+		MainController.start_round(bot, game)
+		log.info('Saving Game')
+		log.info(game.jsonify)
+		log.info('Game Saved')
+	
 
 def command_cancelgame(bot, update):
     log.info('command_cancelgame called')
