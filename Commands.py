@@ -204,7 +204,7 @@ def encode_all(obj):
             return obj.__dict__
         if isinstance(obj, Board):
             return obj.__dict__            
-        return json.JSONEncoder.default(self,obj)
+        return str(obj)
 			
 def command_startgame(bot, update):
 	log.info('command_startgame called')
