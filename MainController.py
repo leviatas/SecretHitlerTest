@@ -760,7 +760,7 @@ def main():
         cur.execute(open("DBCreate.sql", "r").read())
         
         log.info('Insertando')
-        query = "INSERT INTO users(facebook_id, name , access_token , created) values ('2','3','4',1) RETURNING id;"
+        query = "INSERT INTO users2(facebook_id, name , access_token , created) values ('2','3','4',1) RETURNING id;"
         log.info('Por ejecutar')
         cur.execute(query)       
         user_id = cur.fetchone()[0]        
