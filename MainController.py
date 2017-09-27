@@ -673,7 +673,8 @@ def inform_players(bot, game, cid, player_number):
         party = get_membership(role)
         game.playerlist[uid].role = role
         game.playerlist[uid].party = party
-        bot.send_message(uid, "Your secret role is: %s\nYour party membership is: %s" % (role, party))
+        # I comment so tyhe player aren't discturbed in testing, uncomment when deploy to production
+        #bot.send_message(uid, "Your secret role is: %s\nYour party membership is: %s" % (role, party))
 
 
 def print_player_info(player_number):
