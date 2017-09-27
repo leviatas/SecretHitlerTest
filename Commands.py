@@ -200,13 +200,13 @@ def command_join(bot, update, args):
 				fname + ", I can\'t send you a private message. Please go to @secrethitlertestlbot and click \"Start\".\nYou then need to send /join again.")
 
 def encode_all(obj):
-        if isinstance(obj, Player):
-            return obj.__dict__
-        if isinstance(obj, Board):
-            return obj.__dict__    
+	if isinstance(obj, Player):
+	    return obj.__dict__
+	if isinstance(obj, Board):
+	    return obj.__dict__    
 	if isinstance(obj, State):
-            return obj.__dict__    
-        return str(obj)
+		return obj.__dict__
+	return str(obj)
 			
 def command_startgame(bot, update):
 	log.info('command_startgame called')
