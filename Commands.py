@@ -227,7 +227,7 @@ def command_startgame(bot, update):
 		log.info('Showing Game')
 		log.info(game)
 		log.info('Saving Game')
-		log.info(json.dumps(game.__dict__, default=encode_All))
+		log.info(json.dumps(game.__dict__, default=encode_all))
 		log.info('Game Saved')
 	
 
