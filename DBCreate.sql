@@ -1,6 +1,6 @@
-drop table if exists users
-drop table if exists users2
-drop table if exists games
+drop table if exists users;
+drop table if exists users2;
+drop table if exists games;
 
 CREATE TABLE IF NOT EXISTS users (
     uid bigint PRIMARY KEY,
