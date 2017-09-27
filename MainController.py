@@ -754,19 +754,22 @@ def main():
         GamesController.init() #Call only once
         #initialize_testdata()
         
-        #Init DB    
+        #Init DB Create tables if they don't exist   
+        log.info('Init DB')
         conn.autocommit = True
         cur = conn.cursor()
         cur.execute(open("DBCreate.sql", "r").read())
-        
+        log.info('DB Created/Updated')
+        conn.autocommit = False
+        '''
         log.info('Insertando')
-        query = "INSERT INTO users2(facebook_id, name , access_token , created) values ('2','3','4',1) RETURNING id;"
+        query = "INSERT INTO users(facebook_id, name , access_token , created) values ('2','3','4',1) RETURNING id;"
         log.info('Por ejecutar')
         cur.execute(query)       
         user_id = cur.fetchone()[0]        
         log.info(user_id)
         
-        '''
+        
         query = "SELECT ...."
         cur.execute(query)
         '''
