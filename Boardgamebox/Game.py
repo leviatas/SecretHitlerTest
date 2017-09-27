@@ -1,3 +1,4 @@
+import json
 from datetime import datetime
 from random import shuffle
 
@@ -48,3 +49,5 @@ class Game(object):
                     rtext += "(dead) "
                 rtext += "secret role was " + self.playerlist[p].role + "\n"
             return rtext
+    def jsonify(self):
+        return json.dumps(foo.__dict__)
