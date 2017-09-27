@@ -198,7 +198,14 @@ def command_join(bot, update, args):
 		except Exception:
 			bot.send_message(game.cid,
 				fname + ", I can\'t send you a private message. Please go to @secrethitlertestlbot and click \"Start\".\nYou then need to send /join again.")
-		
+
+def encode_all(obj):
+        if isinstance(obj, Player):
+            return obj.__dict__
+        if isinstance(obj, Board):
+            return obj.__dict__            
+        return obj
+			
 def command_startgame(bot, update):
 	log.info('command_startgame called')
 	cid = update.message.chat_id
@@ -329,5 +336,7 @@ def command_showhistory(bot, update):
 			bot.send_message(cid, "There is no game in this chat. Create a new game with /newgame")
 	except Exception as e:
 		bot.send_message(cid, str(e))
-		log.error("Unknown error: " + str(e))      
+		log.error("Unknown error: " + str(e))     
+
+
         
