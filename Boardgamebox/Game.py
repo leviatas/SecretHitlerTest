@@ -50,4 +50,4 @@ class Game(object):
                 rtext += "secret role was " + self.playerlist[p].role + "\n"
             return rtext
     def jsonify(self):
-        return json.dumps(foo.__dict__)
+        return json.dumps(self.__dict__)
