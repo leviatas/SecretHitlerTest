@@ -173,7 +173,7 @@ def command_newgame(bot, update):
 			dbdata = cur.fetchone()
 			
 			log.info("Data fectched")
-			log.info(dbdata)
+			#log.info(dbdata)
 						
 			if cur.rowcount > 0:
 				jsdata = dbdata[2]
@@ -183,7 +183,7 @@ def command_newgame(bot, update):
 				#log.info("'%s'" % (jsdata))
 				
 				game = Game(jsdata)
-				log.info(game)
+				#log.info(game)
 							
 				'''jsdata = str(jsdata).replace("'","\"")	
 				log.info(jsdata)				
@@ -194,7 +194,7 @@ def command_newgame(bot, update):
 				log.info(game.player_sequence )
 				log.info(game.cid)
 				log.info(game.board )
-				log.info(game.board.state)
+				log.info(game.board.state.currentround )
 				log.info(game.initiator )
 				log.info(game.dateinitvote )
 				
