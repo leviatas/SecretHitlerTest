@@ -182,6 +182,9 @@ def command_newgame(bot, update):
 				#log.info(jsdata)
 				#log.info("'%s'" % (jsdata))
 				
+				game = Game(jsdata)
+				log.info(game)
+							
 				jsdata = str(jsdata).replace("'","\"")	
 				log.info(jsdata)				
 				x = json.loads("""%s""" % (jsdata), object_hook=lambda d: namedtuple('X', d.keys())(*d.values()))
