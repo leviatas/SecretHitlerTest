@@ -172,9 +172,10 @@ def command_newgame(bot, update):
 			dbdata = cur.fetchone()
 			
 			log.info("Data fectched")
-			log.info(dbdata)
-			
+			#log.info(dbdata)
+						
 			if cur.rowcount > 0:
+				log.info(dbdata[2])
 				s1 = json.dumps(dbdata[2])
 				d2 = json.loads(s1)
 				x = json.loads(d2, object_hook=lambda d: namedtuple('X', d.keys())(*d.values()))
