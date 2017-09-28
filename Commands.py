@@ -243,7 +243,7 @@ def command_startgame(bot, update):
 		
 		# Insert game into DB		
 		log.info('Updating Game info')
-		query = "INSERT INTO games(cid , groupName  , data) values (cid, groupName, gamejson) RETURNING cid;"
+		query = "INSERT INTO games(id , groupName  , data) values (cid, groupName, gamejson) RETURNING cid;"
 		log.info('Finished updating Game info')		
 		cur = conn.cursor()
 		cur.execute(query)
