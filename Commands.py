@@ -1,7 +1,8 @@
 import json
 import logging as log
 import datetime
- 
+import ast
+
 import os
 import psycopg2
 import urllib.parse
@@ -175,9 +176,10 @@ def command_newgame(bot, update):
 			#log.info(dbdata)
 						
 			if cur.rowcount > 0:
-				log.info("'%s'" % dbdata[2])
-				
-				x = json.loads("""%s""" % dbdata[2], object_hook=lambda d: namedtuple('X', d.keys())(*d.values()))
+				#log.info("'%s'" % dbdata[2])
+				jsdata = ast.literal_eval(dbdata[2])
+				log.info(jsdata)
+				x = json.loads(jsdata, object_hook=lambda d: namedtuple('X', d.keys())(*d.values()))
 			else:
 				GamesController.games[cid] = Game(cid, update.message.from_user.id)
 			
