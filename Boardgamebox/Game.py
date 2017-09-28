@@ -2,6 +2,10 @@ import json
 from datetime import datetime
 from random import shuffle
 
+from Boardgamebox.Player import Player
+from Boardgamebox.Board import Board
+from Boardgamebox.State import State
+
 class Game(object):
     def __init__(self, cid, initiator):
         self.playerlist = {}
