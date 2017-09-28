@@ -16,6 +16,7 @@ from Boardgamebox.Game import Game
 from Boardgamebox.Player import Player
 from Boardgamebox.State import State
 from Constants.Config import ADMIN
+from collections import namedtuple
 
 # Enable logging
 
@@ -171,10 +172,10 @@ def command_newgame(bot, update):
 			dbdata = cur.fetchall()
 			
 			log.info("Data fectched")
-			log.info(dbdata)
+			#log.info(dbdata)
 			
 			if cur.rowcount > 0:
-				log.info(dbdata)
+				x = json.loads(dbdata, object_hook=lambda d: namedtuple('X', d.keys())(*d.values()))
 			else:
 				GamesController.games[cid] = Game(cid, update.message.from_user.id)
 			
