@@ -12,7 +12,7 @@ class Game(object):
         self.dateinitvote = None
     
     def __init__(self, data):
-        for name, value in data.iteritems():
+        for name, value in data.items():
             setattr(self, name, self._wrap(value))
 
     def _wrap(self, value):
