@@ -15,17 +15,6 @@ class Game(object):
         self.initiator = initiator
         self.dateinitvote = None
     
-    def __init__(self, data):
-        for name, value in data.items():
-            setattr(self, name, self._wrap(value))
-
-    def _wrap(self, value):
-        if isinstance(value, (tuple, list, set, frozenset)): 
-            return type(value)([self._wrap(v) for v in value])
-        else:  
-            if isinstance(value, Board):
-                return Board(value)
-            return Game(value) if isinstance(value, dict) else value
     
     def add_player(self, uid, player):
         self.playerlist[uid] = player
