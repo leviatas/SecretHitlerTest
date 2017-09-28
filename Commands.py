@@ -175,7 +175,7 @@ def command_newgame(bot, update):
 			#log.info(dbdata)
 						
 			if cur.rowcount > 0:
-				log.info("""%s""" % dbdata[2])
+				log.info("'%s'" % dbdata[2])
 				
 				x = json.loads("""%s""" % dbdata[2], object_hook=lambda d: namedtuple('X', d.keys())(*d.values()))
 			else:
