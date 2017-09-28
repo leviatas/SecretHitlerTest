@@ -167,7 +167,7 @@ def command_newgame(bot, update):
 			log.info('ResultCount = %d' % len(rows))
 			
 			log.info("Searching Game")
-			query = "select * from games where id = %s;"
+			query = "select * from games where id = %d;"
 			cur.execute(query, (cid))						
 			dbdata = cur.fetchone()
 			
