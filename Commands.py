@@ -6,6 +6,7 @@ import jsonpickle
 import os
 import psycopg2
 import urllib.parse
+
 	
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, ParseMode
 
@@ -304,7 +305,7 @@ def command_startgame(bot, update):
 		log.info(game)
 		log.info('Saving Game')
 		log.info(json.dumps(game.__dict__, default=encode_all))
-		gamejson = json.dumps(game.__dict__, default=encode_all)
+		gamejson = jsonpickle.encode(game)
 		
 		# Insert game into DB		
 		log.info('Updating Game info')
