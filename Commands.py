@@ -190,7 +190,7 @@ def command_newgame(bot, update):
 				x = json.loads("""%s""" % (jsdata), object_hook=lambda d: namedtuple('X', d.keys())(*d.values()))
 				log.info(x)
 				'''
-				#GamesController.games[cid] = Game(cid, update.message.from_user.id)
+				GamesController.games[cid] = game
 				
 			else:
 				GamesController.games[cid] = Game(cid, update.message.from_user.id)
