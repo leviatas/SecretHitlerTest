@@ -151,9 +151,10 @@ def command_newgame(bot, update):
 						
 			if cur.rowcount > 0:
 				rows = cur.fetchall()
-				log.info(rows[0][0])
-				log.info(rows[0][1])
-				log.info(rows[0][2])
+				for row in rows:
+					log.info(row[0])
+					log.info(row[1])
+					log.info(row[2])
 			else:
 				GamesController.games[cid] = Game(cid, update.message.from_user.id)
 			
