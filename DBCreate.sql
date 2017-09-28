@@ -1,5 +1,5 @@
---drop table if exists users;
---drop table if exists games;
+drop table if exists users;
+drop table if exists games;
 
 CREATE TABLE IF NOT EXISTS users (
     uid bigint PRIMARY KEY,
@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS users (
 );
 
 CREATE TABLE IF NOT EXISTS games (
-    cid bigint PRIMARY KEY,
+    id bigint PRIMARY KEY,
     groupName TEXT NOT NULL,
     data json NOT NULL
 );
