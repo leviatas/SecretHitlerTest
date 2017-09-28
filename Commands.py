@@ -211,6 +211,7 @@ def encode_all(obj):
 			
 def command_startgame(bot, update):
 	log.info('command_startgame called')
+	groupName = update.message.chat.title
 	cid = update.message.chat_id
 	game = GamesController.games.get(cid, None)
 	if not game:
@@ -238,7 +239,14 @@ def command_startgame(bot, update):
 		log.info(game)
 		log.info('Saving Game')
 		log.info(json.dumps(game.__dict__, default=encode_all))
-		log.info('Game Saved')
+		gamejson = json.dumps(game.__dict__, default=encode_all)
+		
+		# Insert game into DB		
+		log.info('Updating Game info')
+		query = "INSERT INTO games(cid , groupName  , data) values (cid, groupName, gamejson) RETURNING cid;"
+		log.info('Finished updating Game info')		
+		cur.execute(query)
+		log.info(cur.fetchone()[0])
 	
 
 def command_cancelgame(bot, update):
