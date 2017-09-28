@@ -264,7 +264,7 @@ def command_startgame(bot, update):
 		
 		MainController.start_round(bot, game)		
 				
-		'''
+		
 		log.info(game)
 		log.info('Saving Game')
 		log.info(json.dumps(game.__dict__, default=encode_all))
@@ -277,7 +277,7 @@ def command_startgame(bot, update):
 		cur = conn.cursor()
 		cur.execute(query, (cid, groupName, gamejson))
 		log.info(cur.fetchone()[0])
-		'''
+		
 		
 		
 	
