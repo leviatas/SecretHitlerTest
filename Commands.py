@@ -179,7 +179,7 @@ def command_newgame(bot, update):
 				jsdata = dbdata[2]
 				#log.info("'%s'" % dbdata[2])
 				#jsdata = ast.literal_eval(dbdata[2])				
-				#log.info(jsdata)
+				log.info(jsdata)
 				#log.info("'%s'" % (jsdata))
 				
 				game = Game(jsdata)
@@ -197,6 +197,8 @@ def command_newgame(bot, update):
 				log.info(game.board.state.currentround )
 				log.info(game.initiator )
 				log.info(game.dateinitvote )
+				
+				game.print_roles()
 				
 				game.board.print_board(game.player_sequence)
 				
