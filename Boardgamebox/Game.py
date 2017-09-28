@@ -22,13 +22,7 @@ class Game(object):
     def _wrap(self, value):
         if isinstance(value, (tuple, list, set, frozenset)): 
             return type(value)([self._wrap(v) for v in value])
-        else:
-            if isinstance(value, Player):
-                Player(value)
-            if isinstance(value, Board):
-                Board(value)
-            if isinstance(value, State):
-                State(value)                
+        else:                 
             return Game(value) if isinstance(value, dict) else value
     
     def add_player(self, uid, player):
