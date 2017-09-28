@@ -167,12 +167,12 @@ def command_newgame(bot, update):
 			log.info('ResultCount = %d' % len(rows))
 			
 			log.info("Searching Game")
-			query = "select * from games;"
-			cur.execute(query)						
-			dbdata = cur.fetchall()
+			query = "select * from games where id = %s;"
+			cur.execute(query, (cid))						
+			dbdata = cur.fetchone()
 			
 			log.info("Data fectched")
-			#log.info(dbdata)
+			log.info(dbdata)
 			
 			if cur.rowcount > 0:
 				x = json.loads(dbdata, object_hook=lambda d: namedtuple('X', d.keys())(*d.values()))
