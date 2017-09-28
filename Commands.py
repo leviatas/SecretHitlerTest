@@ -178,13 +178,16 @@ def command_newgame(bot, update):
 			if cur.rowcount > 0:
 				jsdata = dbdata[2]
 				#log.info("'%s'" % dbdata[2])
-				#jsdata = ast.literal_eval(dbdata[2])
-				
+				#jsdata = ast.literal_eval(dbdata[2])				
 				#log.info(jsdata)
-				#log.info("'%s'" % (jsdata))				
+				#log.info("'%s'" % (jsdata))
+				
 				jsdata = str(jsdata).replace("'","\"")	
-				log.info(jsdata)
-				x = json.loads("'%s'" % (jsdata), object_hook=lambda d: namedtuple('X', d.keys())(*d.values()))
+				log.info(jsdata)				
+				x = json.loads("""%s""" % (jsdata), object_hook=lambda d: namedtuple('X', d.keys())(*d.values()))
+				log.info(x)
+				#GamesController.games[cid] = Game(cid, update.message.from_user.id)
+				
 			else:
 				GamesController.games[cid] = Game(cid, update.message.from_user.id)
 			
