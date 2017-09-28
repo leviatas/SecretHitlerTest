@@ -147,10 +147,11 @@ def command_newgame(bot, update):
 			#If the game is not in the bot try to load it from DB
 			query = "select * from games;"			
 			cur = conn.cursor()
-			cur.execute(query, (cid))
+			cur.execute(query)
 			log.info("Searching Game")			
 			dbdata = cur.fetchone()			
 			log.info("Data fectched")
+			log.info(dbdata)
 			if cur.rowcount > 0:
 				log.info(dbdata)
 			else:
