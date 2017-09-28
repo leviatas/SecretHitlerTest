@@ -307,6 +307,7 @@ def command_startgame(bot, update):
 		log.info(json.dumps(game.__dict__, default=encode_all))
 		gamejson = jsonpickle.encode(game)
 		
+		log.info(gamejson)
 		# Insert game into DB		
 		log.info('Updating Game info')
 		query = "INSERT INTO games(id , groupName  , data) values (%s, %s, %s) RETURNING id;"
