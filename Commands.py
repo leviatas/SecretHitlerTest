@@ -190,6 +190,13 @@ def command_newgame(bot, update):
 				x = json.loads("""%s""" % (jsdata), object_hook=lambda d: namedtuple('X', d.keys())(*d.values()))
 				log.info(x)
 				'''
+				log.info(game.playerlist )
+				log.info(game.player_sequence )
+				log.info(game.cid)
+				log.info(game.board )
+				log.info(game.board.state)
+				log.info(game.initiator )
+				log.info(game.dateinitvote )
 				
 				game.board.print_board(game.player_sequence)
 				
