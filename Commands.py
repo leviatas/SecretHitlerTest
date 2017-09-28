@@ -149,9 +149,10 @@ def command_newgame(bot, update):
 			cur = conn.cursor()
 			cur.execute(query, (cid))
 			log.info("Searching Game")			
+			cur.fetchone()			
 			if cur.rowcount > 0:
 				log.info("There is a Game!")
-				rows = cur.fetchall()
+				#rows = cur.fetchall()
 				for row in rows:
 					log.info("%d" % (row[0]))
 					log.info(row[1])
