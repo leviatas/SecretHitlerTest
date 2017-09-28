@@ -153,9 +153,9 @@ def command_newgame(bot, update):
 				log.info("There is a Game!")
 				rows = cur.fetchall()
 				for row in rows:
-					log.info(str(row[0]))
-					log.info(str(row[1]))
-					log.info(str(row[2)))
+					log.info("%d" % (row[0]))
+					log.info(row[1])
+					log.info(row[2])
 			else:
 				GamesController.games[cid] = Game(cid, update.message.from_user.id)
 			
