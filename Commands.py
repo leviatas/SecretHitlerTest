@@ -173,7 +173,7 @@ def command_newgame(bot, update):
 			dbdata = cur.fetchone()
 			
 			log.info("Data fectched")
-			#log.info(dbdata)
+			log.info(dbdata)
 						
 			if cur.rowcount > 0:
 				jsdata = dbdata[2]
