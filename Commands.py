@@ -147,6 +147,14 @@ def command_newgame(bot, update):
 			#If the game is not in the bot try to load it from DB
 			cur = conn.cursor()
 			
+			'''
+			query = "INSERT INTO users(id , name) values (%s, %s) RETURNING id;"
+			log.info('Players added')		
+			cur = conn.cursor()
+			cur.execute(query, (cid, groupName, gamejson))
+			log.info(cur.fetchone()[0])
+			'''		
+			
 			query = "select row_number() over(), * from games"
 			cur.execute(query)
 			rows = cur.fetchall()
@@ -262,8 +270,7 @@ def command_startgame(bot, update):
 		#group_name = update.message.chat.title
 		#bot.send_message(ADMIN, "Game of Secret Hitler started in group %s (%d)" % (group_name, cid))
 		
-		MainController.start_round(bot, game)		
-				
+		MainController.start_round(bot, game)
 		
 		log.info(game)
 		log.info('Saving Game')
@@ -277,9 +284,7 @@ def command_startgame(bot, update):
 		cur = conn.cursor()
 		cur.execute(query, (cid, groupName, gamejson))
 		log.info(cur.fetchone()[0])
-		
-		
-		
+		conn.commit()
 	
 
 def command_cancelgame(bot, update):
