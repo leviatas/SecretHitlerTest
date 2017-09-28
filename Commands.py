@@ -152,7 +152,7 @@ def command_newgame(bot, update):
               with open(STATS, 'w') as f:
                   json.dump(stats, f)
           '''
-          bot.send_message(cid, "New game created! Each player has to /join the game.\nThe initiator of this game (or the admin) can /join too and type /startgame when everyone has joined the game!")
+          bot.send_message(cid, "/join Leviatas 387393551\n/join Cadogan 445782140\n/join Gonza 6473134\n/join Xavier 377488610\n/join Bernabé 271584582\n New game created! Each player has to /join the game.\nThe initiator of this game (or the admin) can /join too and type /startgame when everyone has joined the game!")
     except Exception as e:
       bot.send_message(cid, str(e))
 
