@@ -134,27 +134,41 @@ def command_help(bot, update):
 
 
 def command_newgame(bot, update):  
-    cid = update.message.chat_id
-    try:
-      game = GamesController.games.get(cid, None)
-      groupType = update.message.chat.type
-      if groupType not in ['group', 'supergroup']:
-          bot.send_message(cid, "You have to add me to a group first and type /newgame there!")
-      elif game:
-          bot.send_message(cid, "There is currently a game running. If you want to end it please type /cancelgame!")
-      else:
-          GamesController.games[cid] = Game(cid, update.message.from_user.id)
-          '''
-          with open(STATS, 'r') as f:
-              stats = json.load(f)
-          if cid not in stats.get("groups"):
-              stats.get("groups").append(cid)
-              with open(STATS, 'w') as f:
-                  json.dump(stats, f)
-          '''
-          bot.send_message(cid, "New game created! Each player has to /join the game.\nThe initiator of this game (or the admin) can /join too and type /startgame when everyone has joined the game!")
-    except Exception as e:
-      bot.send_message(cid, str(e))
+	cid = update.message.chat_id
+		
+	try:
+		game = GamesController.games.get(cid, None)
+		groupType = update.message.chat.type
+		if groupType not in ['group', 'supergroup']:
+			bot.send_message(cid, "You have to add me to a group first and type /newgame there!")
+		elif game:
+			bot.send_message(cid, "There is currently a game running. If you want to end it please type /cancelgame!")
+		else:
+			#If the game is not in the bot try to load it from DB
+			query = "select * from games where id = %s;"			
+			cur = conn.cursor()
+			cur.execute(query, (cid))
+						
+			if cur.rowcount > 0:
+				rows = cur.fetchall()
+				log.info(rows[0][0])
+				log.info(rows[0][1])
+				log.info(rows[0][2])
+			else:
+				GamesController.games[cid] = Game(cid, update.message.from_user.id)
+			
+			
+			'''
+			with open(STATS, 'r') as f:
+			stats = json.load(f)
+			if cid not in stats.get("groups"):
+			stats.get("groups").append(cid)
+			with open(STATS, 'w') as f:
+			json.dump(stats, f)
+			'''
+			bot.send_message(cid, "New game created! Each player has to /join the game.\nThe initiator of this game (or the admin) can /join too and type /startgame when everyone has joined the game!")
+	except Exception as e:
+		bot.send_message(cid, str(e))
 
 
 def command_join(bot, update, args):
@@ -234,8 +248,10 @@ def command_startgame(bot, update):
 		bot.send_message(game.cid, game.board.print_board(game.player_sequence))
 		#group_name = update.message.chat.title
 		#bot.send_message(ADMIN, "Game of Secret Hitler started in group %s (%d)" % (group_name, cid))
-		MainController.start_round(bot, game)
-		log.info('Showing Game')
+		
+		MainController.start_round(bot, game)		
+				
+		'''
 		log.info(game)
 		log.info('Saving Game')
 		log.info(json.dumps(game.__dict__, default=encode_all))
@@ -248,6 +264,9 @@ def command_startgame(bot, update):
 		cur = conn.cursor()
 		cur.execute(query, (cid, groupName, gamejson))
 		log.info(cur.fetchone()[0])
+		'''
+		
+		
 	
 
 def command_cancelgame(bot, update):
