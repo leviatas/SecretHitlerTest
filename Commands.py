@@ -175,7 +175,7 @@ def command_newgame(bot, update):
 			log.info(dbdata)
 			
 			if cur.rowcount > 0:
-				x = json.loads(dbdata, object_hook=lambda d: namedtuple('X', d.keys())(*d.values()))
+				x = json.loads(dbdata[2], object_hook=lambda d: namedtuple('X', d.keys())(*d.values()))
 			else:
 				GamesController.games[cid] = Game(cid, update.message.from_user.id)
 			
