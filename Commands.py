@@ -190,6 +190,9 @@ def command_newgame(bot, update):
 				x = json.loads("""%s""" % (jsdata), object_hook=lambda d: namedtuple('X', d.keys())(*d.values()))
 				log.info(x)
 				'''
+				
+				game.board.print_board(game.player_sequence)
+				
 				GamesController.games[cid] = game
 				
 			else:
