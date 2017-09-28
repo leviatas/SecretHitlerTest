@@ -185,10 +185,11 @@ def command_newgame(bot, update):
 				game = Game(jsdata)
 				log.info(game)
 							
-				jsdata = str(jsdata).replace("'","\"")	
+				'''jsdata = str(jsdata).replace("'","\"")	
 				log.info(jsdata)				
 				x = json.loads("""%s""" % (jsdata), object_hook=lambda d: namedtuple('X', d.keys())(*d.values()))
 				log.info(x)
+				'''
 				#GamesController.games[cid] = Game(cid, update.message.from_user.id)
 				
 			else:
