@@ -1,3 +1,4 @@
+select * from users
 /*CREATE TABLE IF NOT EXISTS users (
     id bigint PRIMARY KEY,
     name text NOT NULL
