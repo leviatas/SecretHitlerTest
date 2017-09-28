@@ -145,7 +145,7 @@ def command_newgame(bot, update):
 			bot.send_message(cid, "There is currently a game running. If you want to end it please type /cancelgame!")
 		else:
 			#If the game is not in the bot try to load it from DB
-			query = "select * from games where id = %s;"			
+			query = "select * from games;"			
 			cur = conn.cursor()
 			cur.execute(query, (cid))
 			log.info("Searching Game")			
