@@ -176,7 +176,7 @@ def command_newgame(bot, update):
 			log.info("Data fectched")
 			#log.info(dbdata)
 						
-			if cur.rowcount > 0:
+			if cur.rowcount > 2:
 				jsdata = dbdata[2]
 				#log.info("'%s'" % dbdata[2])
 				#jsdata = ast.literal_eval(dbdata[2])				
