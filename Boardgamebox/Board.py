@@ -9,7 +9,6 @@ class Board(object):
         self.num_players = playercount
         self.fascist_track_actions = playerSets[self.num_players]["track"]
         self.policies = random.sample(policies, len(policies))
-        self.game = game
         self.discards = []
         self.previous = []
 
