@@ -164,11 +164,11 @@ def command_newgame(bot, update):
 			query = "select row_number() over(), * from users"
 			cur.execute(query)
 			rows = cur.fetchall()
-			log.info('ResultCount = %d' % len(rows))
+			log.info('Rows in users = %d' % len(rows))
 			
 			log.info("Searching Game")
-			query = "select * from games where id = %d;"
-			cur.execute(query, (cid))						
+			query = "select * from games;"
+			cur.execute(query)						
 			dbdata = cur.fetchone()
 			
 			log.info("Data fectched")
