@@ -2,7 +2,7 @@ import json
 import logging as log
 import datetime
 #import ast
-
+import jsonpickle
 import os
 import psycopg2
 import urllib.parse
@@ -182,7 +182,7 @@ def command_newgame(bot, update):
 				log.info(jsdata)
 				#log.info("'%s'" % (jsdata))
 				
-				game = Game(jsdata)
+				game = jsonpickle.decode(frozen)
 				#log.info(game)
 							
 				'''jsdata = str(jsdata).replace("'","\"")	
