@@ -145,11 +145,18 @@ def command_newgame(bot, update):
 			bot.send_message(cid, "There is currently a game running. If you want to end it please type /cancelgame!")
 		else:
 			#If the game is not in the bot try to load it from DB
-			query = "select * from games;"			
 			cur = conn.cursor()
+						
+			query = "select row_number() over(), * from games"
+			cur.execute(query)
+			rows = cur.fetchall()
+			log.info('ResultCount = %d' % len(rows))
+			
+			query = "select * from games;"
 			cur.execute(query)
 			log.info("Searching Game")			
-			dbdata = cur.fetchone()			
+			dbdata = cur.fetchall()	
+			
 			log.info("Data fectched")
 			log.info(dbdata)
 			if cur.rowcount > 0:
