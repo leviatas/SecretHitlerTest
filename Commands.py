@@ -308,14 +308,14 @@ def command_startgame(bot, update):
 		gamejson = jsonpickle.encode(game)
 		
 		log.info(gamejson)
-		# Insert game into DB		
+		      '''	
 		log.info('Updating Game info')
 		query = "INSERT INTO games(id , groupName  , data) values (%s, %s, %s) RETURNING id;"
 		log.info('Finished updating Game info')		
 		cur = conn.cursor()
 		cur.execute(query, (cid, groupName, gamejson))
 		log.info(cur.fetchone()[0])
-		conn.commit()
+		conn.commit()'''
 	
 
 def command_cancelgame(bot, update):
