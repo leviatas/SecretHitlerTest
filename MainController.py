@@ -110,7 +110,7 @@ def choose_chancellor(bot, game):
                 btns.append([InlineKeyboardButton(name, callback_data=strcid + "_chan_" + str(uid))])
 
     chancellorMarkup = InlineKeyboardMarkup(btns)
-    bot.send_message(game.board.state.nominated_president.uid, game.board.print_board())
+    bot.send_message(game.board.state.nominated_president.uid, game.board.print_board(game.player_sequence))
     bot.send_message(game.board.state.nominated_president.uid, 'Please nominate your chancellor!',
                      reply_markup=chancellorMarkup)
 
@@ -155,7 +155,7 @@ def vote(bot, game):
         if not game.playerlist[uid].is_dead:
             if game.playerlist[uid] is not game.board.state.nominated_president:
                 # the nominated president already got the board before nominating a chancellor
-                bot.send_message(uid, game.board.print_board())
+                bot.send_message(uid, game.board.print_board(game.player_sequence))
             bot.send_message(uid,
                              "Do you want to elect President %s and Chancellor %s?" % (
                                  game.board.state.nominated_president.name, game.board.state.nominated_chancellor.name),
@@ -237,7 +237,7 @@ def voting_aftermath(bot, game, voting_success):
             # voting was successful and Hitler was not nominated as chancellor after 3 fascist policies
             draw_policies(bot, game)
     else:
-        bot.send_message(game.cid, game.board.print_board())
+        bot.send_message(game.cid, game.board.print_board(game.player_sequence))
         start_next_round(bot, game)
 
 
@@ -356,7 +356,7 @@ def enact_policy(bot, game, policy, anarchy):
         bot.send_message(game.cid,
                          "The top most policy was enacted: %s" % policy)
     sleep(3)
-    bot.send_message(game.cid, game.board.print_board())
+    bot.send_message(game.cid, game.board.print_board(game.player_sequence))
     # end of round
     if game.board.state.liberal_track == 5:
         game.board.state.game_endcode = 1
@@ -427,7 +427,7 @@ def choose_veto(bot, update):
             if game.board.state.failed_votes == 3:
                 do_anarchy(bot, game)
             else:
-                bot.send_message(game.cid, game.board.print_board())
+                bot.send_message(game.cid, game.board.print_board(game.player_sequence))
                 start_next_round(bot, game)
         elif answer == "noveto":
             log.info("Player %s (%d) declined the veto" % (callback.from_user.first_name, uid))
@@ -445,7 +445,7 @@ def choose_veto(bot, update):
 
 def do_anarchy(bot, game):
     #log.info('do_anarchy called')
-    bot.send_message(game.cid, game.board.print_board())
+    bot.send_message(game.cid, game.board.print_board(game.player_sequence))
     bot.send_message(game.cid, "ANARCHY!!")
     game.board.state.president = None
     game.board.state.chancellor = None
@@ -476,7 +476,7 @@ def action_kill(bot, game):
             btns.append([InlineKeyboardButton(name, callback_data=strcid + "_kill_" + str(uid))])
 
     killMarkup = InlineKeyboardMarkup(btns)
-    bot.send_message(game.board.state.president.uid, game.board.print_board())
+    bot.send_message(game.board.state.president.uid, game.board.print_board(game.player_sequence))
     bot.send_message(game.board.state.president.uid,
                      'You have to kill one person. You can discuss your decision with the others. Choose wisely!',
                      reply_markup=killMarkup)
@@ -506,7 +506,7 @@ def choose_kill(bot, update):
             bot.send_message(game.cid,
                              "President %s killed %s who was not Hitler. %s, you are dead now and are not allowed to talk anymore!" % (
                                  game.board.state.president.name, chosen.name, chosen.name))
-            bot.send_message(game.cid, game.board.print_board())
+            bot.send_message(game.cid, game.board.print_board(game.player_sequence))
             start_next_round(bot, game)
     except:
         log.error("choose_kill: Game or board should not be None!")
@@ -523,7 +523,7 @@ def action_choose(bot, game):
             btns.append([InlineKeyboardButton(name, callback_data=strcid + "_choo_" + str(uid))])
 
     inspectMarkup = InlineKeyboardMarkup(btns)
-    bot.send_message(game.board.state.president.uid, game.board.print_board())
+    bot.send_message(game.board.state.president.uid, game.board.print_board(game.player_sequence))
     bot.send_message(game.board.state.president.uid,
                      'You get to choose the next presidential candidate. Afterwards the order resumes back to normal. Choose wisely!',
                      reply_markup=inspectMarkup)
@@ -562,7 +562,7 @@ def action_inspect(bot, game):
             btns.append([InlineKeyboardButton(name, callback_data=strcid + "_insp_" + str(uid))])
 
     inspectMarkup = InlineKeyboardMarkup(btns)
-    bot.send_message(game.board.state.president.uid, game.board.print_board())
+    bot.send_message(game.board.state.president.uid, game.board.print_board(game.player_sequence))
     bot.send_message(game.board.state.president.uid,
                      'You may see the party membership of one player. Which do you want to know? Choose wisely!',
                      reply_markup=inspectMarkup)
