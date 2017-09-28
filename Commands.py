@@ -180,10 +180,10 @@ def command_newgame(bot, update):
 				jsdata = dbdata[2]
 				#log.info("'%s'" % dbdata[2])
 				#jsdata = ast.literal_eval(dbdata[2])				
-				log.info(jsdata)
+				log.info("""%s""" % (jsdata))
 				#log.info("'%s'" % (jsdata))
 				
-				game = jsonpickle.decode(str(jsdata))
+				game = jsonpickle.decode("""%s""" % (jsdata))
 				#log.info(game)
 							
 				'''jsdata = str(jsdata).replace("'","\"")	
