@@ -262,7 +262,7 @@ def command_cancelgame(bot, update):
 	log.info('command_cancelgame called')
 	cid = update.message.chat_id	
 	#Always try to delete in DB
-	Commands.delete_game(game.cid)
+	delete_game(game.cid)
 	if cid in GamesController.games.keys():
 		game = GamesController.games[cid]
 		status = bot.getChatMember(cid, update.message.from_user.id).status
