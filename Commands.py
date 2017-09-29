@@ -178,13 +178,14 @@ def command_newgame(bot, update):
 						
 			if cur.rowcount > 0:
 				jsdata = dbdata[2]
+				log.info("jsdata = %s" % (jsdata))
 				#log.info("'%s'" % dbdata[2])
 				#jsdata = ast.literal_eval(dbdata[2])				
 				
 				#log.info("'%s'" % (jsdata))
-				jsdatajson = str(jsdata).replace("'","\"")
-				log.info("jsdatajson %s"%( jsdatajson))
-				gamejsdata = json.loads(jsdatajson)
+				#jsdatajson = str(jsdata).replace("'","\"")
+				#log.info("jsdatajson %s"%( jsdatajson))
+				gamejsdata = json.loads(jsdata)
 				log.info("gamejsdata %s"%( gamejsdata)) 
 				#bot.send_message(jsdata.cid, jsdata.board.print_board(jsdata.player_sequence))
 				
