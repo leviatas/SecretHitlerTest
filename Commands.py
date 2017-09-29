@@ -377,7 +377,7 @@ def save_game(cid, groupName, game):
 	else:
 		log.info('Saving Game')
 		gamejson = jsonpickle.encode(game)
-		query = "INSERT INTO games(id , groupName  , data) values (%s, %s, %s) RETURNING data;"
+		query = "INSERT INTO games(id , groupName  , data) VALUES (%s, %s, %s) RETURNING data;"
 		cur.execute(query, (cid, groupName, gamejson))
 		log.info(cur.fetchone()[0])
 		conn.commit()
@@ -385,7 +385,7 @@ def save_game(cid, groupName, game):
 def load_game(cid):
 	cur = conn.cursor()			
 	log.info("Searching Game in DB")
-	query = "select * from games where id = %s;"
+	query = "SELECT * FROM games WHERE id = %s;"
 	cur.execute(query, [cid])
 	dbdata = cur.fetchone()
 
@@ -402,7 +402,7 @@ def load_game(cid):
 def delete_game(cid):
 	cur = conn.cursor()
 	log.info("Deleting Game in DB")
-	query = "delete * from games where id = %s;"
+	query = "DELETE FROM games WHERE id = %s;"
 	cur.execute(query, [cid])
 	conn.commit()
 
