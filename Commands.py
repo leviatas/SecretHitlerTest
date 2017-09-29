@@ -301,13 +301,15 @@ def command_startgame(bot, update):
 		
 		MainController.start_round(bot, game)
 		
-		log.info(game)
+		
 		log.info('Saving Game')
-		log.info(json.dumps(game.__dict__, default=encode_all))
+		#log. Info(json.dumps(game.__dict__, default=encode_all))
 		gamejson = jsonpickle.encode(game)
 		
 		game = jsonpickle.decode(gamejson)
-		game.board.print_board(game.player_sequence)
+		bot.send_message(cid, game.board.print_board(game.player_sequence)) 
+		
+		
 		log.info(gamejson)
 			
 		log.info('Updating Game info')
