@@ -70,7 +70,9 @@ def start_round(bot, game):
         log.info('start_round called')
         # Starting a new round makes the current round to go up    
         game.board.state.currentround += 1
-
+        
+        log.info(game.board.state.chosen_president)
+        
         if game.board.state.chosen_president is None:
                 game.board.state.nominated_president = game.player_sequence[game.board.state.player_counter]
         else:
