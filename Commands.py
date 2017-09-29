@@ -135,7 +135,6 @@ def command_help(bot, update):
         help_text += i + "\n"
     bot.send_message(cid, help_text)
 
-
 def command_newgame(bot, update):  
 	cid = update.message.chat_id
 		
@@ -148,19 +147,7 @@ def command_newgame(bot, update):
 			bot.send_message(cid, "There is currently a game running. If you want to end it please type /cancelgame!")
 		else:
 			#If the game is not in the bot try to load it from DB
-			cur = conn.cursor()	
-			
-			'''
-			query = "select row_number() over(), * from games"
-			cur.execute(query)
-			rows = cur.fetchall()
-			log.info('Rows de games = %d' % len(rows))
-			
-			query = "select row_number() over(), * from users"
-			cur.execute(query)
-			rows = cur.fetchall()
-			log.info('Rows in users = %d' % len(rows))
-			'''
+			cur = conn.cursor()
 			
 			log.info("Searching Game in DB")
 			query = "select * from games where id = %s;"
@@ -175,19 +162,15 @@ def command_newgame(bot, update):
 				#bot.send_message(cid, game.print_roles())				
 				GamesController.games[cid] = game
 				bot.send_message(cid, "There is currently a game running. If you want to end it please type /cancelgame!")				
-				bot.send_message(cid, game.board.print_board(game.player_sequence)) 
+				bot.send_message(cid, game.board.print_board(game.player_sequence))
+				#Info players of their 
+				MainController.inform_players(bot, game, game.cid, player_number)
+				MainController.inform_fascists(bot, game, player_number)
+				MainController.start_round(bot, game)
 			else:
 				GamesController.games[cid] = Game(cid, update.message.from_user.id)
 				bot.send_message(cid, "New game created! Each player has to /join the game.\nThe initiator of this game (or the admin) can /join too and type /startgame when everyone has joined the game!")
-						
-			'''
-			with open(STATS, 'r') as f:
-			stats = json.load(f)
-			if cid not in stats.get("groups"):
-			stats.get("groups").append(cid)
-			with open(STATS, 'w') as f:
-			json.dump(stats, f)
-			'''
+			
 			
 	except Exception as e:
 		bot.send_message(cid, str(e))
@@ -288,7 +271,6 @@ def command_startgame(bot, update):
 		bot.send_message(game.cid, game.board.print_board(game.player_sequence))
 		#group_name = update.message.chat.title
 		#bot.send_message(ADMIN, "Game of Secret Hitler started in group %s (%d)" % (group_name, cid))
-		MainController.start_round(bot, game)
 		log.info('Saving Game')
 		gamejson = jsonpickle.encode(game)		
 		log.info('Updating Game info')
@@ -298,6 +280,7 @@ def command_startgame(bot, update):
 		cur.execute(query, (cid, groupName, gamejson))
 		log.info(cur.fetchone()[0])
 		conn.commit()
+		MainController.start_round(bot, game)		
 
 def command_cancelgame(bot, update):
     log.info('command_cancelgame called')
