@@ -657,8 +657,8 @@ def end_game(bot, game, game_endcode):
         '''with open(STATS, 'w') as f:
         json.dump(stats, f)'''
         del GamesController.games[game.cid]
-        #After deleting the game in memory delete it in DB
-        cur = conn.cursor()
+	#After deleting the game in memory delete it in DB
+	cur = conn.cursor()
 	log.info("Deleting Game in DB")
 	query = "delete * from games where id = %s;"
 	cur.execute(query, [game.cid])
