@@ -182,16 +182,16 @@ def command_newgame(bot, update):
 				#jsdata = ast.literal_eval(dbdata[2])				
 				
 				#log.info("'%s'" % (jsdata))
-				bot.send_message(jsdata.cid, jsdata.board.print_board(jsdata.player_sequence))
+				jsdatajson = str(jsdata).replace("'","\"")
+				log.info("jsdatajson %s"%( jsdatajson))
+				gamejsdata = json.loads(jsdatajson)
+				log.info("gamejsdata %s"%( gamejsdata)) 
+				#bot.send_message(jsdata.cid, jsdata.board.print_board(jsdata.player_sequence))
 				
 				gamejsdata = json.loads(jsdata)
 				#= str(jsdata).replace("'","\"")	
 				game = jsonpickle.decode(gamejsdata)
 				#log.info(game)
-							
-				
-				
-				
 				log.info(game.playerlist )
 				log.info(game.player_sequence )
 				log.info(game.cid)
