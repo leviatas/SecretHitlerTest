@@ -392,7 +392,7 @@ def load_game(cid):
 		jsdata = dbdata[2]
 		log.info("jsdata = %s" % (jsdata))				
 		game = jsonpickle.decode(jsdata)
-		#bot.send_message(cid, game.print_roles())				
+		#bot.send_message(cid, game.print_roles())
 		return game
 	else:
 		return None
