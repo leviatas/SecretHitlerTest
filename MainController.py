@@ -653,9 +653,10 @@ def end_game(bot, game, game_endcode):
                 #stats['libwin_kill'] = stats['libwin_kill'] + 1
 
                 # bot.send_message(ADMIN, "Game of Secret Hitler ended in group %d" % game.cid)
-
-	'''with open(STATS, 'w') as f:
-	json.dump(stats, f)'''
+	'''
+	with open(STATS, 'w') as f:
+	json.dump(stats, f)
+	'''
 	del GamesController.games[game.cid]
 	cur = conn.cursor()
 	log.info("Deleting Game in DB")
