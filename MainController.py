@@ -654,10 +654,9 @@ def end_game(bot, game, game_endcode):
 
                 # bot.send_message(ADMIN, "Game of Secret Hitler ended in group %d" % game.cid)
 
-        '''with open(STATS, 'w') as f:
-        json.dump(stats, f)'''
-        del GamesController.games[game.cid]
-	#After deleting the game in memory delete it in DB
+	'''with open(STATS, 'w') as f:
+	json.dump(stats, f)'''
+	del GamesController.games[game.cid]
 	cur = conn.cursor()
 	log.info("Deleting Game in DB")
 	query = "delete * from games where id = %s;"
