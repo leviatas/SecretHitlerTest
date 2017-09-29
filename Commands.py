@@ -183,10 +183,11 @@ def command_newgame(bot, update):
 				log.info("""%s""" % (jsdata))
 				#log.info("'%s'" % (jsdata))
 				
-				game = jsonpickle.decode("""%s""" % (jsdata))
+				gamejsdata = str(jsdata).replace("'","\"")	
+				game = jsonpickle.decode("""%s""" % (gamejsdata))
 				#log.info(game)
 							
-				jsdata = str(jsdata).replace("'","\"")	
+				
 				
 				
 				log.info(game.playerlist )
