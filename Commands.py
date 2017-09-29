@@ -146,26 +146,16 @@ def command_newgame(bot, update):
 		elif game:
 			bot.send_message(cid, "There is currently a game running. If you want to end it please type /cancelgame!")
 		else:
-			#If the game is not in the bot try to load it from DB
-			cur = conn.cursor()
-			
-			log.info("Searching Game in DB")
-			query = "select * from games where id = %s;"
-			cur.execute(query, [cid])
-			dbdata = cur.fetchone()
-									
-			if cur.rowcount > 0:
-				log.info("Game Found")
-				jsdata = dbdata[2]
-				log.info("jsdata = %s" % (jsdata))				
-				game = jsonpickle.decode(jsdata)
-				#bot.send_message(cid, game.print_roles())				
+			#Search game in DB
+			game = load_game(cid)			
+			if game							
 				GamesController.games[cid] = game
 				bot.send_message(cid, "There is currently a game running. If you want to end it please type /cancelgame!")				
 				bot.send_message(cid, game.board.print_board(game.player_sequence))
-				#Info players of their 
+				#Info players if they forgot their roles
 				MainController.inform_players(bot, game, game.cid, player_number)
 				MainController.inform_fascists(bot, game, player_number)
+				# Ask the player to choose chancellor
 				MainController.start_round(bot, game)
 			else:
 				GamesController.games[cid] = Game(cid, update.message.from_user.id)
@@ -237,16 +227,7 @@ def command_join(bot, update, args):
 			bot.send_message(game.cid,
 				fname + ", I can\'t send you a private message. Please go to @secrethitlertestlbot and click \"Start\".\nYou then need to send /join again.")
 
-def encode_all(obj):
-	if isinstance(obj, Player):
-	    return obj.__dict__
-	if isinstance(obj, Board):
-	    return obj.__dict__    
-	if isinstance(obj, State):
-		return obj.__dict__
-	return str(obj)
-
-def savegame(cid, groupName, game)
+def save_game(cid, groupName, game)
 	#Check if game is in DB first
 	cur = conn.cursor()			
 	log.info("Searching Game in DB")
@@ -266,7 +247,26 @@ def savegame(cid, groupName, game)
 		query = "INSERT INTO games(id , groupName  , data) values (%s, %s, %s) RETURNING data;"
 		cur.execute(query, (cid, groupName, gamejson))
 		log.info(cur.fetchone()[0])
-		conn.commit()	
+		conn.commit()
+
+def load_game(cid)
+	cur = conn.cursor()			
+	log.info("Searching Game in DB")
+	query = "select * from games where id = %s;"
+	cur.execute(query, [cid])
+	dbdata = cur.fetchone()
+
+	if cur.rowcount > 0:
+		log.info("Game Found")
+		jsdata = dbdata[2]
+		log.info("jsdata = %s" % (jsdata))				
+		game = jsonpickle.decode(jsdata)
+		#bot.send_message(cid, game.print_roles())				
+		return game
+	else:
+		return None
+			
+	
 
 def command_startgame(bot, update):
 	log.info('command_startgame called')
@@ -294,7 +294,7 @@ def command_startgame(bot, update):
 		#group_name = update.message.chat.title
 		#bot.send_message(ADMIN, "Game of Secret Hitler started in group %s (%d)" % (group_name, cid))		
 		MainController.start_round(bot, game)
-		savegame(cid, groupName, game)
+		save_game(cid, groupName, game)
 
 def command_cancelgame(bot, update):
     log.info('command_cancelgame called')
