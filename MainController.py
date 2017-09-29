@@ -145,6 +145,7 @@ def nominate_chosen_chancellor(bot, update):
         log.error("nominate_chosen_chancellor: Game or board should not be None! Eror: " + str(e))
     except Exception as e:
         log.error("Unknown error: " + repr(e))
+        log.exception(e)
 
 
 def vote(bot, game):
