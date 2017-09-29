@@ -121,15 +121,16 @@ def choose_chancellor(bot, game):
 
 def nominate_chosen_chancellor(bot, update):
     log.info('nominate_chosen_chancellor called')
-    log.info(GamesController.games.keys())
+    #log.info(GamesController.games.keys())
     callback = update.callback_query
     regex = re.search("(-[0-9]*)_chan_([0-9]*)", callback.data)
     cid = int(regex.group(1))
     chosen_uid = int(regex.group(2))
     try:
         game = GamesController.games.get(cid, None)
-        log.info(game.playerlist[chosen_uid])
-        log.info("Other info")
+        log.info(game.playerlist)
+        log.info(game.board.state.nominated_chancellor)
+        log.info(game.playerlist[chosen_uid])        
         game.board.state.nominated_chancellor = game.playerlist[chosen_uid]
         log.info("President %s (%d) nominated %s (%d)" % (
                 game.board.state.nominated_president.name, game.board.state.nominated_president.uid,
