@@ -163,8 +163,8 @@ def command_newgame(bot, update):
 			'''
 			
 			log.info("Searching Game in DB")
-			query = "select * from games where id = %d;"
-			cur.execute(query, (cid))
+			query = "select * from games where id = %s;"
+			cur.execute(query, [cid])
 			dbdata = cur.fetchone()
 			
 			log.info("Data fectched")
