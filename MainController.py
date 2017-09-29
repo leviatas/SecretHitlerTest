@@ -614,34 +614,6 @@ def start_next_round(bot, game):
 
 def end_game(bot, game, game_endcode):
         log.info('end_game called')
-        ##
-        # game_endcode:
-        #   -2  fascists win by electing Hitler as chancellor
-        #   -1  fascists win with 6 fascist policies
-        #   0   not ended
-        #   1   liberals win with 5 liberal policies
-        #   2   liberals win by killing Hitler
-        #   99  game cancelled
-        #
-        '''with open(STATS, 'r') as f:
-        stats = json.load(f)
-        '''
-        if game_endcode == 99:
-                if GamesController.games[game.cid].board is not None:
-                        bot.send_message(game.cid, "Game cancelled!\n\n%s" % game.print_roles())        
-                else:
-                        bot.send_message(game.cid, "Game cancelled!")
-        else:
-                if game_endcode == -2:
-                        bot.send_message(game.cid, "Game over! The fascists win by electing Hitler as Chancellor!\n\n%s" % game.print_roles())
-        
-                if game_endcode == -1:
-                        bot.send_message(game.cid, "Game over! The fascists win by enacting 6 fascist policies!\n\n%s" % game.print_roles())
-        
-                if game_endcode == 1:
-                        bot.send_message(game.cid, "Game over! The liberals win by enacting 5 liberal policies!\n\n%s" % game.print_roles())
-                if game_endcode == 2:
-                        bot.send_message(game.cid, "Game over! The liberals win by killing Hitler!\n\n%s" % game.print_roles())
         del GamesController.games[game.cid]
         Commands.delete_game(game.cid)
         
