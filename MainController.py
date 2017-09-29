@@ -110,10 +110,10 @@ def choose_chancellor(bot, game):
                 btns.append([InlineKeyboardButton(name, callback_data=strcid + "_chan_" + str(uid))])
 
     chancellorMarkup = InlineKeyboardMarkup(btns)
-#descomentar al entrar en produccion
-    #bot.send_message(game.board.state.nominated_president.uid, game.board.print_board(game.player_sequence))
-    #bot.send_message(game.board.state.nominated_president.uid, 'Please nominate your chancellor!',
-    #                 reply_markup=chancellorMarkup)
+        #descomentar al entrar en produccion
+    bot.send_message(game.board.state.nominated_president.uid, game.board.print_board(game.player_sequence))
+    bot.send_message(game.board.state.nominated_president.uid, 'Please nominate your chancellor!',
+                     reply_markup=chancellorMarkup)
 
 
 def nominate_chosen_chancellor(bot, update):
@@ -671,7 +671,7 @@ def inform_players(bot, game, cid, player_number):
         game.playerlist[uid].role = role
         game.playerlist[uid].party = party
         # I comment so tyhe player aren't discturbed in testing, uncomment when deploy to production
-        #bot.send_message(uid, "Your secret role is: %s\nYour party membership is: %s" % (role, party))
+        bot.send_message(uid, "Your secret role is: %s\nYour party membership is: %s" % (role, party))
 
 
 def print_player_info(player_number):
@@ -704,11 +704,11 @@ def inform_fascists(bot, game, player_number):
                 fstring = fstring[:-2]
                 bot.send_message(uid, "Your fellow fascists are: %s" % fstring)
             hitler = game.get_hitler()
-            #bot.send_message(uid, "Hitler is: %s" % hitler.name) #Uncoomend on production
+            bot.send_message(uid, "Hitler is: %s" % hitler.name) #Uncoomend on production
         elif role == "Hitler":
             if player_number <= 6:
                 fascists = game.get_fascists()
-                #bot.send_message(uid, "Your fellow fascist is: %s" % fascists[0].name) // Uncoommend on production
+                bot.send_message(uid, "Your fellow fascist is: %s" % fascists[0].name) // Uncoommend on production
         elif role == "Liberal":
             pass
         else:
