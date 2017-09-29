@@ -259,17 +259,19 @@ def command_startgame(bot, update):
 		#save_game(cid, groupName, game)
 
 def command_cancelgame(bot, update):
-    log.info('command_cancelgame called')
-    cid = update.message.chat_id
-    if cid in GamesController.games.keys():
-        game = GamesController.games[cid]
-        status = bot.getChatMember(cid, update.message.from_user.id).status
-        if update.message.from_user.id == game.initiator or status in ("administrator", "creator"):
-            MainController.end_game(bot, game, 99)
-        else:
-            bot.send_message(cid, "Only the initiator of the game or a group admin can cancel the game with /cancelgame")
-    else:
-        bot.send_message(cid, "There is no game in this chat. Create a new game with /newgame")
+	log.info('command_cancelgame called')
+	cid = update.message.chat_id	
+	#Always try to delete in DB
+	Commands.delete_game(game.cid)
+	if cid in GamesController.games.keys():
+		game = GamesController.games[cid]
+		status = bot.getChatMember(cid, update.message.from_user.id).status
+		if update.message.from_user.id == game.initiator or status in ("administrator", "creator"):
+			MainController.end_game(bot, game, 99)
+		else:
+			bot.send_message(cid, "Only the initiator of the game or a group admin can cancel the game with /cancelgame")
+	else:
+		bot.send_message(cid, "There is no game in this chat. Create a new game with /newgame")
 
 def command_votes(bot, update):
 	try:
