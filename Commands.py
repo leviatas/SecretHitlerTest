@@ -166,11 +166,9 @@ def command_newgame(bot, update):
 			query = "select * from games where id = %s;"
 			cur.execute(query, [cid])
 			dbdata = cur.fetchone()
-			
-			log.info("Data fectched")
-			#log.info(dbdata)
-						
+									
 			if cur.rowcount > 0:
+				log.info("Game Found")
 				jsdata = dbdata[2]
 				log.info("jsdata = %s" % (jsdata))				
 				game = jsonpickle.decode(jsdata)
