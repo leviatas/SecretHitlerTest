@@ -128,8 +128,8 @@ def nominate_chosen_chancellor(bot, update):
     chosen_uid = int(regex.group(2))
     try:
         game = GamesController.games.get(cid, None)
-        log.info(game)
-        log.info(game.board)
+        log.info(game.playerlist[chosen_uid])
+        log.info("Other info")
         game.board.state.nominated_chancellor = game.playerlist[chosen_uid]
         log.info("President %s (%d) nominated %s (%d)" % (
                 game.board.state.nominated_president.name, game.board.state.nominated_president.uid,
