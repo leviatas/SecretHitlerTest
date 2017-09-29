@@ -228,46 +228,6 @@ def command_join(bot, update, args):
 			bot.send_message(game.cid,
 				fname + ", I can\'t send you a private message. Please go to @secrethitlertestlbot and click \"Start\".\nYou then need to send /join again.")
 
-def save_game(cid, groupName, game)
-	#Check if game is in DB first
-	cur = conn.cursor()			
-	log.info("Searching Game in DB")
-	query = "select * from games where id = %s;"
-	cur.execute(query, [cid])
-	dbdata = cur.fetchone()
-	if cur.rowcount > 0:
-		log.info('Updating Game')
-		gamejson = jsonpickle.encode(game)
-		query = "UPDATE games SET groupName = %s, data = %s WHERE id = %s RETURNING data;"
-		cur.execute(query, (groupName, gamejson, cid))
-		log.info(cur.fetchone()[0])
-		conn.commit()		
-	else:
-		log.info('Saving Game')
-		gamejson = jsonpickle.encode(game)
-		query = "INSERT INTO games(id , groupName  , data) values (%s, %s, %s) RETURNING data;"
-		cur.execute(query, (cid, groupName, gamejson))
-		log.info(cur.fetchone()[0])
-		conn.commit()
-
-def load_game(cid)
-	cur = conn.cursor()			
-	log.info("Searching Game in DB")
-	query = "select * from games where id = %s;"
-	cur.execute(query, [cid])
-	dbdata = cur.fetchone()
-
-	if cur.rowcount > 0:
-		log.info("Game Found")
-		jsdata = dbdata[2]
-		log.info("jsdata = %s" % (jsdata))				
-		game = jsonpickle.decode(jsdata)
-		#bot.send_message(cid, game.print_roles())				
-		return game
-	else:
-		return None
-			
-	
 
 def command_startgame(bot, update):
 	log.info('command_startgame called')
@@ -395,7 +355,46 @@ def command_showhistory(bot, update):
 			bot.send_message(cid, "There is no game in this chat. Create a new game with /newgame")
 	except Exception as e:
 		bot.send_message(cid, str(e))
-		log.error("Unknown error: " + str(e))     
+		log.error("Unknown error: " + str(e))    
+		
+def save_game(cid, groupName, game):
+	#Check if game is in DB first
+	cur = conn.cursor()			
+	log.info("Searching Game in DB")
+	query = "select * from games where id = %s;"
+	cur.execute(query, [cid])
+	dbdata = cur.fetchone()
+	if cur.rowcount > 0:
+		log.info('Updating Game')
+		gamejson = jsonpickle.encode(game)
+		query = "UPDATE games SET groupName = %s, data = %s WHERE id = %s RETURNING data;"
+		cur.execute(query, (groupName, gamejson, cid))
+		log.info(cur.fetchone()[0])
+		conn.commit()		
+	else:
+		log.info('Saving Game')
+		gamejson = jsonpickle.encode(game)
+		query = "INSERT INTO games(id , groupName  , data) values (%s, %s, %s) RETURNING data;"
+		cur.execute(query, (cid, groupName, gamejson))
+		log.info(cur.fetchone()[0])
+		conn.commit()
+
+def load_game(cid):
+	cur = conn.cursor()			
+	log.info("Searching Game in DB")
+	query = "select * from games where id = %s;"
+	cur.execute(query, [cid])
+	dbdata = cur.fetchone()
+
+	if cur.rowcount > 0:
+		log.info("Game Found")
+		jsdata = dbdata[2]
+		log.info("jsdata = %s" % (jsdata))				
+		game = jsonpickle.decode(jsdata)
+		#bot.send_message(cid, game.print_roles())				
+		return game
+	else:
+		return None
 
 
         
