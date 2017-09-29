@@ -46,7 +46,7 @@ commands = [  # command description used in the "help" command
     '/rules - Gives you a link to the official Secret Hitler rules',
     '/newgame - Creates a new game',
     '/join - Joins an existing game',
-    '/startgame - Starts an existing game when all players have joined',
+    '/startgame - Starts or continues an existing game when all players have joined',
     '/cancelgame - Cancels an existing game. All data of the game will be lost',
     '/board - Prints the current board with fascist and liberals tracks, presidential order and election counter',
     '/history - Prints a History of the current game',
@@ -155,16 +155,16 @@ def command_newgame(bot, update):
 			cur.execute(query)
 			rows = cur.fetchall()
 			log.info('Rows de games = %d' % len(rows))
-			'''
-						
+			
 			query = "select row_number() over(), * from users"
 			cur.execute(query)
 			rows = cur.fetchall()
 			log.info('Rows in users = %d' % len(rows))
+			'''
 			
-			log.info("Searching Game")
-			query = "select * from games;"
-			cur.execute(query)						
+			log.info("Searching Game in DB")
+			query = "select * from games where id = %s;"
+			cur.execute(query, (str(cid)))
 			dbdata = cur.fetchone()
 			
 			log.info("Data fectched")
@@ -172,37 +172,16 @@ def command_newgame(bot, update):
 						
 			if cur.rowcount > 0:
 				jsdata = dbdata[2]
-				log.info("jsdata = %s" % (jsdata))
-				#log.info("'%s'" % dbdata[2])
-				#jsdata = ast.literal_eval(dbdata[2])				
-				
-				#log.info("'%s'" % (jsdata))
-				#jsdatajson = str(jsdata).replace("'","\"")
-				#log.info("jsdatajson %s"%( jsdatajson))
-				#gamejsdata = json.loads(jsdata)
-				#log.info("gamejsdata %s"%( gamejsdata)) 
-				#bot.send_message(jsdata.cid, jsdata.board.print_board(jsdata.player_sequence))
-				#gamejsdata = json.loads(jsdata)
-				#= str(jsdata).replace("'","\"")	
+				log.info("jsdata = %s" % (jsdata))				
 				game = jsonpickle.decode(jsdata)
-				
-				bot.send_message(cid, game.board.print_board(game.player_sequence)) 
-				bot.send_message(cid, game.print_roles())
-				
-				log.info(game.playerlist )
-				log.info(game.player_sequence )
-				log.info(game.cid)
-				log.info(game.board )
-				log.info(game.board.state.currentround )
-				log.info(game.initiator )
-				log.info(game.dateinitvote )
-								
+				#bot.send_message(cid, game.print_roles())				
 				GamesController.games[cid] = game
-				
+				bot.send_message(cid, "There is currently a game running. If you want to end it please type /cancelgame!")				
+				bot.send_message(cid, game.board.print_board(game.player_sequence)) 
 			else:
 				GamesController.games[cid] = Game(cid, update.message.from_user.id)
-			
-			
+				bot.send_message(cid, "New game created! Each player has to /join the game.\nThe initiator of this game (or the admin) can /join too and type /startgame when everyone has joined the game!")
+						
 			'''
 			with open(STATS, 'r') as f:
 			stats = json.load(f)
@@ -211,7 +190,7 @@ def command_newgame(bot, update):
 			with open(STATS, 'w') as f:
 			json.dump(stats, f)
 			'''
-			bot.send_message(cid, "New game created! Each player has to /join the game.\nThe initiator of this game (or the admin) can /join too and type /startgame when everyone has joined the game!")
+			
 	except Exception as e:
 		bot.send_message(cid, str(e))
 
@@ -311,20 +290,9 @@ def command_startgame(bot, update):
 		bot.send_message(game.cid, game.board.print_board(game.player_sequence))
 		#group_name = update.message.chat.title
 		#bot.send_message(ADMIN, "Game of Secret Hitler started in group %s (%d)" % (group_name, cid))
-		
 		MainController.start_round(bot, game)
-		
-		
 		log.info('Saving Game')
-		#log. Info(json.dumps(game.__dict__, default=encode_all))
-		gamejson = jsonpickle.encode(game)
-		
-		game = jsonpickle.decode(gamejson)
-		bot.send_message(cid, game.board.print_board(game.player_sequence)) 
-		
-		
-		log.info(gamejson)
-			
+		gamejson = jsonpickle.encode(game)		
 		log.info('Updating Game info')
 		query = "INSERT INTO games(id , groupName  , data) values (%s, %s, %s) RETURNING id;"
 		log.info('Finished updating Game info')		
@@ -332,8 +300,6 @@ def command_startgame(bot, update):
 		cur.execute(query, (cid, groupName, gamejson))
 		log.info(cur.fetchone()[0])
 		conn.commit()
-		
-	
 
 def command_cancelgame(bot, update):
     log.info('command_cancelgame called')
