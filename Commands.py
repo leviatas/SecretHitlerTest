@@ -148,21 +148,15 @@ def command_newgame(bot, update):
 			bot.send_message(cid, "There is currently a game running. If you want to end it please type /cancelgame!")
 		else:
 			#If the game is not in the bot try to load it from DB
-			cur = conn.cursor()
+			cur = conn.cursor()	
 			
 			'''
-			query = "INSERT INTO users(id , name) values (%s, %s) RETURNING id;"
-			log.info('Players added')		
-			cur = conn.cursor()
-			cur.execute(query, (cid, groupName, gamejson))
-			log.info(cur.fetchone()[0])
-			'''		
-			
 			query = "select row_number() over(), * from games"
 			cur.execute(query)
 			rows = cur.fetchall()
 			log.info('Rows de games = %d' % len(rows))
-			
+			'''
+						
 			query = "select row_number() over(), * from users"
 			cur.execute(query)
 			rows = cur.fetchall()
@@ -190,11 +184,11 @@ def command_newgame(bot, update):
 				#bot.send_message(jsdata.cid, jsdata.board.print_board(jsdata.player_sequence))
 				#gamejsdata = json.loads(jsdata)
 				#= str(jsdata).replace("'","\"")	
-				game2 = jsonpickle.decode(jsdata)
+				game = jsonpickle.decode(jsdata)
 				
-				bot.send_message(cid, game2.board.print_board(game2.player_sequence)) 
+				bot.send_message(cid, game.board.print_board(game.player_sequence)) 
+				bot.send_message(cid, game.print_roles())
 				
-				#log.info(game)
 				log.info(game.playerlist )
 				log.info(game.player_sequence )
 				log.info(game.cid)
@@ -202,11 +196,7 @@ def command_newgame(bot, update):
 				log.info(game.board.state.currentround )
 				log.info(game.initiator )
 				log.info(game.dateinitvote )
-				
-				game.print_roles()
-				
-				game.board.print_board(game.player_sequence)
-				
+								
 				GamesController.games[cid] = game
 				
 			else:
