@@ -397,5 +397,11 @@ def load_game(cid):
 	else:
 		return None
 
+def delete_game(cid):
+	cur = conn.cursor()
+	log.info("Deleting Game in DB")
+	query = "delete * from games where id = %s;"
+	cur.execute(query, [game.cid])
+	conn.commit()
 
         
