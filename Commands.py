@@ -245,7 +245,29 @@ def encode_all(obj):
 	if isinstance(obj, State):
 		return obj.__dict__
 	return str(obj)
-			
+
+def savegame(cid, groupName, game)
+	#Check if game is in DB first
+	cur = conn.cursor()			
+	log.info("Searching Game in DB")
+	query = "select * from games where id = %s;"
+	cur.execute(query, [cid])
+	dbdata = cur.fetchone()
+	if cur.rowcount > 0:
+		log.info('Updating Game')
+		gamejson = jsonpickle.encode(game)
+		query = "UPDATE games SET groupName = %s, data = %s WHERE id = %s RETURNING data;"
+		cur.execute(query, (groupName, gamejson, cid))
+		log.info(cur.fetchone()[0])
+		conn.commit()		
+	else:
+		log.info('Saving Game')
+		gamejson = jsonpickle.encode(game)
+		query = "INSERT INTO games(id , groupName  , data) values (%s, %s, %s) RETURNING data;"
+		cur.execute(query, (cid, groupName, gamejson))
+		log.info(cur.fetchone()[0])
+		conn.commit()	
+
 def command_startgame(bot, update):
 	log.info('command_startgame called')
 	groupName = update.message.chat.title
@@ -270,17 +292,9 @@ def command_startgame(bot, update):
 		game.board.state.player_counter = 0
 		bot.send_message(game.cid, game.board.print_board(game.player_sequence))
 		#group_name = update.message.chat.title
-		#bot.send_message(ADMIN, "Game of Secret Hitler started in group %s (%d)" % (group_name, cid))
-		log.info('Saving Game')
-		gamejson = jsonpickle.encode(game)		
-		log.info('Updating Game info')
-		query = "INSERT INTO games(id , groupName  , data) values (%s, %s, %s) RETURNING id;"
-		log.info('Finished updating Game info')		
-		cur = conn.cursor()
-		cur.execute(query, (cid, groupName, gamejson))
-		log.info(cur.fetchone()[0])
-		conn.commit()
-		MainController.start_round(bot, game)		
+		#bot.send_message(ADMIN, "Game of Secret Hitler started in group %s (%d)" % (group_name, cid))		
+		MainController.start_round(bot, game)
+		savegame(cid, groupName, game)
 
 def command_cancelgame(bot, update):
     log.info('command_cancelgame called')
