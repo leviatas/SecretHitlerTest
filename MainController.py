@@ -613,52 +613,57 @@ def start_next_round(bot, game):
 ##
 
 def end_game(bot, game, game_endcode):
-    log.info('end_game called')
-    ##
-    # game_endcode:
-    #   -2  fascists win by electing Hitler as chancellor
-    #   -1  fascists win with 6 fascist policies
-    #   0   not ended
-    #   1   liberals win with 5 liberal policies
-    #   2   liberals win by killing Hitler
-    #   99  game cancelled
-    #
-    '''with open(STATS, 'r') as f:
+        log.info('end_game called')
+        ##
+        # game_endcode:
+        #   -2  fascists win by electing Hitler as chancellor
+        #   -1  fascists win with 6 fascist policies
+        #   0   not ended
+        #   1   liberals win with 5 liberal policies
+        #   2   liberals win by killing Hitler
+        #   99  game cancelled
+        #
+        '''with open(STATS, 'r') as f:
         stats = json.load(f)
-    '''
-    if game_endcode == 99:
-        if GamesController.games[game.cid].board is not None:
-            bot.send_message(game.cid,
-                             "Game cancelled!\n\n%s" % game.print_roles())
-            # bot.send_message(ADMIN, "Game of Secret Hitler canceled in group %d" % game.cid)
-            #stats['cancelled'] = stats['cancelled'] + 1
+        '''
+        if game_endcode == 99:
+                if GamesController.games[game.cid].board is not None:
+                        bot.send_message(game.cid,
+                                "Game cancelled!\n\n%s" % game.print_roles())
+                # bot.send_message(ADMIN, "Game of Secret Hitler canceled in group %d" % game.cid)
+                #stats['cancelled'] = stats['cancelled'] + 1
+                else:
+                        bot.send_message(game.cid, "Game cancelled!")
         else:
-            bot.send_message(game.cid, "Game cancelled!")
-    else:
-        if game_endcode == -2:
-            bot.send_message(game.cid,
-                             "Game over! The fascists win by electing Hitler as Chancellor!\n\n%s" % game.print_roles())
-            #stats['fascwin_hitler'] = stats['fascwin_hitler'] + 1
-        if game_endcode == -1:
-            bot.send_message(game.cid,
-                             "Game over! The fascists win by enacting 6 fascist policies!\n\n%s" % game.print_roles())
-            #stats['fascwin_policies'] = stats['fascwin_policies'] + 1
-        if game_endcode == 1:
-            bot.send_message(game.cid,
-                             "Game over! The liberals win by enacting 5 liberal policies!\n\n%s" % game.print_roles())
-            #stats['libwin_policies'] = stats['libwin_policies'] + 1
-        if game_endcode == 2:
-            bot.send_message(game.cid,
-                             "Game over! The liberals win by killing Hitler!\n\n%s" % game.print_roles())
-            #stats['libwin_kill'] = stats['libwin_kill'] + 1
+                if game_endcode == -2:
+                        bot.send_message(game.cid,
+                                "Game over! The fascists win by electing Hitler as Chancellor!\n\n%s" % game.print_roles())
+                        #stats['fascwin_hitler'] = stats['fascwin_hitler'] + 1
+                if game_endcode == -1:
+                        bot.send_message(game.cid,
+                                "Game over! The fascists win by enacting 6 fascist policies!\n\n%s" % game.print_roles())
+                        #stats['fascwin_policies'] = stats['fascwin_policies'] + 1
+                if game_endcode == 1:
+                        bot.send_message(game.cid,
+                                "Game over! The liberals win by enacting 5 liberal policies!\n\n%s" % game.print_roles())
+                        #stats['libwin_policies'] = stats['libwin_policies'] + 1
+                if game_endcode == 2:
+                        bot.send_message(game.cid,
+                                "Game over! The liberals win by killing Hitler!\n\n%s" % game.print_roles())
+                #stats['libwin_kill'] = stats['libwin_kill'] + 1
 
-            # bot.send_message(ADMIN, "Game of Secret Hitler ended in group %d" % game.cid)
+                # bot.send_message(ADMIN, "Game of Secret Hitler ended in group %d" % game.cid)
 
-    '''with open(STATS, 'w') as f:
+        '''with open(STATS, 'w') as f:
         json.dump(stats, f)'''
-    del GamesController.games[game.cid]
-
-
+        del GamesController.games[game.cid]
+        #After deleting the game in memory delete it in DB
+        cur = conn.cursor()			
+	log.info("Deleting Game in DB")
+	query = "delete * from games where id = %s;"
+	cur.execute(query, [game.cid])
+        conn.commit()	
+        
 def inform_players(bot, game, cid, player_number):
     log.info('inform_players called')
     bot.send_message(cid,
