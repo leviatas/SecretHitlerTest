@@ -403,7 +403,7 @@ def delete_game(cid):
 	cur = conn.cursor()
 	log.info("Deleting Game in DB")
 	query = "delete * from games where id = %s;"
-	cur.execute(query, [game.cid])
+	cur.execute(query, [cid])
 	conn.commit()
 
         
