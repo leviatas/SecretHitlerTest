@@ -306,12 +306,8 @@ def command_startgame(bot, update):
 		log.info(json.dumps(game.__dict__, default=encode_all))
 		gamejson = jsonpickle.encode(game)
 		
-		game.print_roles()
 		game = jsonpickle.decode(gamejson)
-		
-                
-				
-                game.board.print_board(game.player_sequence)
+		game.board.print_board(game.player_sequence)
 		log.info(gamejson)
 			
 		log.info('Updating Game info')
