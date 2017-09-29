@@ -154,9 +154,10 @@ def command_newgame(bot, update):
 				bot.send_message(cid, "There is currently a game running. If you want to end it please type /cancelgame!")				
 				bot.send_message(cid, game.board.print_board(game.player_sequence))
 				#Info players if they forgot their roles
+				player_number = len(game.playerlist)
 				MainController.inform_players(bot, game, game.cid, player_number)
 				MainController.inform_fascists(bot, game, player_number)
-				# Ask the player to choose chancellor
+				# Ask the president to choose a chancellor
 				MainController.start_round(bot, game)
 			else:
 				GamesController.games[cid] = Game(cid, update.message.from_user.id)
