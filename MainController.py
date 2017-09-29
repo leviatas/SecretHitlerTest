@@ -658,11 +658,11 @@ def end_game(bot, game, game_endcode):
         json.dump(stats, f)'''
         del GamesController.games[game.cid]
         #After deleting the game in memory delete it in DB
-        cur = conn.cursor()			
+        cur = conn.cursor()
 	log.info("Deleting Game in DB")
 	query = "delete * from games where id = %s;"
 	cur.execute(query, [game.cid])
-        conn.commit()	
+	conn.commit()	
         
 def inform_players(bot, game, cid, player_number):
     log.info('inform_players called')
