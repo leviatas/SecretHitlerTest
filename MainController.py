@@ -66,21 +66,24 @@ def initialize_testdata():
 ##
 
 def start_round(bot, game):
-    log.info('start_round called')
-    # Starting a new round makes the current round to go up    
-    game.board.state.currentround += 1
+        cid = update.message.chat_id
+        groupName = update.message.chat.title	
+        Commands.save_game(cid, groupName, game)
+        log.info('start_round called')
+        # Starting a new round makes the current round to go up    
+        game.board.state.currentround += 1
 
-    if game.board.state.chosen_president is None:
-        game.board.state.nominated_president = game.player_sequence[game.board.state.player_counter]
-    else:
-        game.board.state.nominated_president = game.board.state.chosen_president
-        game.board.state.chosen_president = None
-    bot.send_message(game.cid,
-                     "The next presidential canditate is %s.\n%s, please nominate a Chancellor in our private chat!" % (
-                         game.board.state.nominated_president.name, game.board.state.nominated_president.name))
-    choose_chancellor(bot, game)
-    # --> nominate_chosen_chancellor --> vote --> handle_voting --> count_votes --> voting_aftermath --> draw_policies
-    # --> choose_policy --> pass_two_policies --> choose_policy --> enact_policy --> start_round
+        if game.board.state.chosen_president is None:
+                game.board.state.nominated_president = game.player_sequence[game.board.state.player_counter]
+        else:
+                game.board.state.nominated_president = game.board.state.chosen_president
+                game.board.state.chosen_president = None
+                bot.send_message(game.cid,
+                        "The next presidential canditate is %s.\n%s, please nominate a Chancellor in our private chat!" % (
+                        game.board.state.nominated_president.name, game.board.state.nominated_president.name))
+                choose_chancellor(bot, game)
+        # --> nominate_chosen_chancellor --> vote --> handle_voting --> count_votes --> voting_aftermath --> draw_policies
+        # --> choose_policy --> pass_two_policies --> choose_policy --> enact_policy --> start_round
 
 
 def choose_chancellor(bot, game):
@@ -708,7 +711,7 @@ def inform_fascists(bot, game, player_number):
         elif role == "Hitler":
             if player_number <= 6:
                 fascists = game.get_fascists()
-                bot.send_message(uid, "Your fellow fascist is: %s" % fascists[0].name) // Uncoommend on production
+                bot.send_message(uid, "Your fellow fascist is: %s" % fascists[0].name)
         elif role == "Liberal":
             pass
         else:
