@@ -65,10 +65,8 @@ def initialize_testdata():
 #
 ##
 
-def start_round(bot, game):
-        cid = update.message.chat_id
-        groupName = update.message.chat.title	
-        Commands.save_game(cid, groupName, game)
+def start_round(bot, game):        
+        Commands.save_game(game.cid, "Saved Round %d" % (game.board.state.currentround + 1), game)
         log.info('start_round called')
         # Starting a new round makes the current round to go up    
         game.board.state.currentround += 1
