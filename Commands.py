@@ -186,11 +186,9 @@ def command_newgame(bot, update):
 				game = jsonpickle.decode("""%s""" % (jsdata))
 				#log.info(game)
 							
-				'''jsdata = str(jsdata).replace("'","\"")	
-				log.info(jsdata)				
-				x = json.loads("""%s""" % (jsdata), object_hook=lambda d: namedtuple('X', d.keys())(*d.values()))
-				log.info(x)
-				'''
+				jsdata = str(jsdata).replace("'","\"")	
+				
+				
 				log.info(game.playerlist )
 				log.info(game.player_sequence )
 				log.info(game.cid)
