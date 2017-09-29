@@ -10,5 +10,5 @@ CREATE TABLE IF NOT EXISTS users (
 CREATE TABLE IF NOT EXISTS games (
     id bigint PRIMARY KEY,
     groupName TEXT NOT NULL,
-    data json NOT NULL
+    data text NOT NULL
 );
