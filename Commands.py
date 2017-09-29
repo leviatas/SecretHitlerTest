@@ -148,7 +148,7 @@ def command_newgame(bot, update):
 		else:
 			#Search game in DB
 			game = load_game(cid)			
-			if game							
+			if game
 				GamesController.games[cid] = game
 				bot.send_message(cid, "There is currently a game running. If you want to end it please type /cancelgame!")				
 				bot.send_message(cid, game.board.print_board(game.player_sequence))
