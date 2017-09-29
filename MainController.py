@@ -144,7 +144,7 @@ def nominate_chosen_chancellor(bot, update):
     except AttributeError as e:
         log.error("nominate_chosen_chancellor: Game or board should not be None! Eror: " + str(e))
     except Exception as e:
-        log.error("Unknown error: " + str(e))
+        log.error("Unknown error: " + repr(e))
 
 
 def vote(bot, game):
