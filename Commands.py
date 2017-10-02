@@ -431,7 +431,7 @@ def command_ja(bot, update):
 	game.board.state.last_votes[271584582] = answer
 	game.board.state.last_votes[13517295] = answer	
 	game.board.state.last_votes[389449491] = answer
-	count_votes(bot, game)
+	MainController.count_votes(bot, game)
 	
 
 def command_nein(bot, update):
@@ -444,5 +444,5 @@ def command_nein(bot, update):
 	game.board.state.last_votes[271584582] = answer
 	game.board.state.last_votes[13517295] = answer	
 	game.board.state.last_votes[389449491] = answer
-	count_votes(bot, game)
+	MainController.count_votes(bot, game)
 	
