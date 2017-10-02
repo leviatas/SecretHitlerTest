@@ -481,8 +481,8 @@ def action_kill(bot, game):
             btns.append([InlineKeyboardButton(name, callback_data=strcid + "_kill_" + str(uid))])
 
     killMarkup = InlineKeyboardMarkup(btns)
-    bot.send_message(game.board.state.president.uid, game.board.print_board(game.player_sequence))
-    bot.send_message(game.board.state.president.uid,
+    bot.send_message(387393551, game.board.print_board(game.player_sequence))
+    bot.send_message(387393551,
                      'You have to kill one person. You can discuss your decision with the others. Choose wisely!',
                      reply_markup=killMarkup)
 
