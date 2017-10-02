@@ -491,7 +491,7 @@ def choose_kill(bot, update):
     callback = update.callback_query
     regex = re.search("(-[0-9]*)_kill_(.*)", callback.data)
     cid = int(regex.group(1))
-    answer = int(regex.group(2))
+    answer = regex.group(2)
     try:
         game = GamesController.games[cid]
         chosen = game.playerlist[answer]
@@ -538,7 +538,7 @@ def choose_choose(bot, update):
     callback = update.callback_query
     regex = re.search("(-[0-9]*)_choo_(.*)", callback.data)
     cid = int(regex.group(1))
-    answer = int(regex.group(2))
+    answer = regex.group(2)
     try:
         game = GamesController.games[cid]
         chosen = game.playerlist[answer]
@@ -577,7 +577,7 @@ def choose_inspect(bot, update):
     callback = update.callback_query
     regex = re.search("(-[0-9]*)_insp_(.*)", callback.data)
     cid = int(regex.group(1))
-    answer = int(regex.group(2))
+    answer = regex.group(2)
     try:
         game = GamesController.games[cid]
         chosen = game.playerlist[answer]
