@@ -156,11 +156,11 @@ def vote(bot, game):
     btns = [[InlineKeyboardButton("Ja", callback_data=strcid + "_Ja"),
              InlineKeyboardButton("Nein", callback_data=strcid + "_Nein")]]
     voteMarkup = InlineKeyboardMarkup(btns)
-    for uid in game.playerlist:
-        if not game.playerlist[uid].is_dead:
-            if game.playerlist[uid] is not game.board.state.nominated_president:
+    #for uid in game.playerlist:
+        #if not game.playerlist[uid].is_dead:
+            #if game.playerlist[uid] is not game.board.state.nominated_president:
                 # the nominated president already got the board before nominating a chancellor
-                bot.send_message(uid, game.board.print_board(game.player_sequence))
+                #bot.send_message(uid, game.board.print_board(game.player_sequence))
             #bot.send_message(uid, 
             #                 "Do you want to elect President %s and Chancellor %s?" % (
             #                     game.board.state.nominated_president.name, game.board.state.nominated_chancellor.name),
