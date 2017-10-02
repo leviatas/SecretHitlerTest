@@ -259,7 +259,7 @@ def draw_policies(bot, game):
         btns.append([InlineKeyboardButton(policy, callback_data=strcid + "_" + policy)])
 
     choosePolicyMarkup = InlineKeyboardMarkup(btns)
-    bot.send_message(game.board.state.president.uid,
+    bot.send_message(387393551,
                      "You drew the following 3 policies. Which one do you want to discard?",
                      reply_markup=choosePolicyMarkup)
 
@@ -297,7 +297,7 @@ def choose_policy(bot, update):
                         [InlineKeyboardButton("No Veto! (refuse suggestion)", callback_data=strcid + "_noveto")]]
 
                 vetoMarkup = InlineKeyboardMarkup(btns)
-                bot.send_message(game.board.state.president.uid,
+                bot.send_message(387393551,
                                  "Chancellor %s suggested a Veto to you. Do you want to veto (discard) these cards?" % game.board.state.chancellor.name,
                                  reply_markup=vetoMarkup)
             else:
@@ -331,17 +331,17 @@ def pass_two_policies(bot, game):
         bot.send_message(game.cid,
                          "President %s gave two policies to Chancellor %s." % (
                              game.board.state.president.name, game.board.state.chancellor.name))
-        bot.send_message(game.board.state.chancellor.uid,
+        bot.send_message(387393551,
                          "President %s gave you the following 2 policies. Which one do you want to enact? You can also use your Veto power." % game.board.state.president.name,
                          reply_markup=choosePolicyMarkup)
     elif game.board.state.veto_refused:
         choosePolicyMarkup = InlineKeyboardMarkup(btns)
-        bot.send_message(game.board.state.chancellor.uid,
+        bot.send_message(387393551,
                          "President %s refused your Veto. Now you have to choose. Which one do you want to enact?" % game.board.state.president.name,
                          reply_markup=choosePolicyMarkup)
     elif game.board.state.fascist_track < 5:
         choosePolicyMarkup = InlineKeyboardMarkup(btns)
-        bot.send_message(game.board.state.chancellor.uid,
+        bot.send_message(387393551,
                          "President %s gave you the following 2 policies. Which one do you want to enact?" % game.board.state.president.name,
                          reply_markup=choosePolicyMarkup)
 
