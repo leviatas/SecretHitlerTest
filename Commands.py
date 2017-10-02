@@ -413,3 +413,31 @@ def delete_game(cid):
 	query = "DELETE FROM games WHERE id = %s;"
 	cur.execute(query, [cid])
 	conn.commit()
+	
+	
+#Testing commands
+def command_ja(bot, update):
+	cid = update.message.chat_id
+	game = GamesController.games.get(cid, None)
+	answer = "Ja"
+	game.board.state.last_votes[387393551] = answer
+	game.board.state.last_votes[6473134] = answer
+	game.board.state.last_votes[377488610] = answer
+	game.board.state.last_votes[271584582] = answer
+	game.board.state.last_votes[13517295] = answer	
+	game.board.state.last_votes[389449491] = answer
+	count_votes(bot, game)
+	
+
+def command_nein(bot, update):
+	cid = update.message.chat_id
+	game = GamesController.games.get(cid, None)
+	answer = "Nein"
+	game.board.state.last_votes[387393551] = answer
+	game.board.state.last_votes[6473134] = answer
+	game.board.state.last_votes[377488610] = answer
+	game.board.state.last_votes[271584582] = answer
+	game.board.state.last_votes[13517295] = answer	
+	game.board.state.last_votes[389449491] = answer
+	count_votes(bot, game)
+	
