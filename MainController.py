@@ -102,13 +102,11 @@ def choose_chancellor(bot, game):
         # ineligible to be Chancellor Candidate; the
         # last President may be nominated.
         if len(game.player_sequence) > 5:
-            if uid != game.board.state.nominated_president.uid and game.playerlist[
-                uid].is_dead == False and uid != pres_uid and uid != chan_uid:
+            if uid != game.board.state.nominated_president.uid and game.playerlist[uid].is_dead == False and uid != pres_uid and uid != chan_uid:
                 name = game.playerlist[uid].name
                 btns.append([InlineKeyboardButton(name, callback_data=strcid + "_chan_" + str(uid))])
         else:
-            if uid != game.board.state.nominated_president.uid and game.playerlist[
-                uid].is_dead == False and uid != chan_uid:
+            if uid != game.board.state.nominated_president.uid and game.playerlist[uid].is_dead == False and uid != chan_uid:
                 name = game.playerlist[uid].name
                 btns.append([InlineKeyboardButton(name, callback_data=strcid + "_chan_" + str(uid))])
 
@@ -125,7 +123,7 @@ def nominate_chosen_chancellor(bot, update):
     callback = update.callback_query
     regex = re.search("(-[0-9]*)_chan_([0-9]*)", callback.data)
     cid = int(regex.group(1))
-    chosen_uid = int(regex.group(2))
+    chosen_uid = regex.group(2)
     try:
         game = GamesController.games.get(cid, None)
         #log.info(game.playerlist)
