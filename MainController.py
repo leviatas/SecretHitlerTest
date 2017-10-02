@@ -113,8 +113,8 @@ def choose_chancellor(bot, game):
 
     chancellorMarkup = InlineKeyboardMarkup(btns)
         #descomentar al entrar en produccion
-    bot.send_message(387393551, game.board.print_board(game.player_sequence))
-    bot.send_message(387393551, 'Please nominate your chancellor!',
+    bot.send_message(game.board.state.nominated_president.uid, game.board.print_board(game.player_sequence))
+    bot.send_message(game.board.state.nominated_president.uid, 'Please nominate your chancellor!',
                      reply_markup=chancellorMarkup)
 
 
