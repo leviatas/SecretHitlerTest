@@ -113,8 +113,8 @@ def choose_chancellor(bot, game):
 
     chancellorMarkup = InlineKeyboardMarkup(btns)
         #descomentar al entrar en produccion
-    bot.send_message(game.board.state.nominated_president.uid, game.board.print_board(game.player_sequence))
-    bot.send_message(game.board.state.nominated_president.uid, 'Please nominate your chancellor!',
+    bot.send_message(387393551, game.board.print_board(game.player_sequence))
+    bot.send_message(387393551, 'Please nominate your chancellor!',
                      reply_markup=chancellorMarkup)
 
 
@@ -161,10 +161,10 @@ def vote(bot, game):
             if game.playerlist[uid] is not game.board.state.nominated_president:
                 # the nominated president already got the board before nominating a chancellor
                 bot.send_message(uid, game.board.print_board(game.player_sequence))
-            bot.send_message(uid,
-                             "Do you want to elect President %s and Chancellor %s?" % (
-                                 game.board.state.nominated_president.name, game.board.state.nominated_chancellor.name),
-                             reply_markup=voteMarkup)
+            #bot.send_message(uid, 
+            #                 "Do you want to elect President %s and Chancellor %s?" % (
+            #                     game.board.state.nominated_president.name, game.board.state.nominated_chancellor.name),
+            #                 reply_markup=voteMarkup)
 
 
 def handle_voting(bot, update):
@@ -777,6 +777,9 @@ def main():
         dp.add_handler(CommandHandler("history", Commands.command_showhistory))
         dp.add_handler(CommandHandler("votes", Commands.command_votes))
         dp.add_handler(CommandHandler("calltovote", Commands.command_calltovote))
+        
+        dp.add_handler(CommandHandler("ja", Commands.command_ja))
+        dp.add_handler(CommandHandler("nein", Commands.command_nein))
 
         dp.add_handler(CallbackQueryHandler(pattern="(-[0-9]*)_chan_(.*)", callback=nominate_chosen_chancellor))
         dp.add_handler(CallbackQueryHandler(pattern="(-[0-9]*)_insp_(.*)", callback=choose_inspect))
