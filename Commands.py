@@ -394,6 +394,13 @@ def load_game(cid):
 		jsdata = dbdata[2]
 		log.info("jsdata = %s" % (jsdata))				
 		game = jsonpickle.decode(jsdata)
+		
+		# For some reason the decoding fails when bringing the dict playerlist and it changes it id from int to string.
+		# So I have to change it back the ID to int.				
+		temp_player_list = {}		
+		for uid in game.playerlist:
+			temp_player_list[int(uid)] = game.playerlist[uid]
+		game.playerlist = temp_player_list		
 		#bot.send_message(cid, game.print_roles())
 		return game
 	else:
