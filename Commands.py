@@ -176,30 +176,26 @@ def command_join(bot, update, args):
 		uid = update.message.from_user.id
 	else:
 		# If args, testing behaviour				
-		fname = str(args[0])
+		fname = args[0]
 		uid = int(args[1])
 		player = Player(fname, uid)
 		game.add_player(uid, player)
-		fname = str(args[2])
+		fname = args[2]
 		uid = int(args[3])
 		player = Player(fname, uid)
 		game.add_player(uid, player)
-		fname = str(args[4])
+		fname = args[4]
 		uid = int(args[5])
 		player = Player(fname, uid)
 		game.add_player(uid, player)
-		fname = str(args[6])
+		fname = args[6]
 		uid = int(args[7])
 		player = Player(fname, uid)
 		game.add_player(uid, player)
-		fname = str(args[8])
+		fname = args[8]
 		uid = int(args[9])
 		player = Player(fname, uid)
-		game.add_player(uid, player)
-		fname = str(args[10])
-		uid = int(args[11])
-		player = Player(fname, uid)
-		game.add_player(uid, player)
+		game.add_player(uid, player)		
 
 	if groupType not in ['group', 'supergroup']:
 		bot.send_message(cid, "You have to add me to a group first and type /newgame there!")
