@@ -173,31 +173,31 @@ def command_join(bot, update, args):
 	if len(args) <= 0:
 		# if not args, use normal behaviour
 		fname = update.message.from_user.first_name
-		uid = update.message.from_user.id
+		uid = str(update.message.from_user.id)
 	else:
 		# If args, testing behaviour				
-		fname = str(args[0])
-		uid = int(args[1])
+		fname = args[0]
+		uid = args[1]
 		player = Player(fname, uid)
 		game.add_player(uid, player)
-		fname = str(args[2])
-		uid = int(args[3])
+		fname = args[2]
+		uid = args[3]
 		player = Player(fname, uid)
 		game.add_player(uid, player)
-		fname = str(args[4])
-		uid = int(args[5])
+		fname = args[4]
+		uid = args[5]
 		player = Player(fname, uid)
 		game.add_player(uid, player)
-		fname = str(args[6])
-		uid = int(args[7])
+		fname = args[6]
+		uid = args[7]
 		player = Player(fname, uid)
 		game.add_player(uid, player)
-		fname = str(args[8])
-		uid = int(args[9])
+		fname = args[8]
+		uid = args[9]
 		player = Player(fname, uid)
 		game.add_player(uid, player)
-		fname = str(args[10])
-		uid = int(args[11])
+		fname = args[10]
+		uid = args[11]
 		player = Player(fname, uid)
 		game.add_player(uid, player)
 
