@@ -426,7 +426,8 @@ def delete_game(cid):
 	
 #Testing commands
 def command_ja(bot, update):
-	if cid == ADMIN:
+	uid = update.message.from_user.id
+	if uid == ADMIN:
 		cid = update.message.chat_id
 		game = GamesController.games.get(cid, None)
 		answer = "Ja"
@@ -436,7 +437,8 @@ def command_ja(bot, update):
 	
 
 def command_nein(bot, update):	
-	if cid == ADMIN:
+	uid = update.message.from_user.id
+	if uid == ADMIN:
 		cid = update.message.chat_id
 		game = GamesController.games.get(cid, None)
 		answer = "Nein"
