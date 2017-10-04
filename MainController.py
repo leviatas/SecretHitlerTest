@@ -265,6 +265,10 @@ def draw_policies(bot, game):
         btns.append([InlineKeyboardButton(policy, callback_data=strcid + "_" + policy)])
 
     choosePolicyMarkup = InlineKeyboardMarkup(btns)
+    log.info(game.board)
+    log.info(game.board.state)
+    log.info(game.board.state.nominated_president)
+    log.info(game.board.state.nominated_president.uid)
     bot.send_message(game.board.state.nominated_president.uid,
                      "You drew the following 3 policies. Which one do you want to discard?",
                      reply_markup=choosePolicyMarkup)
