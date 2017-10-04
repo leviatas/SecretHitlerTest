@@ -207,7 +207,6 @@ def command_join(bot, update, args):
 			player = Player(fname, uid)
 			game.add_player(uid, player)	
 			log.info("%s (%d) joined a game in %d" % (fname, uid, game.cid))
-			return
 	
 	if groupType not in ['group', 'supergroup']:
 		bot.send_message(cid, "You have to add me to a group first and type /newgame there!")
