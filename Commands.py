@@ -175,37 +175,39 @@ def command_join(bot, update, args):
 		fname = update.message.from_user.first_name
 		uid = update.message.from_user.id
 	else:
-		# If args, testing behaviour				
-		fname = args[0]
-		uid = int(args[1])
-		player = Player(fname, uid)
-		game.add_player(uid, player)
-		log.info("%s (%d) joined a game in %d" % (fname, uid, game.cid))
-		fname = args[2]
-		uid = int(args[3])
-		player = Player(fname, uid)
-		game.add_player(uid, player)
-		log.info("%s (%d) joined a game in %d" % (fname, uid, game.cid))
-		fname = args[4]
-		uid = int(args[5])
-		player = Player(fname, uid)
-		game.add_player(uid, player)
-		log.info("%s (%d) joined a game in %d" % (fname, uid, game.cid))
-		fname = args[6]
-		uid = int(args[7])
-		player = Player(fname, uid)
-		game.add_player(uid, player)
-		log.info("%s (%d) joined a game in %d" % (fname, uid, game.cid))
-		fname = args[8]
-		uid = int(args[9])
-		player = Player(fname, uid)
-		game.add_player(uid, player)	
-		log.info("%s (%d) joined a game in %d" % (fname, uid, game.cid))
-		fname = args[10]
-		uid = int(args[11])
-		player = Player(fname, uid)
-		game.add_player(uid, player)	
-		log.info("%s (%d) joined a game in %d" % (fname, uid, game.cid))
+		if cid == ADMIN:
+			# If args, testing behaviour				
+			fname = args[0]
+			uid = int(args[1])
+			player = Player(fname, uid)
+			game.add_player(uid, player)
+			log.info("%s (%d) joined a game in %d" % (fname, uid, game.cid))
+			fname = args[2]
+			uid = int(args[3])
+			player = Player(fname, uid)
+			game.add_player(uid, player)
+			log.info("%s (%d) joined a game in %d" % (fname, uid, game.cid))
+			fname = args[4]
+			uid = int(args[5])
+			player = Player(fname, uid)
+			game.add_player(uid, player)
+			log.info("%s (%d) joined a game in %d" % (fname, uid, game.cid))
+			fname = args[6]
+			uid = int(args[7])
+			player = Player(fname, uid)
+			game.add_player(uid, player)
+			log.info("%s (%d) joined a game in %d" % (fname, uid, game.cid))
+			fname = args[8]
+			uid = int(args[9])
+			player = Player(fname, uid)
+			game.add_player(uid, player)	
+			log.info("%s (%d) joined a game in %d" % (fname, uid, game.cid))
+			fname = args[10]
+			uid = int(args[11])
+			player = Player(fname, uid)
+			game.add_player(uid, player)	
+			log.info("%s (%d) joined a game in %d" % (fname, uid, game.cid))
+			return
 	
 	if groupType not in ['group', 'supergroup']:
 		bot.send_message(cid, "You have to add me to a group first and type /newgame there!")
@@ -424,27 +426,21 @@ def delete_game(cid):
 	
 #Testing commands
 def command_ja(bot, update):
-	cid = update.message.chat_id
-	game = GamesController.games.get(cid, None)
-	answer = "Ja"
-	game.board.state.last_votes[387393551] = answer
-	game.board.state.last_votes[6473134] = answer
-	game.board.state.last_votes[377488610] = answer
-	game.board.state.last_votes[271584582] = answer
-	game.board.state.last_votes[13517295] = answer	
-	game.board.state.last_votes[389449491] = answer
-	MainController.count_votes(bot, game)
+	if cid == ADMIN:
+		cid = update.message.chat_id
+		game = GamesController.games.get(cid, None)
+		answer = "Ja"
+		for uid in game.playerlist:
+			game.board.state.last_votes[uid] = answer
+		MainController.count_votes(bot, game)
 	
 
-def command_nein(bot, update):
-	cid = update.message.chat_id
-	game = GamesController.games.get(cid, None)
-	answer = "Nein"
-	game.board.state.last_votes[387393551] = answer
-	game.board.state.last_votes[6473134] = answer
-	game.board.state.last_votes[377488610] = answer
-	game.board.state.last_votes[271584582] = answer
-	game.board.state.last_votes[13517295] = answer	
-	game.board.state.last_votes[389449491] = answer
-	MainController.count_votes(bot, game)
+def command_nein(bot, update):	
+	if cid == ADMIN:
+		cid = update.message.chat_id
+		game = GamesController.games.get(cid, None)
+		answer = "Nein"
+		for uid in game.playerlist:
+			game.board.state.last_votes[uid] = answer
+		MainController.count_votes(bot, game)
 	
