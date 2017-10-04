@@ -264,12 +264,8 @@ def draw_policies(bot, game):
     for policy in game.board.state.drawn_policies:
         btns.append([InlineKeyboardButton(policy, callback_data=strcid + "_" + policy)])
 
-    choosePolicyMarkup = InlineKeyboardMarkup(btns)
-    log.info(game.board)
-    log.info(game.board.state)
-    log.info(game.board.state.nominated_president)
-    log.info(game.board.state.nominated_president.uid)
-    bot.send_message(game.board.state.nominated_president.uid,
+    choosePolicyMarkup = InlineKeyboardMarkup(btns)    
+    bot.send_message(game.board.state.president.uid,
                      "You drew the following 3 policies. Which one do you want to discard?",
                      reply_markup=choosePolicyMarkup)
 
@@ -307,7 +303,7 @@ def choose_policy(bot, update):
                         [InlineKeyboardButton("No Veto! (refuse suggestion)", callback_data=strcid + "_noveto")]]
 
                 vetoMarkup = InlineKeyboardMarkup(btns)
-                bot.send_message(game.board.state.nominated_president.uid,
+                bot.send_message(game.board.state.president.uid,
                                  "Chancellor %s suggested a Veto to you. Do you want to veto (discard) these cards?" % game.board.state.chancellor.name,
                                  reply_markup=vetoMarkup)
             else:
