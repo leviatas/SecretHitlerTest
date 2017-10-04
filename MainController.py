@@ -191,8 +191,8 @@ def handle_voting(bot, update):
                 game.board.state.last_votes[uid] = answer
         if len(game.board.state.last_votes) == len(game.player_sequence):
                 count_votes(bot, game)
-    except:
-        log.error("handle_voting: Game or board should not be None!")
+    except Exception as e:
+        log.error(str(e))
 
 
 def count_votes(bot, game):
