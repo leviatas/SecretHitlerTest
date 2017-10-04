@@ -14,7 +14,7 @@ from telegram.ext import (Updater, CommandHandler, CallbackQueryHandler)
 
 import Commands
 from Constants.Cards import playerSets
-from Constants.Config import TOKEN, STATS
+from Constants.Config import TOKEN, STATS, ADMIN
 from Boardgamebox.Game import Game
 from Boardgamebox.Player import Player
 import GamesController
@@ -49,6 +49,8 @@ cur = conn.cursor()
 query = "SELECT ...."
 cur.execute(query)
 '''
+
+debugging = True
 
 def initialize_testdata():
     # Sample game for quicker tests
@@ -113,6 +115,9 @@ def choose_chancellor(bot, game):
 
     chancellorMarkup = InlineKeyboardMarkup(btns)
         #descomentar al entrar en produccion
+        
+    if(debugging):
+        game.board.state.nominated_president.uid = ADMIN      
     bot.send_message(game.board.state.nominated_president.uid, game.board.print_board(game.player_sequence))
     bot.send_message(game.board.state.nominated_president.uid, 'Please nominate your chancellor!',
                      reply_markup=chancellorMarkup)
@@ -125,6 +130,8 @@ def nominate_chosen_chancellor(bot, update):
     regex = re.search("(-[0-9]*)_chan_([0-9]*)", callback.data)
     cid = int(regex.group(1))
     chosen_uid = int(regex.group(2))
+    if(debugging):
+        chosen_uid = ADMIN   
     try:
         game = GamesController.games.get(cid, None)
         #log.info(game.playerlist)
@@ -778,8 +785,9 @@ def main():
         dp.add_handler(CommandHandler("votes", Commands.command_votes))
         dp.add_handler(CommandHandler("calltovote", Commands.command_calltovote))
         
-        #dp.add_handler(CommandHandler("ja", Commands.command_ja))
-        #dp.add_handler(CommandHandler("nein", Commands.command_nein))
+        #Testing commands
+        dp.add_handler(CommandHandler("ja", Commands.command_ja))
+        dp.add_handler(CommandHandler("nein", Commands.command_nein))
 
         dp.add_handler(CallbackQueryHandler(pattern="(-[0-9]*)_chan_(.*)", callback=nominate_chosen_chancellor))
         dp.add_handler(CallbackQueryHandler(pattern="(-[0-9]*)_insp_(.*)", callback=choose_inspect))
