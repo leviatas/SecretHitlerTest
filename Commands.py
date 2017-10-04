@@ -384,7 +384,7 @@ def save_game(cid, groupName, game):
 		#log.info(cur.fetchone()[0])
 		conn.commit()		
 	else:
-		log.info('Saving Game')
+		log.info('Saving Game in DB')
 		gamejson = jsonpickle.encode(game)
 		query = "INSERT INTO games(id , groupName  , data) VALUES (%s, %s, %s);"
 		#query = "INSERT INTO games(id , groupName  , data) VALUES (%s, %s, %s) RETURNING data;"
@@ -402,7 +402,7 @@ def load_game(cid):
 	if cur.rowcount > 0:
 		log.info("Game Found")
 		jsdata = dbdata[2]
-		log.info("jsdata = %s" % (jsdata))				
+		#log.info("jsdata = %s" % (jsdata))				
 		game = jsonpickle.decode(jsdata)
 		
 		# For some reason the decoding fails when bringing the dict playerlist and it changes it id from int to string.
@@ -414,6 +414,7 @@ def load_game(cid):
 		#bot.send_message(cid, game.print_roles())
 		return game
 	else:
+		log.info("Game Not Found")
 		return None
 
 def delete_game(cid):
