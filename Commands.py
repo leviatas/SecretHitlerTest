@@ -175,6 +175,8 @@ def command_join(bot, update, args):
 		fname = update.message.from_user.first_name
 		uid = update.message.from_user.id
 	else:
+		log.info(str(cid))
+		log.info(str(ADMIN))
 		if cid == ADMIN:
 			# If args, testing behaviour				
 			fname = args[0]
