@@ -357,6 +357,9 @@ def command_showhistory(bot, update):
 			game = GamesController.games.get(cid, None)  
 			bot.send_message(cid, "Current round: " + str(game.board.state.currentround))
 			
+			for x in range(0, game.currentround):
+				history_text += game.history[x] + "\n"				
+			
 			'''bot.send_message(cid, "This players are playing the game\n")
 			for uid in game.playerlist:
 				bot.send_message(cid, text="[%s](tg://user?id=%d)\n" % 
