@@ -359,7 +359,7 @@ def command_showhistory(bot, update):
 			uid = update.message.from_user.id
 			history_text = "" 
 			for x in game.history:
-				history_text += x + "\n"
+				history_text += x + "\n\n"
 
 			bot.send_message(uid, history_text) 
 			
