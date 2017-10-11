@@ -229,7 +229,7 @@ def count_votes(bot, game):
         game.board.state.nominated_chancellor = None
         voting_success = True
         bot.send_message(game.cid, voting_text)
-        game.history.Append(voting_text)
+        game.history.append(voting_text)
         voting_aftermath(bot, game, voting_success)
     else:
         log.info("Voting failed")
@@ -239,7 +239,7 @@ def count_votes(bot, game):
         game.board.state.nominated_chancellor = None
         game.board.state.failed_votes += 1
         bot.send_message(game.cid, voting_text)
-        game.history.Append(voting_text)
+        game.history.append(voting_text)
         if game.board.state.failed_votes == 3:
             do_anarchy(bot, game)
         else:
