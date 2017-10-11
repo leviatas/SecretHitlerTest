@@ -357,7 +357,7 @@ def command_showhistory(bot, update):
 			game = GamesController.games.get(cid, None)  
 			bot.send_message(cid, "Current round: " + str(game.board.state.currentround))
 			uid = update.message.from_user.id
-			history_text = "" 
+			history_text = "History:\n\n" 
 			for x in game.history:
 				history_text += x + "\n\n"
 
