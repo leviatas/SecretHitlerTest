@@ -378,7 +378,7 @@ def enact_policy(bot, game, policy, anarchy):
         bot.send_message(game.cid,
                          "President %s and Chancellor %s enacted a %s policy!" % (
                              game.board.state.president.name, game.board.state.chancellor.name, policy))
-        game.history[game.board.state.currentround] += game.history[game.board.state.currentround] + "President %s and Chancellor %s enacted a %s policy!" % (
+        game.history[game.board.state.currentround] += "\n\nPresident %s and Chancellor %s enacted a %s policy!" % (
                              game.board.state.president.name, game.board.state.chancellor.name, policy)
     else:
         bot.send_message(game.cid,
