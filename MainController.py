@@ -179,6 +179,7 @@ def handle_voting(bot, update):
     regex = re.search("(-[0-9]*)_(.*)", callback.data)
     cid = int(regex.group(1))
     answer = regex.group(2)
+    strcid = regex.group(1)
     try:
         game = GamesController.games[cid]
         uid = callback.from_user.id
@@ -186,8 +187,18 @@ def handle_voting(bot, update):
                 answer, game.board.state.nominated_president.name, game.board.state.nominated_chancellor.name), uid,
                         callback.message.message_id)
         log.info("Player %s (%d) voted %s" % (callback.from_user.first_name, uid, answer))
-        if uid not in game.board.state.last_votes:
-                game.board.state.last_votes[uid] = answer
+        
+        #if uid not in game.board.state.last_votes:
+        game.board.state.last_votes[uid] = answer
+        
+        #Allow player to change his vote
+        btns = [[InlineKeyboardButton("Ja", callback_data=strcid + "_Ja"),
+        InlineKeyboardButton("Nein", callback_data=strcid + "_Nein")]]
+        voteMarkup = InlineKeyboardMarkup(btns)
+        bot.send_message(uid, "You can change your vote here.\nDo you want to to elect President %s and Chancellor %s?" % (
+                                game.board.state.nominated_president.name, game.board.state.nominated_chancellor.name),
+                                reply_markup=voteMarkup)
+        
         if len(game.board.state.last_votes) == len(game.player_sequence):
                 count_votes(bot, game)
     except Exception as e:
