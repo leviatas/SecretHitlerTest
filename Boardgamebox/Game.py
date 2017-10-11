@@ -14,6 +14,7 @@ class Game(object):
         self.board = None
         self.initiator = initiator
         self.dateinitvote = None
+        self.history = []
     
     
     def add_player(self, uid, player):
