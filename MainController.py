@@ -452,6 +452,7 @@ def choose_veto(bot, update):
             game.board.discards += game.board.state.drawn_policies
             game.board.state.drawn_policies = []
             game.board.state.failed_votes += 1
+            shuffle_policy_pile(bot, game)  
             if game.board.state.failed_votes == 3:
                 do_anarchy(bot, game)
             else:
