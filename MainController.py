@@ -164,7 +164,7 @@ def vote(bot, game):
         InlineKeyboardButton("Nein", callback_data=strcid + "_Nein")]]
         voteMarkup = InlineKeyboardMarkup(btns)
         for uid in game.playerlist:
-                if not game.playerlist[uid].is_dead:# and not debugging:
+                if not game.playerlist[uid].is_dead and not debugging:
                         if game.playerlist[uid] is not game.board.state.nominated_president:
                         # the nominated president already got the board before nominating a chancellor
                                 bot.send_message(uid, game.board.print_board(game.player_sequence))
@@ -229,7 +229,7 @@ def count_votes(bot, game):
         game.board.state.nominated_chancellor = None
         voting_success = True
         bot.send_message(game.cid, voting_text)
-        game.history.append(voting_text)
+        game.history.append(("Round %d\n\n" % (game.board.state.currentround + 1) ) + voting_text)
         log.info(game.history[game.board.state.currentround])
         voting_aftermath(bot, game, voting_success)
     else:
@@ -240,7 +240,7 @@ def count_votes(bot, game):
         game.board.state.nominated_chancellor = None
         game.board.state.failed_votes += 1
         bot.send_message(game.cid, voting_text)
-        game.history.append(voting_text)
+        game.history.append(("Round %d\n\n" % (game.board.state.currentround + 1) ) + voting_text)
         log.info(game.history[game.board.state.currentround])
         if game.board.state.failed_votes == 3:
             do_anarchy(bot, game)
