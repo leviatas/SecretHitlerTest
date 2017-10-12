@@ -350,8 +350,8 @@ def command_showhistory(bot, update):
 		#Send message of executing command   
 		cid = update.message.chat_id
 		#bot.send_message(cid, "Looking for history...")
-		bot.send_message(cid, "Debug info")
-		bot.send_message(cid, "Current chat id: " + str(cid))
+		
+		
 		#Check if there is a current game 
 		if cid in GamesController.games.keys():
 			game = GamesController.games.get(cid, None)  
