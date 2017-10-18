@@ -409,8 +409,8 @@ def enact_policy(bot, game, policy, anarchy):
                                                                                               "the pile.  The President may share "
                                                                                               "(or lie about!) the results of their "
                                                                                               "investigation at their discretion." % game.board.state.president.name)
-                action_policy(bot, game)
                 game.history[game.board.state.currentround] += "\n\nPresident %s now knows the next three policies on the pile" % game.board.state.president.name
+                action_policy(bot, game)                
             elif action == "kill":
                 bot.send_message(game.cid,
                                  "Presidential Power enabled: Execution " + u"\U0001F5E1" + "\nPresident %s has to kill one person. You can "
@@ -538,8 +538,8 @@ def choose_kill(bot, update):
                              "President %s killed %s who was not Hitler. %s, you are dead now and are not allowed to talk anymore!" % (
                                  game.board.state.president.name, chosen.name, chosen.name))
             bot.send_message(game.cid, game.board.print_board(game.player_sequence))
-            game.history[game.board.state.currentround] += "\n\nPresident %s killed %s who was not Hitler. %s!" % (
-                                 game.board.state.president.name, chosen.name, chosen.name)
+            game.history[game.board.state.currentround] += "\n\nPresident %s killed %s who was not Hitler!" % (
+                                 game.board.state.president.name, chosen.name)
             start_next_round(bot, game)
     except:
         log.error("choose_kill: Game or board should not be None!")
