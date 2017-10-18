@@ -383,6 +383,7 @@ def enact_policy(bot, game, policy, anarchy):
     else:
         bot.send_message(game.cid,
                          "The top most policy was enacted: %s" % policy)
+        game.history[game.board.state.currentround] += "\n\nThe top most policy was enacted: %s" % policy
     sleep(3)
     bot.send_message(game.cid, game.board.print_board(game.player_sequence))
     # end of round
@@ -409,6 +410,7 @@ def enact_policy(bot, game, policy, anarchy):
                                                                                               "(or lie about!) the results of their "
                                                                                               "investigation at their discretion." % game.board.state.president.name)
                 action_policy(bot, game)
+                game.history[game.board.state.currentround] += "\n\nPresident %s now knows the next three policies on the pile" % game.board.state.president.name
             elif action == "kill":
                 bot.send_message(game.cid,
                                  "Presidential Power enabled: Execution " + u"\U0001F5E1" + "\nPresident %s has to kill one person. You can "
@@ -536,6 +538,8 @@ def choose_kill(bot, update):
                              "President %s killed %s who was not Hitler. %s, you are dead now and are not allowed to talk anymore!" % (
                                  game.board.state.president.name, chosen.name, chosen.name))
             bot.send_message(game.cid, game.board.print_board(game.player_sequence))
+            game.history[game.board.state.currentround] += "\n\nPresident %s killed %s who was not Hitler. %s!" % (
+                                 game.board.state.president.name, chosen.name, chosen.name)
             start_next_round(bot, game)
     except:
         log.error("choose_kill: Game or board should not be None!")
@@ -576,6 +580,8 @@ def choose_choose(bot, update):
         bot.send_message(game.cid,
                          "President %s chose %s as the next president." % (
                              game.board.state.president.name, chosen.name))
+        game.history[game.board.state.currentround] += "\n\nPresident %s chose %s as the next president." % (
+                game.board.state.president.name, chosen.name)
         start_next_round(bot, game)
     except:
         log.error("choose_choose: Game or board should not be None!")
@@ -614,6 +620,7 @@ def choose_inspect(bot, update):
                               callback.from_user.id,
                               callback.message.message_id)
         bot.send_message(game.cid, "President %s inspected %s." % (game.board.state.president.name, chosen.name))
+        game.history[game.board.state.currentround] += "President %s inspected %s." % (game.board.state.president.name, chosen.name)
         start_next_round(bot, game)
     except:
         log.error("choose_inspect: Game or board should not be None!")
