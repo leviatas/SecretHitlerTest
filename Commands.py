@@ -359,7 +359,7 @@ def command_showhistory(bot, update):
 				history_text += x + "\n\n"
 
 			bot.send_message(uid, history_text)
-			bot.send_message(cid, "I send you the history to our private chat")			
+			bot.send_message(cid, "I sent you the history to our private chat")			
 		else:
 			bot.send_message(cid, "There is no game in this chat. Create a new game with /newgame")
 	except Exception as e:
