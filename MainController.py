@@ -687,7 +687,10 @@ def inform_players(bot, game, cid, player_number):
         game.playerlist[uid].role = role
         game.playerlist[uid].party = party
         # I comment so tyhe player aren't discturbed in testing, uncomment when deploy to production
-        bot.send_message(uid, "Your secret role is: %s\nYour party membership is: %s" % (role, party))
+        if not debugging:
+                bot.send_message(uid, "Your secret role is: %s\nYour party membership is: %s" % (role, party))
+        else:
+                bot.send_message(ADMIN, "Player %s role is %s and party membership is: %s" % (game.playerlist[uid].name, role, party))
 
 
 def print_player_info(player_number):
@@ -718,13 +721,16 @@ def inform_fascists(bot, game, player_number):
                     if f.uid != uid:
                         fstring += f.name + ", "
                 fstring = fstring[:-2]
-                bot.send_message(uid, "Your fellow fascists are: %s" % fstring)
+                if not debugging:
+                        bot.send_message(uid, "Your fellow fascists are: %s" % fstring)
             hitler = game.get_hitler()
-            bot.send_message(uid, "Hitler is: %s" % hitler.name) #Uncoomend on production
+            if not debugging:
+                        bot.send_message(uid, "Hitler is: %s" % hitler.name) #Uncoomend on production
         elif role == "Hitler":
             if player_number <= 6:
                 fascists = game.get_fascists()
-                bot.send_message(uid, "Your fellow fascist is: %s" % fascists[0].name)
+                if not debugging:
+                        bot.send_message(uid, "Your fellow fascist is: %s" % fascists[0].name)
         elif role == "Liberal":
             pass
         else:
