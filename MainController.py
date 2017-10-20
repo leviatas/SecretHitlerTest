@@ -799,7 +799,7 @@ def main():
         updater.start_webhook(listen="0.0.0.0",
                       port=PORT,
                       url_path=TOKEN)
-        updater.bot.set_webhook("https://<appname>.herokuapp.com/" + TOKEN)
+        updater.bot.set_webhook("https://secrethitlertest.herokuapp.com/" + TOKEN)
               
         
         # Get the dispatcher to register handlers
