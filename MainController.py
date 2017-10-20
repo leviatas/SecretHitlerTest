@@ -788,11 +788,11 @@ def main():
         updater = Updater(TOKEN)
         
         # Add the Web Hook
-        updater.start_webhook(listen="0.0.0.0",
+        '''updater.start_webhook(listen="0.0.0.0",
                       port=PORT,
                       url_path=TOKEN)
         updater.bot.set_webhook("https://secrethitlertest.herokuapp.com/" + TOKEN)
-
+        '''
         # Get the dispatcher to register handlers
         dp = updater.dispatcher
 
@@ -831,7 +831,7 @@ def main():
         
 
         # Start the Bot
-        # updater.start_polling()
+        updater.start_polling()
 
         # Run the bot until the you presses Ctrl-C or the process receives SIGINT,
         # SIGTERM or SIGABRT. This should be used most of the time, since
