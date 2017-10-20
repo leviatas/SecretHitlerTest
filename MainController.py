@@ -770,7 +770,6 @@ def error(bot, update, error):
     #bot.send_message(387393551, 'Update "%s" caused error "%s"' % (update, error) ) 
     logger.warning('Update "%s" caused error "%s"' % (update, error))
 
-
 def main():
         GamesController.init() #Call only once
         #initialize_testdata()
@@ -782,17 +781,21 @@ def main():
         cur.execute(open("DBCreate.sql", "r").read())
         log.info('DB Created/Updated')
         conn.autocommit = False
-        # End of Create Table
-        
-        PORT = int(os.environ.get('PORT', '5000'))
-        updater = Updater(TOKEN)
-        
-        # Add the Web Hook
-        '''updater.start_webhook(listen="0.0.0.0",
-                      port=PORT,
-                      url_path=TOKEN)
-        updater.bot.set_webhook("https://secrethitlertest.herokuapp.com/" + TOKEN)
         '''
+        log.info('Insertando')
+        query = "INSERT INTO users(facebook_id, name , access_token , created) values ('2','3','4',1) RETURNING id;"
+        log.info('Por ejecutar')
+        cur.execute(query)       
+        user_id = cur.fetchone()[0]        
+        log.info(user_id)
+        
+        
+        query = "SELECT ...."
+        cur.execute(query)
+        '''
+        
+        updater = Updater(TOKEN)
+
         # Get the dispatcher to register handlers
         dp = updater.dispatcher
 
@@ -827,8 +830,6 @@ def main():
 
         # log all errors
         dp.add_error_handler(error)
-        
-        
 
         # Start the Bot
         updater.start_polling()
@@ -837,6 +838,7 @@ def main():
         # SIGTERM or SIGABRT. This should be used most of the time, since
         # start_polling() is non-blocking and will stop the bot gracefully.
         updater.idle()
+
 
 
 if __name__ == '__main__':
