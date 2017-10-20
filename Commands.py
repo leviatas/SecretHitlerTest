@@ -386,7 +386,7 @@ def command_claim(bot, update, args):
 					else:					
 						bot.send_message(cid, "You have to send a message to claim.")
 
-				else
+				else:
 					bot.send_message(cid, "You can't claim in the first round")
 			else:
 				bot.send_message(cid, "You must be a player to claim something in the game.")
