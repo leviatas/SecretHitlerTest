@@ -786,6 +786,12 @@ def main():
         
         PORT = int(os.environ.get('PORT', '5000'))
         updater = Updater(TOKEN)
+        
+        # Add the Web Hook
+        updater.start_webhook(listen="0.0.0.0",
+                      port=PORT,
+                      url_path=TOKEN)
+        updater.bot.set_webhook("https://secrethitlertest.herokuapp.com/" + TOKEN)
 
         # Get the dispatcher to register handlers
         dp = updater.dispatcher
@@ -822,11 +828,7 @@ def main():
         # log all errors
         dp.add_error_handler(error)
         
-        # Add the Web Hook
-        updater.start_webhook(listen="0.0.0.0",
-                      port=PORT,
-                      url_path=TOKEN)
-        updater.bot.set_webhook("https://secrethitlertest.herokuapp.com/" + TOKEN)
+        
 
         # Start the Bot
         # updater.start_polling()
