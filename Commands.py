@@ -379,7 +379,7 @@ def command_claim(bot, update, args):
 				if game.board.state.currentround != 0:
 					if len(args) > 0:
 						#Data is being claimed
-						claimtext = "Player %s claims: " % (game.playerlist[uid].name) + ' '.join(args)
+						claimtext = ' '.join(args)
 						claimtexttohistory = "Player %s claims: %s" % (game.playerlist[uid].name, claimtext)
 						bot.send_message(cid, "Your claim: %s was added to the history." % (claimtext))
 						game.history[game.board.state.currentround - 1] += "\n\n%s" % (claimtexttohistory)
