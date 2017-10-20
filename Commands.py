@@ -352,14 +352,14 @@ def command_showhistory(bot, update):
 		#Check if there is a current game 
 		if cid in GamesController.games.keys():
 			game = GamesController.games.get(cid, None)  
-			bot.send_message(cid, "Current round: " + str(game.board.state.currentround + 1))
+			#bot.send_message(cid, "Current round: " + str(game.board.state.currentround + 1))
 			uid = update.message.from_user.id
 			history_text = "History:\n\n" 
 			for x in game.history:
 				history_text += x + "\n\n"
 
 			bot.send_message(uid, history_text, ParseMode.MARKDOWN)
-			bot.send_message(cid, "I sent you the history to our private chat")			
+			#bot.send_message(cid, "I sent you the history to our private chat")			
 		else:
 			bot.send_message(cid, "There is no game in this chat. Create a new game with /newgame")
 	except Exception as e:
