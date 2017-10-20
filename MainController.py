@@ -81,8 +81,7 @@ def start_round(bot, game):
                 game.board.state.chosen_president = None
         bot.send_message(game.cid,
                 "The next presidential canditate is [%s](tg://user?id=%d).\n%s, please nominate a Chancellor in our private chat!" % (
-                game.board.state.nominated_president.name, game.board.state.nominated_president.uid, game.board.state.nominated_president.name)
-                         , ParseMode.MARKDOWN))
+                game.board.state.nominated_president.name, game.board.state.nominated_president.uid, game.board.state.nominated_president.name), ParseMode.MARKDOWN))
         choose_chancellor(bot, game)
         # --> nominate_chosen_chancellor --> vote --> handle_voting --> count_votes --> voting_aftermath --> draw_policies
         # --> choose_policy --> pass_two_policies --> choose_policy --> enact_policy --> start_round
