@@ -80,8 +80,9 @@ def start_round(bot, game):
                 game.board.state.nominated_president = game.board.state.chosen_president
                 game.board.state.chosen_president = None
         bot.send_message(game.cid,
-                "The next presidential canditate is %s.\n%s, please nominate a Chancellor in our private chat!" % (
-                game.board.state.nominated_president.name, game.board.state.nominated_president.name))
+                "The next presidential canditate is [%s](tg://user?id=%d).\n%s, please nominate a Chancellor in our private chat!" % (
+                game.board.state.nominated_president.name, game.board.state.nominated_president.uid, game.board.state.nominated_president.name)
+                         , ParseMode.MARKDOWN))
         choose_chancellor(bot, game)
         # --> nominate_chosen_chancellor --> vote --> handle_voting --> count_votes --> voting_aftermath --> draw_policies
         # --> choose_policy --> pass_two_policies --> choose_policy --> enact_policy --> start_round
@@ -221,14 +222,15 @@ def count_votes(bot, game):
         len(game.player_sequence) / 2):  # because player_sequence doesnt include dead
         # VOTING WAS SUCCESSFUL
         log.info("Voting successful")
-        voting_text += "Hail President %s! Hail Chancellor %s!" % (
-            game.board.state.nominated_president.name, game.board.state.nominated_chancellor.name)
+        voting_text += "Hail President [%s](tg://user?id=%d)! Hail Chancellor [%s](tg://user?id=%d)!" % (
+            game.board.state.nominated_president.name, game.board.state.nominated_president.uid, 
+                game.board.state.nominated_chancellor.name, game.board.state.nominated_chancellor.uid)
         game.board.state.chancellor = game.board.state.nominated_chancellor
         game.board.state.president = game.board.state.nominated_president
         game.board.state.nominated_president = None
         game.board.state.nominated_chancellor = None
         voting_success = True
-        bot.send_message(game.cid, voting_text)
+        bot.send_message(game.cid, voting_text, ParseMode.MARKDOWN)
         game.history.append(("Round %d\n\n" % (game.board.state.currentround + 1) ) + voting_text)
         log.info(game.history[game.board.state.currentround])
         voting_aftermath(bot, game, voting_success)
@@ -781,19 +783,9 @@ def main():
         cur.execute(open("DBCreate.sql", "r").read())
         log.info('DB Created/Updated')
         conn.autocommit = False
-        '''
-        log.info('Insertando')
-        query = "INSERT INTO users(facebook_id, name , access_token , created) values ('2','3','4',1) RETURNING id;"
-        log.info('Por ejecutar')
-        cur.execute(query)       
-        user_id = cur.fetchone()[0]        
-        log.info(user_id)
+        # End of Create Table
         
-        
-        query = "SELECT ...."
-        cur.execute(query)
-        '''
-        
+        PORT = int(os.environ.get('PORT', '5000'))
         updater = Updater(TOKEN)
 
         # Get the dispatcher to register handlers
@@ -830,9 +822,15 @@ def main():
 
         # log all errors
         dp.add_error_handler(error)
+        
+        # Add the Web Hook
+        updater.start_webhook(listen="0.0.0.0",
+                      port=PORT,
+                      url_path=TOKEN)
+        updater.bot.set_webhook("https://secrethitlertest.herokuapp.com/" + TOKEN)
 
         # Start the Bot
-        updater.start_polling()
+        # updater.start_polling()
 
         # Run the bot until the you presses Ctrl-C or the process receives SIGINT,
         # SIGTERM or SIGABRT. This should be used most of the time, since
