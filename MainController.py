@@ -794,8 +794,14 @@ def main():
         cur.execute(query)
         '''
         
+        PORT = int(os.environ.get('PORT', '5000'))
         updater = Updater(TOKEN)
-
+        updater.start_webhook(listen="0.0.0.0",
+                      port=PORT,
+                      url_path=TOKEN)
+        updater.bot.set_webhook("https://<appname>.herokuapp.com/" + TOKEN)
+              
+        
         # Get the dispatcher to register handlers
         dp = updater.dispatcher
 
