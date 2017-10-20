@@ -230,6 +230,7 @@ def count_votes(bot, game):
         game.board.state.nominated_chancellor = None
         voting_success = True
         bot.send_message(game.cid, voting_text, ParseMode.MARKDOWN)
+        bot.send_message(game.cid, "\nYou can't talk now.")
         game.history.append(("Round %d\n\n" % (game.board.state.currentround + 1) ) + voting_text)
         log.info(game.history[game.board.state.currentround])
         voting_aftermath(bot, game, voting_success)
