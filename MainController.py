@@ -9,7 +9,7 @@ import re
 from random import randrange
 from time import sleep
 
-from telegram import InlineKeyboardButton, InlineKeyboardMarkup
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup, ParseMode
 from telegram.ext import (Updater, CommandHandler, CallbackQueryHandler)
 
 import Commands
@@ -79,7 +79,10 @@ def start_round(bot, game):
         else:
                 game.board.state.nominated_president = game.board.state.chosen_president
                 game.board.state.chosen_president = None
-        bot.send_message(game.cid, text="The next presidential canditate is [%s](tg://user?id=%d).\n%s, please nominate a Chancellor in our private chat!" % (game.board.state.nominated_president.name, game.board.state.nominated_president.uid, game.board.state.nominated_president.name), parse_mode=ParseMode.MARKDOWN))
+        bot.send_message(game.cid, "The next presidential canditate is [%s](tg://user?id=%d).\n%s, 
+                         please nominate a Chancellor in our private chat!" 
+                         % (game.board.state.nominated_president.name, game.board.state.nominated_president.uid, 
+                            game.board.state.nominated_president.name), ParseMode.MARKDOWN))
         choose_chancellor(bot, game)
         # --> nominate_chosen_chancellor --> vote --> handle_voting --> count_votes --> voting_aftermath --> draw_policies
         # --> choose_policy --> pass_two_policies --> choose_policy --> enact_policy --> start_round
