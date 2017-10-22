@@ -154,7 +154,14 @@ def command_newgame(bot, update):
 				bot.send_message(cid, "There is currently a game running. If you want to end it please type /cancelgame!")				
 				bot.send_message(cid, game.board.print_board(game.player_sequence))				
 				# Ask the president to choose a chancellor
-				MainController.start_round(bot, game)
+				
+				if game.board.state.nominated_chancellor
+					if len(game.board.state.last_votes) == len(game.player_sequence):
+						MainController.count_votes(bot, game)
+					else:
+						bot.send_message(cid, "There is a voting in progress use /calltovote to tell the other players. ")
+				else:
+					MainController.start_round(bot, game)
 			else:
 				GamesController.games[cid] = Game(cid, update.message.from_user.id)
 				bot.send_message(cid, "New game created! Each player has to /join the game.\nThe initiator of this game (or the admin) can /join too and type /startgame when everyone has joined the game!")
