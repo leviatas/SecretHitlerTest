@@ -622,7 +622,7 @@ def choose_inspect(bot, update):
                               callback.from_user.id,
                               callback.message.message_id)
         bot.send_message(game.cid, "President %s inspected %s." % (game.board.state.president.name, chosen.name))
-        game.history[game.board.state.currentround] += "President %s inspected %s." % (game.board.state.president.name, chosen.name)
+        game.history[game.board.state.currentround] += "\n\nPresident %s inspected %s." % (game.board.state.president.name, chosen.name)
         start_next_round(bot, game)
     except:
         log.error("choose_inspect: Game or board should not be None!")
@@ -760,6 +760,7 @@ def increment_player_counter(game):
 def shuffle_policy_pile(bot, game):
     log.info('shuffle_policy_pile called')
     if len(game.board.policies) < 3:
+        game.history[game.board.state.currentround] += "\n\nThere were not enough cards left on the policy pile so I shuffled the rest with the discard pile!"
         game.board.discards += game.board.policies
         game.board.policies = random.sample(game.board.discards, len(game.board.discards))
         game.board.discards = []
