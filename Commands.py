@@ -186,37 +186,12 @@ def command_join(bot, update, args):
 	else:
 		uid = update.message.from_user.id
 		if uid == ADMIN:
-			# If args, testing behaviour				
-			fname = args[0]
-			uid = int(args[1])
-			player = Player(fname, uid)
-			game.add_player(uid, player)
-			log.info("%s (%d) joined a game in %d" % (fname, uid, game.cid))
-			fname = args[2]
-			uid = int(args[3])
-			player = Player(fname, uid)
-			game.add_player(uid, player)
-			log.info("%s (%d) joined a game in %d" % (fname, uid, game.cid))
-			fname = args[4]
-			uid = int(args[5])
-			player = Player(fname, uid)
-			game.add_player(uid, player)
-			log.info("%s (%d) joined a game in %d" % (fname, uid, game.cid))
-			fname = args[6]
-			uid = int(args[7])
-			player = Player(fname, uid)
-			game.add_player(uid, player)
-			log.info("%s (%d) joined a game in %d" % (fname, uid, game.cid))
-			fname = args[8]
-			uid = int(args[9])
-			player = Player(fname, uid)
-			game.add_player(uid, player)	
-			log.info("%s (%d) joined a game in %d" % (fname, uid, game.cid))
-			fname = args[10]
-			uid = int(args[11])
-			player = Player(fname, uid)
-			game.add_player(uid, player)	
-			log.info("%s (%d) joined a game in %d" % (fname, uid, game.cid))
+			for i,k in zip(args[0::2], args[1::2]):
+    				fname = i
+				uid = int(k)
+				player = Player(fname, uid)
+				game.add_player(uid, player)
+				log.info("%s (%d) joined a game in %d" % (fname, uid, game.cid))
 	
 	if groupType not in ['group', 'supergroup']:
 		bot.send_message(cid, "You have to add me to a group first and type /newgame there!")
