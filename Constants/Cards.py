@@ -159,7 +159,7 @@ policies = [
         "liberal",
         "liberal",
         "liberal",
-        "liberal",
+        "fascist",
         "fascist",
         "fascist",
         "fascist",
