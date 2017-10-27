@@ -243,7 +243,7 @@ def count_votes(bot, game):
         game.board.state.failed_votes += 1
         bot.send_message(game.cid, voting_text)
         game.history.append(("Round %d.%d\n\n" % (game.board.state.liberal_track + game.board.state.fascist_track + 1, game.board.state.failed_votes) ) + voting_text)
-        #log.info(game.history[game.board.state.currentround])
+        log.info(game.history[game.board.state.currentround])
         if game.board.state.failed_votes == 3:
             do_anarchy(bot, game)
         else:
