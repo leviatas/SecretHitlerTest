@@ -187,7 +187,7 @@ def command_join(bot, update, args):
 		uid = update.message.from_user.id
 		if uid == ADMIN:
 			for i,k in zip(args[0::2], args[1::2]):
-    				fname = i
+				fname = i
 				uid = int(k)
 				player = Player(fname, uid)
 				game.add_player(uid, player)
