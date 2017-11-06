@@ -13,7 +13,26 @@ playerSets = {
             "kill",
             "kill",
             "win"
-        ]
+        ],
+        "policies": [
+            "liberal",
+            "liberal",
+            "liberal",
+            "liberal",
+            "liberal",
+            "liberal",
+            "fascist",
+            "fascist",
+            "fascist",
+            "fascist",
+            "fascist",
+            "fascist",
+            "fascist",
+            "fascist",
+            "fascist",
+            "fascist",
+            "fascist"
+    ]
     },
     # only for testing purposes
     4: {
@@ -30,7 +49,25 @@ playerSets = {
             "kill",
             "kill",
             "win"
-        ]
+        ],
+        "policies": [
+            "liberal",
+            "liberal",
+            "liberal",
+            "liberal",
+            "liberal",
+            "liberal",
+            "fascist",
+            "fascist",
+            "fascist",
+            "fascist",
+            "fascist",
+            "fascist",
+            "fascist",
+            "fascist",
+            "fascist",
+            "fascist",
+            "fascist"
     },
     5: {
         "roles": [
@@ -47,7 +84,25 @@ playerSets = {
             "kill",
             "kill",
             "win"
-        ]
+        ],
+        "policies": [
+            "liberal",
+            "liberal",
+            "liberal",
+            "liberal",
+            "liberal",
+            "liberal",
+            "fascist",
+            "fascist",
+            "fascist",
+            "fascist",
+            "fascist",
+            "fascist",
+            "fascist",
+            "fascist",
+            "fascist",
+            "fascist",
+            "fascist"
     },
     6: {
         "roles": [
@@ -65,7 +120,25 @@ playerSets = {
             "kill",
             "kill",
             "win"
-        ]
+        ],
+        "policies": [
+            "liberal",
+            "liberal",
+            "liberal",
+            "liberal",
+            "liberal",
+            "liberal",
+            "fascist",
+            "fascist",
+            "fascist",
+            "fascist",
+            "fascist",
+            "fascist",
+            "fascist",
+            "fascist",
+            "fascist",
+            "fascist",
+            "fascist"
     },
     7: {
         "roles": [
@@ -84,7 +157,25 @@ playerSets = {
             "kill",
             "kill",
             "win"
-        ]
+        ],
+        "policies": [
+            "liberal",
+            "liberal",
+            "liberal",
+            "liberal",
+            "liberal",
+            "liberal",
+            "fascist",
+            "fascist",
+            "fascist",
+            "fascist",
+            "fascist",
+            "fascist",
+            "fascist",
+            "fascist",
+            "fascist",
+            "fascist",
+            "fascist"
     },
     8: {
         "roles": [
@@ -104,7 +195,25 @@ playerSets = {
             "kill",
             "kill",
             "win"
-        ]
+        ],
+        "policies": [
+            "liberal",
+            "liberal",
+            "liberal",
+            "liberal",
+            "liberal",
+            "liberal",
+            "liberal",
+            "fascist",
+            "fascist",
+            "fascist",
+            "fascist",
+            "fascist",
+            "fascist",
+            "fascist",
+            "fascist",
+            "fascist",
+            "fascist"
     },
     9: {
         "roles": [
@@ -125,7 +234,25 @@ playerSets = {
             "kill",
             "kill",
             "win"
-        ]
+        ],
+        "policies": [
+            "liberal",
+            "liberal",
+            "liberal",
+            "liberal",
+            "liberal",
+            "liberal",
+            "liberal",
+            "fascist",
+            "fascist",
+            "fascist",
+            "fascist",
+            "fascist",
+            "fascist",
+            "fascist",
+            "fascist",
+            "fascist",
+            "fascist"
     },
     10: {
         "roles": [
@@ -147,7 +274,25 @@ playerSets = {
             "kill",
             "kill",
             "win"
-        ]
+        ],
+        "policies": [
+            "liberal",
+            "liberal",
+            "liberal",
+            "liberal",
+            "liberal",
+            "liberal",
+            "liberal",
+            "fascist",
+            "fascist",
+            "fascist",
+            "fascist",
+            "fascist",
+            "fascist",
+            "fascist",
+            "fascist",
+            "fascist",
+            "fascist"
     },
 }
 
