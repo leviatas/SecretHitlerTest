@@ -32,7 +32,7 @@ playerSets = {
             "fascist",
             "fascist",
             "fascist"
-    ]
+        ]
     },
     # only for testing purposes
     4: {
@@ -68,6 +68,7 @@ playerSets = {
             "fascist",
             "fascist",
             "fascist"
+        ]
     },
     5: {
         "roles": [
@@ -103,6 +104,7 @@ playerSets = {
             "fascist",
             "fascist",
             "fascist"
+        ]
     },
     6: {
         "roles": [
@@ -139,6 +141,7 @@ playerSets = {
             "fascist",
             "fascist",
             "fascist"
+        ]
     },
     7: {
         "roles": [
@@ -176,6 +179,7 @@ playerSets = {
             "fascist",
             "fascist",
             "fascist"
+        ]
     },
     8: {
         "roles": [
@@ -214,6 +218,7 @@ playerSets = {
             "fascist",
             "fascist",
             "fascist"
+        ]
     },
     9: {
         "roles": [
@@ -253,6 +258,7 @@ playerSets = {
             "fascist",
             "fascist",
             "fascist"
+        ]
     },
     10: {
         "roles": [
@@ -293,6 +299,7 @@ playerSets = {
             "fascist",
             "fascist",
             "fascist"
+        ]
     },
 }
 
