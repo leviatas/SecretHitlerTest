@@ -88,12 +88,16 @@ def command_board(bot, update):
 def command_start(bot, update):
     cid = update.message.chat_id
     bot.send_message(cid,
-                     "\"Secret Hitler es un juego de deducción social para 5-10 jugadores acerca de encontrar y detener a Hitler."
-                     " La mayoría de los jugadores son liberales. Si pueden aprender a confiar entre ellos, tienen suficientes "
-                     "votos para controlar la mesa y ganar el juego. Pero algunos jugadores son fascistas. Ellos dirán lo que sea necesari "
-                     "para ser elegidos, promulgar su agenda, y culpar a los demás por la caida. Los liberales deben "
-                     "trabajar juntos para descubrir la verdad antes que los fascistas pongan a su desalmado lider y ganen "
-                     "el juego.\"\n- Agregame a un grupo y escribe /newgame para crear un juego!")
+                     "\"Secret Hitler es un juego de deducción social para 5-10 jugadores "
+                     "acerca de encontrar a Hitler y detener el ascenso del fascismo."
+                     "La mayoría de los jugadores son liberales. Si pueden aprender a "
+                     "confiar entre ellos, tienen suficientes votos para controlar el parlamento y ganar el juego."
+                     "Pero algunos jugadores son fascistas. Ellos dirán lo que sea necesario para ser electos, "
+		     "promover el fascismo y culpar a los demás por la derrota de la República."
+		     "Los liberales deben trabajar juntos para descubrir la verdad antes "
+		     "de que los fascistas instalen a su desalamado líder y ganen el juego."
+		     "Traducción de la descripición oficial de Secret Hitler."
+                     "Agregame a un grupo y escribe /newgame para crear un juego!")
     command_help(bot, update)
 
 
