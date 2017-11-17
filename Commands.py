@@ -170,7 +170,7 @@ def command_newgame(bot, update):
 				MainController.start_round(bot, game)
 			else:
 				GamesController.games[cid] = Game(cid, update.message.from_user.id)
-				bot.send_message(cid, "Nuevo juego creado! Cada jugador debe unirse al juego con el comando /join.\nEl iniciador del juego (o el administrador) pueden unirse tambien /join y escribir /startgame cuando todos se hayan unido al juego!")
+				bot.send_message(cid, "Nuevo juego creado! Cada jugador debe unirse al juego con el comando /join.\nEl iniciador del juego (o el administrador) pueden unirse tambien y escribir /startgame cuando todos se hayan unido al juego!")
 			
 			
 	except Exception as e:
@@ -221,6 +221,11 @@ def command_join(bot, update, args):
 				bot.send_message(game.cid, "%s se ha unido al juego. Hay %d jugador en el juego y se necesita 5-10 jugadores." % (fname, len(game.playerlist)))
 			else:
 				bot.send_message(game.cid, "%s se ha unido al juego. Hay %d jugadores en el juego y se necesita 5-10 jugadores" % (fname, len(game.playerlist)))
+			# Luego dicto los jugadores que se han unido
+			jugadoresActuales = "Los jugadores que se han unido al momento son\n\n:
+			for uid in game.playerlist:
+				jugadoresActuales += "%s\n" % game.playerlist[uid].name
+			bot.send_message(game.cid, jugadoresActuales)
 		except Exception:
 			bot.send_message(game.cid,
 				fname + ", No te puedo enviar un mensaje privado. Por favor, ve a @secrethitlertestlbot y has pincha \"Start\".\nLuego necesitas escribir /join de nuevo.")
