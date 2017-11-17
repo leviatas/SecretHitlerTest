@@ -373,7 +373,7 @@ def enact_policy(bot, game, policy, anarchy):
     log.info('enact_policy called')
     if policy == "liberal":
         game.board.state.liberal_track += 1
-    elif policy == "fascist":
+    elif policy == "fascista":
         game.board.state.fascist_track += 1
     game.board.state.failed_votes = 0  # reset counter
     if not anarchy:
@@ -399,7 +399,7 @@ def enact_policy(bot, game, policy, anarchy):
     # End of legislative session, shuffle if necessary 
     shuffle_policy_pile(bot, game)    
     if not anarchy:
-        if policy == "fascist":
+        if policy == "fascista":
             action = game.board.fascist_track_actions[game.board.state.fascist_track - 1]
             if action is None and game.board.state.fascist_track == 6:
                 pass
@@ -715,7 +715,7 @@ def inform_fascists(bot, game, player_number):
 
     for uid in game.playerlist:
         role = game.playerlist[uid].role
-        if role == "Fascist":
+        if role == "Fascista":
             fascists = game.get_fascists()
             if player_number > 6:
                 fstring = ""
@@ -741,8 +741,8 @@ def inform_fascists(bot, game, player_number):
 
 def get_membership(role):
     log.info('get_membership called')
-    if role == "Fascist" or role == "Hitler":
-        return "fascist"
+    if role == "Fascista" or role == "Hitler":
+        return "fascista"
     elif role == "Liberal":
         return "liberal"
     else:
@@ -834,7 +834,7 @@ def main():
         dp.add_handler(CallbackQueryHandler(pattern="(-[0-9]*)_choo_(.*)", callback=choose_choose))
         dp.add_handler(CallbackQueryHandler(pattern="(-[0-9]*)_kill_(.*)", callback=choose_kill))
         dp.add_handler(CallbackQueryHandler(pattern="(-[0-9]*)_(yesveto|noveto)", callback=choose_veto))
-        dp.add_handler(CallbackQueryHandler(pattern="(-[0-9]*)_(liberal|fascist|veto)", callback=choose_policy))
+        dp.add_handler(CallbackQueryHandler(pattern="(-[0-9]*)_(liberal|fascista|veto)", callback=choose_policy))
         dp.add_handler(CallbackQueryHandler(pattern="(-[0-9]*)_(Ja|Nein)", callback=handle_voting))
 
 
