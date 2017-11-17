@@ -88,12 +88,12 @@ def command_board(bot, update):
 def command_start(bot, update):
     cid = update.message.chat_id
     bot.send_message(cid,
-                     "\"Secret Hitler is a social deduction game for 5-10 people about finding and stopping the Secret Hitler."
-                     " The majority of players are liberals. If they can learn to trust each other, they have enough "
-                     "votes to control the table and win the game. But some players are fascists. They will say whatever "
-                     "it takes to get elected, enact their agenda, and blame others for the fallout. The liberals must "
-                     "work together to discover the truth before the fascists install their cold-blooded leader and win "
-                     "the game.\"\n- official description of Secret Hitler\n\nAdd me to a group and type /newgame to create a game!")
+                     "\"Secret Hitler es un juego de deducción social para 5-10 jugadores acerca de encontrar y detener a Hitler."
+                     " La mayoría de los jugadores son liberales. Si pueden aprender a confiar entre ellos, tienen suficientes "
+                     "votos para controlar la mesa y ganar el juego. Pero algunos jugadores son fascistas. Ellos dirán lo que sea necesari "
+                     "para ser elegidos, promulgar su agenda, y culpar a los demás por la caida. Los liberales deben "
+                     "trabajar juntos para descubrir la verdad antes que los fascistas pongan a su desalmado lider y ganen "
+                     "el juego.\"\n- Agregame a un grupo y escribe /newgame para crear un juego!")
     command_help(bot, update)
 
 
@@ -101,7 +101,7 @@ def command_rules(bot, update):
     cid = update.message.chat_id
     btn = [[InlineKeyboardButton("Rules", url="http://www.secrethitler.com/assets/Secret_Hitler_Rules.pdf")]]
     rulesMarkup = InlineKeyboardMarkup(btn)
-    bot.send_message(cid, "Lea las reglas oficiales de Secret Hitler:", reply_markup=rulesMarkup)
+    bot.send_message(cid, "Lee las reglas oficiales de Secret Hitler:", reply_markup=rulesMarkup)
 
 
 # pings the bot
