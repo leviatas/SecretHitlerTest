@@ -3,7 +3,7 @@ playerSets = {
     3: {
         "roles": [
             "Liberal",
-            "Fascist",
+            "Fascista",
             "Hitler"
         ],
         "track": [
@@ -21,17 +21,17 @@ playerSets = {
             "liberal",
             "liberal",
             "liberal",
-            "fascist",
-            "fascist",
-            "fascist",
-            "fascist",
-            "fascist",
-            "fascist",
-            "fascist",
-            "fascist",
-            "fascist",
-            "fascist",
-            "fascist"
+            "fascista",
+            "fascista",
+            "fascista",
+            "fascista",
+            "fascista",
+            "fascista",
+            "fascista",
+            "fascista",
+            "fascista",
+            "fascista",
+            "fascista"
         ]
     },
     # only for testing purposes
@@ -39,7 +39,7 @@ playerSets = {
         "roles": [
             "Liberal",
             "Liberal",
-            "Fascist",
+            "Fascista",
             "Hitler"
         ],
         "track": [
@@ -57,17 +57,17 @@ playerSets = {
             "liberal",
             "liberal",
             "liberal",
-            "fascist",
-            "fascist",
-            "fascist",
-            "fascist",
-            "fascist",
-            "fascist",
-            "fascist",
-            "fascist",
-            "fascist",
-            "fascist",
-            "fascist"
+            "fascista",
+            "fascista",
+            "fascista",
+            "fascista",
+            "fascista",
+            "fascista",
+            "fascista",
+            "fascista",
+            "fascista",
+            "fascista",
+            "fascista"
         ]
     },
     5: {
@@ -75,7 +75,7 @@ playerSets = {
             "Liberal",
             "Liberal",
             "Liberal",
-            "Fascist",
+            "Fascista",
             "Hitler"
         ],
         "track": [
@@ -93,17 +93,17 @@ playerSets = {
             "liberal",
             "liberal",
             "liberal",
-            "fascist",
-            "fascist",
-            "fascist",
-            "fascist",
-            "fascist",
-            "fascist",
-            "fascist",
-            "fascist",
-            "fascist",
-            "fascist",
-            "fascist"
+            "fascista",
+            "fascista",
+            "fascista",
+            "fascista",
+            "fascista",
+            "fascista",
+            "fascista",
+            "fascista",
+            "fascista",
+            "fascista",
+            "fascista"
         ]
     },
     6: {
@@ -112,7 +112,7 @@ playerSets = {
             "Liberal",
             "Liberal",
             "Liberal",
-            "Fascist",
+            "Fascista",
             "Hitler"
         ],
         "track": [
@@ -130,17 +130,17 @@ playerSets = {
             "liberal",
             "liberal",
             "liberal",
-            "fascist",
-            "fascist",
-            "fascist",
-            "fascist",
-            "fascist",
-            "fascist",
-            "fascist",
-            "fascist",
-            "fascist",
-            "fascist",
-            "fascist"
+            "fascista",
+            "fascista",
+            "fascista",
+            "fascista",
+            "fascista",
+            "fascista",
+            "fascista",
+            "fascista",
+            "fascista",
+            "fascista",
+            "fascista"
         ]
     },
     7: {
@@ -149,8 +149,8 @@ playerSets = {
             "Liberal",
             "Liberal",
             "Liberal",
-            "Fascist",
-            "Fascist",
+            "Fascista",
+            "Fascista",
             "Hitler"
         ],
         "track": [
@@ -168,17 +168,17 @@ playerSets = {
             "liberal",
             "liberal",
             "liberal",
-            "fascist",
-            "fascist",
-            "fascist",
-            "fascist",
-            "fascist",
-            "fascist",
-            "fascist",
-            "fascist",
-            "fascist",
-            "fascist",
-            "fascist"
+            "fascista",
+            "fascista",
+            "fascista",
+            "fascista",
+            "fascista",
+            "fascista",
+            "fascista",
+            "fascista",
+            "fascista",
+            "fascista",
+            "fascista"
         ]
     },
     8: {
@@ -188,8 +188,8 @@ playerSets = {
             "Liberal",
             "Liberal",
             "Liberal",
-            "Fascist",
-            "Fascist",
+            "Fascista",
+            "Fascista",
             "Hitler"
         ],
         "track": [
@@ -208,16 +208,16 @@ playerSets = {
             "liberal",
             "liberal",
             "liberal",
-            "fascist",
-            "fascist",
-            "fascist",
-            "fascist",
-            "fascist",
-            "fascist",
-            "fascist",
-            "fascist",
-            "fascist",
-            "fascist"
+            "fascista",
+            "fascista",
+            "fascista",
+            "fascista",
+            "fascista",
+            "fascista",
+            "fascista",
+            "fascista",
+            "fascista",
+            "fascista"
         ]
     },
     9: {
@@ -227,9 +227,9 @@ playerSets = {
             "Liberal",
             "Liberal",
             "Liberal",
-            "Fascist",
-            "Fascist",
-            "Fascist",
+            "Fascista",
+            "Fascista",
+            "Fascista",
             "Hitler"
         ],
         "track": [
@@ -248,16 +248,16 @@ playerSets = {
             "liberal",
             "liberal",
             "liberal",
-            "fascist",
-            "fascist",
-            "fascist",
-            "fascist",
-            "fascist",
-            "fascist",
-            "fascist",
-            "fascist",
-            "fascist",
-            "fascist"
+            "fascista",
+            "fascista",
+            "fascista",
+            "fascista",
+            "fascista",
+            "fascista",
+            "fascista",
+            "fascista",
+            "fascista",
+            "fascista"
         ]
     },
     10: {
@@ -268,9 +268,9 @@ playerSets = {
             "Liberal",
             "Liberal",
             "Liberal",
-            "Fascist",
-            "Fascist",
-            "Fascist",
+            "Fascista",
+            "Fascista",
+            "Fascista",
             "Hitler"
         ],
         "track": [
@@ -289,16 +289,16 @@ playerSets = {
             "liberal",
             "liberal",
             "liberal",
-            "fascist",
-            "fascist",
-            "fascist",
-            "fascist",
-            "fascist",
-            "fascist",
-            "fascist",
-            "fascist",
-            "fascist",
-            "fascist"
+            "fascista",
+            "fascista",
+            "fascista",
+            "fascista",
+            "fascista",
+            "fascista",
+            "fascista",
+            "fascista",
+            "fascista",
+            "fascista"
         ]
     },
 }
@@ -310,15 +310,15 @@ policies = [
         "liberal",
         "liberal",
         "liberal",
-        "fascist",
-        "fascist",
-        "fascist",
-        "fascist",
-        "fascist",
-        "fascist",
-        "fascist",
-        "fascist",
-        "fascist",
-        "fascist",
-        "fascist"
+        "fascista",
+        "fascista",
+        "fascista",
+        "fascista",
+        "fascista",
+        "fascista",
+        "fascista",
+        "fascista",
+        "fascista",
+        "fascista",
+        "fascista"
     ]
