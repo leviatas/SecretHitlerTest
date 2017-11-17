@@ -222,7 +222,7 @@ def command_join(bot, update, args):
 			else:
 				bot.send_message(game.cid, "%s se ha unido al juego. Hay %d jugadores en el juego y se necesita 5-10 jugadores" % (fname, len(game.playerlist)))
 			# Luego dicto los jugadores que se han unido
-			jugadoresActuales = "Los jugadores que se han unido al momento son\n\n:
+			jugadoresActuales = "Los jugadores que se han unido al momento son\n\n:"
 			for uid in game.playerlist:
 				jugadoresActuales += "%s\n" % game.playerlist[uid].name
 			bot.send_message(game.cid, jugadoresActuales)
