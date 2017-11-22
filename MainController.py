@@ -378,7 +378,7 @@ def enact_policy(bot, game, policy, anarchy):
     game.board.state.failed_votes = 0  # reset counter
     if not anarchy:
         bot.send_message(game.cid,
-                         "El President %s y el Canciller %s promulgaron una política %s!" % (
+                         "El Presidente %s y el Canciller %s promulgaron una política %s!" % (
                              game.board.state.president.name, game.board.state.chancellor.name, policy))
         game.history[game.board.state.currentround] += "\n\nEl Presidente %s y el Canciller %s promulgaron una política %s!" % (
                              game.board.state.president.name, game.board.state.chancellor.name, policy)
