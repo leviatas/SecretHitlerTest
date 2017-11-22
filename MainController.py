@@ -214,9 +214,9 @@ def count_votes(bot, game):
     voting_success = False
     for player in game.player_sequence:
         if game.board.state.last_votes[player.uid] == "Ja":
-            voting_text += game.playerlist[player.uid].name + " voted Ja!\n"
+            voting_text += game.playerlist[player.uid].name + " votó Ja!\n"
         elif game.board.state.last_votes[player.uid] == "Nein":
-            voting_text += game.playerlist[player.uid].name + " voted Nein!\n"
+            voting_text += game.playerlist[player.uid].name + " votó Nein!\n"
     if list(game.board.state.last_votes.values()).count("Ja") > (
         len(game.player_sequence) / 2):  # because player_sequence doesnt include dead
         # VOTING WAS SUCCESSFUL
