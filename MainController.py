@@ -299,7 +299,7 @@ def choose_policy(bot, update):
         uid = callback.from_user.id
         if len(game.board.state.drawn_policies) == 3:
             log.info("Player %s (%d) discarded %s" % (callback.from_user.first_name, uid, answer))
-            bot.edit_message_text("The policy %s will be discarded!" % answer, uid,
+            bot.edit_message_text("La polítca %s va a ser descartada!" % answer, uid,
                                   callback.message.message_id)
             # remove policy from drawn cards and add to discard pile, pass the other two policies
             for i in range(3):
