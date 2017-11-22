@@ -40,21 +40,21 @@ class Board(object):
                 elif action == "choose":
                     board += u"\U0001F454" + " " # tie
 
-        board += "\n--- Election counter ---\n"
+        board += "\n--- Contador de elección ---\n"
         for i in range(3):
             if i < self.state.failed_votes:
                 board += u"\u2716\uFE0F" + " " #X
             else:
                 board += u"\u25FB\uFE0F" + " " #empty
 
-        board += "\n--- Presidential order  ---\n"
+        board += "\n--- Orden Presidencial  ---\n"
         for player in player_sequence:
             board += player.name + " " + u"\u27A1\uFE0F" + " "
         board = board[:-3]
         board += u"\U0001F501"
         board += "\n\nHay " + str(len(self.policies)) + " politicas restantes en el mazo de politicas."
         if self.state.fascist_track >= 3:
-            board += "\n\n" + u"\u203C\uFE0F" + " Cuidado: SI Hitler es elegido como Canciller los fascistas ganan el juego! " + u"\u203C\uFE0F"
+            board += "\n\n" + u"\u203C\uFE0F" + " Cuidado: Si Hitler es elegido como Canciller los fascistas ganan el juego! " + u"\u203C\uFE0F"
         if len(self.state.not_hitlers) > 0:
             board += "\n\nSabemos que los siguientes jugadores no son Hitler porque fueron elegidos Canciller despues de 3 politicas fascistas:\n"
             for nh in self.state.not_hitlers:
