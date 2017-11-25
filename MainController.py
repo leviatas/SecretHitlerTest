@@ -699,7 +699,7 @@ def print_player_info(player_number):
     if player_number == 5:
         return "Hay 3 Liberales, 1 Fascista y Hitler. Hitler conoce quien es el Fascista."
     elif player_number == 6:
-        return "Hay  4 Liberales, 1 Fascista y Hitler. Hitler knows who the Fascist is."
+        return "Hay  4 Liberales, 1 Fascista y Hitler. Hitler conocer quienes quien es el Fascista."
     elif player_number == 7:
         return "Hay  4 Liberales, 2 Fascistas y Hitler. Hitler no conoce quienes son los Fascistas."
     elif player_number == 8:
