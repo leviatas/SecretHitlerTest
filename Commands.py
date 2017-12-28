@@ -216,7 +216,7 @@ def command_join(bot, update, args):
 			game.add_player(uid, player)
 			log.info("%s (%d) joined a game in %d" % (fname, uid, game.cid))
 			if len(game.playerlist) > 4:
-				bot.send_message(game.cid, fname + " se ha unido al juego. Escribe /startgame si este es el último jugador y quieren comenzar con %d players!" % len(game.playerlist))
+				bot.send_message(game.cid, fname + " se ha unido al juego. Escribe /startgame si este es el último jugador y quieren comenzar con %d jugadores!" % len(game.playerlist))
 			elif len(game.playerlist) == 1:
 				bot.send_message(game.cid, "%s se ha unido al juego. Hay %d jugador en el juego y se necesita 5-10 jugadores." % (fname, len(game.playerlist)))
 			else:
