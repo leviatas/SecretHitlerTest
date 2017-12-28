@@ -373,16 +373,16 @@ def command_claim(bot, update, args):
 					if len(args) > 0:
 						#Data is being claimed
 						claimtext = ' '.join(args)
-						claimtexttohistory = "El juegador %s reclama: %s" % (game.playerlist[uid].name, claimtext)
-						bot.send_message(cid, "Tu reclamo: %s fue agregado al historial." % (claimtext))
+						claimtexttohistory = "El juegador %s declara: %s" % (game.playerlist[uid].name, claimtext)
+						bot.send_message(cid, "Tu declaración: %s fue agregada al historial." % (claimtext))
 						game.history[game.board.state.currentround - 1] += "\n\n%s" % (claimtexttohistory)
 					else:					
-						bot.send_message(cid, "Debes mandar un mensaje para hacer un reclamo.")
+						bot.send_message(cid, "Debes mandar un mensaje para hacer una declaración.")
 
 				else:
-					bot.send_message(cid, "No puedes hacer reclamos en la primera ronda.")
+					bot.send_message(cid, "No puedes hacer declaraciones en la primera ronda.")
 			else:
-				bot.send_message(cid, "Debes ser un jugador del aprtido para reclamar algo.")
+				bot.send_message(cid, "Debes ser un jugador del partido para declarar algo.")
 				
 		else:
 			bot.send_message(cid, "No hay juego en este chat. Crea un nuevo juego con /newgame")
