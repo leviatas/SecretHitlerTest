@@ -540,7 +540,7 @@ def choose_kill(bot, update):
                              "El Presidente %s ha matado a %s que no era Hitler. %s, ahora estás muerto y no puedes hablar más!" % (
                                  game.board.state.president.name, chosen.name, chosen.name))
             bot.send_message(game.cid, game.board.print_board(game.player_sequence))
-            game.history[game.board.state.currentround] += "\n\nEl President %s ha matado a %s que no era Hitler!" % (
+            game.history[game.board.state.currentround] += "\n\nEl Presidente %s ha matado a %s que no era Hitler!" % (
                                  game.board.state.president.name, chosen.name)
             start_next_round(bot, game)
     except:
