@@ -158,16 +158,15 @@ def command_newgame(bot, update):
 				bot.send_message(cid, "Hay un juego comenzado en este chat. Si quieres terminarlo escribe /cancelgame!")				
 				bot.send_message(cid, game.board.print_board(game.player_sequence))				
 				# Ask the president to choose a chancellor
-				''' 
+				
 				
 				if game.board.state.nominated_chancellor:
 					if len(game.board.state.last_votes) == len(game.player_sequence):
 						MainController.count_votes(bot, game)
 					else:
 						bot.send_message(cid, "There is a voting in progress use /calltovote to tell the other players. ")
-				else:
-				'''
-				MainController.start_round(bot, game)
+				else:				
+					MainController.start_round(bot, game)
 			else:
 				GamesController.games[cid] = Game(cid, update.message.from_user.id)
 				bot.send_message(cid, "Nuevo juego creado! Cada jugador debe unirse al juego con el comando /join.\nEl iniciador del juego (o el administrador) pueden unirse tambien y escribir /startgame cuando todos se hayan unido al juego!")
@@ -432,7 +431,11 @@ def load_game(cid):
 		temp_player_list = {}		
 		for uid in game.playerlist:
 			temp_player_list[int(uid)] = game.playerlist[uid]
-		game.playerlist = temp_player_list		
+		game.playerlist = temp_player_list
+		temp_last_votes = {}	
+		for uid in game.board.state.last_votes:
+			temp_last_votes[int(uid)] = game.board.state.last_votes[uid]
+		game.board.state.last_votes = temp_last_votes
 		#bot.send_message(cid, game.print_roles())
 		return game
 	else:
