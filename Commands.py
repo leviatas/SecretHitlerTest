@@ -65,7 +65,6 @@ symbols = [
     u"\u2620" + ' Fascistas ganan'  # skull
 ]
 
-
 def command_symbols(bot, update):
     cid = update.message.chat_id
     symbol_text = "Los siguientes símbolos aparecen en el tablero: \n"
