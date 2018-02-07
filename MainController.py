@@ -50,7 +50,7 @@ query = "SELECT ...."
 cur.execute(query)
 '''
 
-debugging = False
+debugging = True
 
 def initialize_testdata():
     # Sample game for quicker tests
