@@ -268,7 +268,7 @@ def command_cancelgame(bot, update):
 		if update.message.from_user.id == game.initiator or status in ("administrator", "creator"):
 			MainController.end_game(bot, game, 99)
 		else:
-			bot.send_message(cid, "Solo el creador del jueg o el adminsitrador del grupo pueden cancelar el juego con /cancelgame")
+			bot.send_message(cid, "Solo el creador del juego o el adminsitrador del grupo pueden cancelar el juego con /cancelgame")
 	else:
 		bot.send_message(cid, "No hay juego en este chat. Crea un nuevo juego con /newgame")
 
