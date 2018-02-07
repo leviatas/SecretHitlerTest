@@ -198,7 +198,7 @@ def handle_voting(bot, update):
         bot.send_message(uid, "Puedes cambiar tu voto aquí.\nQuieres elegir al Presidente %s y al canciller %s?" % (
                                 game.board.state.nominated_president.name, game.board.state.nominated_chancellor.name),
                                 reply_markup=voteMarkup)
-        #Commands.save_game(game.cid, "Saved Round %d" % (game.board.state.currentround), game)
+        Commands.save_game(game.cid, "Saved Round %d" % (game.board.state.currentround), game)
         if len(game.board.state.last_votes) == len(game.player_sequence):
                 count_votes(bot, game)
     except Exception as e:
