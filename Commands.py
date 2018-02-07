@@ -163,7 +163,7 @@ def command_newgame(bot, update):
 					if len(game.board.state.last_votes) == len(game.player_sequence):
 						MainController.count_votes(bot, game)
 					else:
-						bot.send_message(cid, "There is a voting in progress use /calltovote to tell the other players. ")
+						bot.send_message(cid, "Hay una votación en progreso utiliza /calltovote para decirles a los otros jugadores. ")
 				else:				
 					MainController.start_round(bot, game)
 			else:
