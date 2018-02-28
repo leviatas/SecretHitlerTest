@@ -350,7 +350,7 @@ def command_showhistory(bot, update):
 			for x in game.history:
 				if len(history_text) < 3500:
 					history_text += x + "\n\n"
-				else
+				else:
 					history_textContinue = += x + "\n\n"
 
 			bot.send_message(uid, history_text, ParseMode.MARKDOWN)
