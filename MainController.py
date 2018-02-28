@@ -283,9 +283,7 @@ def draw_policies(bot, game):
                 btns.append([InlineKeyboardButton(policy, callback_data=strcid + "_" + policy)])
                 hiddenhistory_text += policy
         
-        # Guardo Historial secreto, eliminar estas proximas dos lineas cuando no haya juegos sin hiddenhistory
-        if not hasattr(game, 'hiddenhistory'):
-                game.hiddenhistory = []
+        # Guardo Historial secreto
         game.hiddenhistory.append(("Ronda %d.%d El presidente recibió " % (game.board.state.liberal_track + game.board.state.fascist_track + 1, game.board.state.failed_votes + 1) ) + hiddenhistory_text + "\n")        
         
         choosePolicyMarkup = InlineKeyboardMarkup(btns)
