@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-__author__ = "Julian Schrittwieser, Leviatas"
+__author__ = "Julian Schrittwieser,  Leviatas"
 
 import json
 import logging as log
