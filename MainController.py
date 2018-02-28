@@ -686,15 +686,14 @@ def end_game(bot, game, game_endcode):
 def showHiddenhistory(cid):
 	#game.pedrote = 3
 	try:
-                #Send message of executing command   
-                cid = update.message.chat_id
+		#Send message of executing command   
+		cid = update.message.chat_id
 		#Check if there is a current game 
 		if cid in GamesController.games.keys():
-			game = GamesController.games.get(cid, None)  
-			
+			game = GamesController.games.get(cid, None)
 			history_text = "Historial Oculto:\n\n" 
 			for x in game.hiddenhistory:				
-                                history_text += x + "\n\n"
+				history_text += x + "\n\n"
 			bot.send_message(cid, history_text, ParseMode.MARKDOWN)			
 		else:
 			bot.send_message(cid, "No se pudo generar correctamente el Historial Oculto")
