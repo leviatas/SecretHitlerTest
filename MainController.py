@@ -681,8 +681,28 @@ def end_game(bot, game, game_endcode):
                         bot.send_message(game.cid, "Juego finalizado! Los liberales ganaron promulgando 5 políticas liberales!\n\n%s" % game.print_roles())
                 if game_endcode == 2:
                         bot.send_message(game.cid, "Juego finalizado! Los liberales ganaron matando a Hitler!\n\n%s" % game.print_roles())
+        showHiddenhistory(game.cid)
         del GamesController.games[game.cid]
         Commands.delete_game(game.cid)
+
+def showHiddenhistory(cid):
+	#game.pedrote = 3
+	try:
+                #Send message of executing command   
+                cid = update.message.chat_id
+		#Check if there is a current game 
+		if cid in GamesController.games.keys():
+			game = GamesController.games.get(cid, None)  
+			
+			history_text = "Historial Oculto:\n\n" 
+			for x in game.hiddenhistory:				
+                                history_text += x + "\n\n"
+			bot.send_message(cid, history_text, ParseMode.MARKDOWN)			
+		else:
+			bot.send_message(cid, "No se pudo generar correctamente el Historial Oculto")
+	except Exception as e:
+		bot.send_message(cid, str(e))
+		log.error("Unknown error: " + str(e)) 
         
 def inform_players(bot, game, cid, player_number):
     log.info('inform_players called')
