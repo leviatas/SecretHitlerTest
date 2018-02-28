@@ -594,7 +594,7 @@ def action_inspect(bot, game):
     strcid = str(game.cid)
     btns = []
     for uid in game.playerlist:
-        if uid != game.board.state.president.uid and game.playerlist[uid].is_dead == False:
+        if uid != game.board.state.president.uid and game.playerlist[uid].is_dead == False and game.playerlist[uid].was_investigated == False:
             name = game.playerlist[uid].name
             btns.append([InlineKeyboardButton(name, callback_data=strcid + "_insp_" + str(uid))])
 
@@ -621,6 +621,7 @@ def choose_inspect(bot, update):
         bot.edit_message_text("La afiliación política de %s es %s" % (chosen.name, chosen.party),
                               callback.from_user.id,
                               callback.message.message_id)
+        chosen.was_investigated = True
         bot.send_message(game.cid, "El Presidente %s ha inspeccionado a %s." % (game.board.state.president.name, chosen.name))
         game.history[game.board.state.currentround] += "\n\nEl President %s ha inspeccionado a %s." % (game.board.state.president.name, chosen.name)
         start_next_round(bot, game)
