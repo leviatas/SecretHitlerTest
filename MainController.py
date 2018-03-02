@@ -308,7 +308,7 @@ def choose_policy(bot, update):
                                                 callback.message.message_id)
                         # remove policy from drawn cards and add to discard pile, pass the other two policies
                         # Grabo en Hidden History que descarta el presidente.
-                        game.hiddenhistory.append(("Ronda %d.%d El presidente descartó " % (game.board.state.liberal_track + game.board.state.fascist_track + 1, game.board.state.failed_votes + 1) ) + answer + "\n")
+                        game.hiddenhistory.append(("El presidente descartó " % (game.board.state.liberal_track + game.board.state.fascist_track + 1, game.board.state.failed_votes + 1) ) + answer + "\n")
                         for i in range(3):
                                 if game.board.state.drawn_policies[i] == answer:
                                         game.board.discards.append(game.board.state.drawn_policies.pop(i))                                
@@ -686,15 +686,12 @@ def end_game(bot, game, game_endcode):
 def showHiddenhistory(cid):
 	#game.pedrote = 3
 	try:
-		#Check if there is a current game 
-		if cid in GamesController.games.keys():
-			game = GamesController.games.get(cid, None)
-			history_text = "Historial Oculto:\n\n" 
-			for x in game.hiddenhistory:				
-				history_text += x + "\n\n"
-			bot.send_message(cid, history_text, ParseMode.MARKDOWN)			
-		else:
-			bot.send_message(cid, "No se pudo generar correctamente el Historial Oculto")
+		#Check if there is a current game		
+		game = GamesController.games.get(cid, None)
+		history_text = "Historial Oculto:\n\n" 
+		for x in game.hiddenhistory:				
+			history_text += x + "\n\n"
+		bot.send_message(cid, history_text, ParseMode.MARKDOWN)
 	except Exception as e:
 		bot.send_message(cid, str(e))
 		log.error("Unknown error: " + str(e)) 
