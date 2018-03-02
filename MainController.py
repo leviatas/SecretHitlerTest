@@ -686,8 +686,6 @@ def end_game(bot, game, game_endcode):
 def showHiddenhistory(cid):
 	#game.pedrote = 3
 	try:
-		#Send message of executing command   
-		cid = update.message.chat_id
 		#Check if there is a current game 
 		if cid in GamesController.games.keys():
 			game = GamesController.games.get(cid, None)
