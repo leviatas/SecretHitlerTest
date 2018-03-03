@@ -284,7 +284,7 @@ def draw_policies(bot, game):
                 hiddenhistory_text += policy
         
         # Guardo Historial secreto
-        game.hiddenhistory.append(("Ronda %d.%d El presidente recibió " % (game.board.state.liberal_track + game.board.state.fascist_track + 1, game.board.state.failed_votes + 1) ) + hiddenhistory_text + "\n")        
+        #game.hiddenhistory.append(("Ronda %d.%d El presidente recibió " % (game.board.state.liberal_track + game.board.state.fascist_track + 1, game.board.state.failed_votes + 1) ) + hiddenhistory_text + "\n")        
         
         choosePolicyMarkup = InlineKeyboardMarkup(btns)
         bot.send_message(game.board.state.president.uid,
@@ -308,7 +308,7 @@ def choose_policy(bot, update):
                                                 callback.message.message_id)
                         # remove policy from drawn cards and add to discard pile, pass the other two policies
                         # Grabo en Hidden History que descarta el presidente.
-                        game.hiddenhistory.append(("El presidente descartó " % (game.board.state.liberal_track + game.board.state.fascist_track + 1, game.board.state.failed_votes + 1) ) + answer + "\n")
+                        #game.hiddenhistory.append(("El presidente descartó " % (game.board.state.liberal_track + game.board.state.fascist_track + 1, game.board.state.failed_votes + 1) ) + answer + "\n")
                         for i in range(3):
                                 if game.board.state.drawn_policies[i] == answer:
                                         game.board.discards.append(game.board.state.drawn_policies.pop(i))                                
@@ -679,7 +679,7 @@ def end_game(bot, game, game_endcode):
                         bot.send_message(game.cid, "Juego finalizado! Los liberales ganaron promulgando 5 políticas liberales!\n\n%s" % game.print_roles())
                 if game_endcode == 2:
                         bot.send_message(game.cid, "Juego finalizado! Los liberales ganaron matando a Hitler!\n\n%s" % game.print_roles())
-        showHiddenhistory(game.cid)
+        #showHiddenhistory(game.cid)
         del GamesController.games[game.cid]
         Commands.delete_game(game.cid)
 
