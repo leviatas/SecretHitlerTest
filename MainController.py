@@ -847,7 +847,7 @@ def main():
         dp.add_handler(CommandHandler("calltovote", Commands.command_calltovote))
         dp.add_handler(CommandHandler("claim", Commands.command_claim, pass_args = True))
 	dp.add_handler(CommandHandler("reloadgame", Commands.command_reloadgame))
-        
+	
         #Testing commands
         dp.add_handler(CommandHandler("ja", Commands.command_ja))
         dp.add_handler(CommandHandler("nein", Commands.command_nein))
