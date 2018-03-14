@@ -476,4 +476,35 @@ def command_nein(bot, update):
 		for uid in game.playerlist:
 			game.board.state.last_votes[uid] = answer
 		MainController.count_votes(bot, game)
+		
+def command_reloadgame(bot, update):  
+	cid = update.message.chat_id
+		
+	try:
+		game = GamesController.games.get(cid, None)
+		groupType = update.message.chat.type
+		if groupType not in ['group', 'supergroup']:
+			bot.send_message(cid, "Tienes que agregarme a un grupo primero y escribir /reloadgame allá!")		
+		else:			
+			#Search game in DB
+			game = load_game(cid)			
+			if game:
+				GamesController.games[cid] = game
+				bot.send_message(cid, "Hay un juego comenzado en este chat. Si quieres terminarlo escribe /cancelgame!")				
+				bot.send_message(cid, game.board.print_board(game.player_sequence))				
+				# Ask the president to choose a chancellor
+								
+				if game.board.state.nominated_chancellor:
+					if len(game.board.state.last_votes) == len(game.player_sequence):
+						MainController.count_votes(bot, game)
+					else:
+						bot.send_message(cid, "Hay una votación en progreso utiliza /calltovote para decirles a los otros jugadores. ")
+				else:				
+					MainController.start_round(bot, game)
+			else:				
+				bot.send_message(cid, "No hay juego que recargar! Crea un nuevo juego con /newgame!")
+			
+			
+	except Exception as e:
+		bot.send_message(cid, str(e))
 	
