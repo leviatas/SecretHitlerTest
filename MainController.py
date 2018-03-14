@@ -795,82 +795,82 @@ def error(bot, update, error):
     logger.warning('Update "%s" caused error "%s"' % (update, error))
 
 def main():
-        GamesController.init() #Call only once
-        #initialize_testdata()
-        
-        #Init DB Create tables if they don't exist   
-        log.info('Init DB')
-        conn.autocommit = True
-        cur = conn.cursor()
-        cur.execute(open("DBCreate.sql", "r").read())
-        log.info('DB Created/Updated')
-        conn.autocommit = False
-        '''
-        log.info('Insertando')
-        query = "INSERT INTO users(facebook_id, name , access_token , created) values ('2','3','4',1) RETURNING id;"
-        log.info('Por ejecutar')
-        cur.execute(query)       
-        user_id = cur.fetchone()[0]        
-        log.info(user_id)
-        
-        
-        query = "SELECT ...."
-        cur.execute(query)
-        '''
-        
-        #PORT = int(os.environ.get('PORT', '5000'))
-        updater = Updater(TOKEN)
-        '''
-        updater.start_webhook(listen="0.0.0.0",
-                      port=PORT,
-                      url_path=TOKEN)
-        updater.bot.set_webhook("https://secrethitlertest.herokuapp.com/" + TOKEN)
-        '''
-        
-        # Get the dispatcher to register handlers
-        dp = updater.dispatcher
+	GamesController.init() #Call only once
+	#initialize_testdata()
 
-        # on different commands - answer in Telegram
-        dp.add_handler(CommandHandler("start", Commands.command_start))
-        dp.add_handler(CommandHandler("help", Commands.command_help))
-        dp.add_handler(CommandHandler("board", Commands.command_board))
-        dp.add_handler(CommandHandler("rules", Commands.command_rules))
-        dp.add_handler(CommandHandler("ping", Commands.command_ping))
-        dp.add_handler(CommandHandler("symbols", Commands.command_symbols))
-        dp.add_handler(CommandHandler("stats", Commands.command_stats))
-        dp.add_handler(CommandHandler("newgame", Commands.command_newgame))
-        dp.add_handler(CommandHandler("startgame", Commands.command_startgame))
-        dp.add_handler(CommandHandler("cancelgame", Commands.command_cancelgame))
-        dp.add_handler(CommandHandler("join", Commands.command_join, pass_args = True))
-        dp.add_handler(CommandHandler("history", Commands.command_showhistory))
-        dp.add_handler(CommandHandler("votes", Commands.command_votes))
-        dp.add_handler(CommandHandler("calltovote", Commands.command_calltovote))	
-        dp.add_handler(CommandHandler("claim", Commands.command_claim, pass_args = True))
-	dp.add_handler(CommandHandler("reload", Commands.command_reloadgame))	
-	
-        #Testing commands
-        dp.add_handler(CommandHandler("ja", Commands.command_ja))
-        dp.add_handler(CommandHandler("nein", Commands.command_nein))
-
-        dp.add_handler(CallbackQueryHandler(pattern="(-[0-9]*)_chan_(.*)", callback=nominate_chosen_chancellor))
-        dp.add_handler(CallbackQueryHandler(pattern="(-[0-9]*)_insp_(.*)", callback=choose_inspect))
-        dp.add_handler(CallbackQueryHandler(pattern="(-[0-9]*)_choo_(.*)", callback=choose_choose))
-        dp.add_handler(CallbackQueryHandler(pattern="(-[0-9]*)_kill_(.*)", callback=choose_kill))
-        dp.add_handler(CallbackQueryHandler(pattern="(-[0-9]*)_(yesveto|noveto)", callback=choose_veto))
-        dp.add_handler(CallbackQueryHandler(pattern="(-[0-9]*)_(liberal|fascista|veto)", callback=choose_policy))
-        dp.add_handler(CallbackQueryHandler(pattern="(-[0-9]*)_(Ja|Nein)", callback=handle_voting))
+	#Init DB Create tables if they don't exist   
+	log.info('Init DB')
+	conn.autocommit = True
+	cur = conn.cursor()
+	cur.execute(open("DBCreate.sql", "r").read())
+	log.info('DB Created/Updated')
+	conn.autocommit = False
+	'''
+	log.info('Insertando')
+	query = "INSERT INTO users(facebook_id, name , access_token , created) values ('2','3','4',1) RETURNING id;"
+	log.info('Por ejecutar')
+	cur.execute(query)       
+	user_id = cur.fetchone()[0]        
+	log.info(user_id)
 
 
-        # log all errors
-        dp.add_error_handler(error)
+	query = "SELECT ...."
+	cur.execute(query)
+	'''
 
-        # Start the Bot
-        updater.start_polling()
+	#PORT = int(os.environ.get('PORT', '5000'))
+	updater = Updater(TOKEN)
+	'''
+	updater.start_webhook(listen="0.0.0.0",
+	      port=PORT,
+	      url_path=TOKEN)
+	updater.bot.set_webhook("https://secrethitlertest.herokuapp.com/" + TOKEN)
+	'''
 
-        # Run the bot until the you presses Ctrl-C or the process receives SIGINT,
-        # SIGTERM or SIGABRT. This should be used most of the time, since
-        # start_polling() is non-blocking and will stop the bot gracefully.
-        updater.idle()
+	# Get the dispatcher to register handlers
+	dp = updater.dispatcher
+
+	# on different commands - answer in Telegram
+	dp.add_handler(CommandHandler("start", Commands.command_start))
+	dp.add_handler(CommandHandler("help", Commands.command_help))
+	dp.add_handler(CommandHandler("board", Commands.command_board))
+	dp.add_handler(CommandHandler("rules", Commands.command_rules))
+	dp.add_handler(CommandHandler("ping", Commands.command_ping))
+	dp.add_handler(CommandHandler("symbols", Commands.command_symbols))
+	dp.add_handler(CommandHandler("stats", Commands.command_stats))
+	dp.add_handler(CommandHandler("newgame", Commands.command_newgame))
+	dp.add_handler(CommandHandler("startgame", Commands.command_startgame))
+	dp.add_handler(CommandHandler("cancelgame", Commands.command_cancelgame))
+	dp.add_handler(CommandHandler("join", Commands.command_join, pass_args = True))
+	dp.add_handler(CommandHandler("history", Commands.command_showhistory))
+	dp.add_handler(CommandHandler("votes", Commands.command_votes))
+	dp.add_handler(CommandHandler("calltovote", Commands.command_calltovote))	
+	dp.add_handler(CommandHandler("claim", Commands.command_claim, pass_args = True))
+	dp.add_handler(CommandHandler("reload", Commands.command_reloadgame))
+
+	#Testing commands
+	dp.add_handler(CommandHandler("ja", Commands.command_ja))
+	dp.add_handler(CommandHandler("nein", Commands.command_nein))
+
+	dp.add_handler(CallbackQueryHandler(pattern="(-[0-9]*)_chan_(.*)", callback=nominate_chosen_chancellor))
+	dp.add_handler(CallbackQueryHandler(pattern="(-[0-9]*)_insp_(.*)", callback=choose_inspect))
+	dp.add_handler(CallbackQueryHandler(pattern="(-[0-9]*)_choo_(.*)", callback=choose_choose))
+	dp.add_handler(CallbackQueryHandler(pattern="(-[0-9]*)_kill_(.*)", callback=choose_kill))
+	dp.add_handler(CallbackQueryHandler(pattern="(-[0-9]*)_(yesveto|noveto)", callback=choose_veto))
+	dp.add_handler(CallbackQueryHandler(pattern="(-[0-9]*)_(liberal|fascista|veto)", callback=choose_policy))
+	dp.add_handler(CallbackQueryHandler(pattern="(-[0-9]*)_(Ja|Nein)", callback=handle_voting))
+
+
+	# log all errors
+	dp.add_error_handler(error)
+
+	# Start the Bot
+	updater.start_polling()
+
+	# Run the bot until the you presses Ctrl-C or the process receives SIGINT,
+	# SIGTERM or SIGABRT. This should be used most of the time, since
+	# start_polling() is non-blocking and will stop the bot gracefully.
+	updater.idle()
 
 
 
