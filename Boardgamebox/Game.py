@@ -44,17 +44,20 @@ class Game(object):
                 p.remove(Player)
 
     def print_roles(self):
-        rtext = ""
-        if self.board is None:
-            #game was not started yet
-            return rtext
-        else:
-            for p in self.playerlist:
-                rtext += self.playerlist[p].name + "'s "
-                if self.playerlist[p].is_dead:
-                    rtext += "(dead) "
-                rtext += "secret role was " + self.playerlist[p].role + "\n"
-            return rtext
+        try:
+            rtext = ""
+            if self.board is None:
+                #game was not started yet
+                return rtext
+            else:
+                for p in self.playerlist:
+                    rtext += self.playerlist[p].name + "'s "
+                    if self.playerlist[p].is_dead:
+                        rtext += "(dead) "
+                    rtext += "secret role was " + self.playerlist[p].role + "\n"
+                return rtext
+        except Exception as e:
+		    rtext += str(e)
     def encode_all(obj):
         if isinstance(obj, Player):
             return obj.__dict__
