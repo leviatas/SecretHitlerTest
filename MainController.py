@@ -701,7 +701,7 @@ def count_votes_anarquia(bot, game):
 			voting_text += game.playerlist[player.uid].name + " votó Ja!\n"
 		elif game.board.state.votes_anarquia[player.uid] == "Nein":
 			voting_text += game.playerlist[player.uid].name + " votó Nein!\n"
-	if list(game.board.state.votes_anarquia.values()).count("Ja") > (len(game.player_sequence) / 2):  # because player_sequence doesnt include dead
+	if list(game.board.state.votes_anarquia.values()).count("Ja") >= (len(game.player_sequence) / 2):  # because player_sequence doesnt include dead
 		# VOTING WAS SUCCESSFUL
 		log.info("Vamos a anarquia!")
 		voting_text += "Debido a que la mayoria de los jugador ha decidido ir a anarquia se ejecuta la anarquia."		
