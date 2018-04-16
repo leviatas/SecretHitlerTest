@@ -697,16 +697,16 @@ def count_votes_anarquia(bot, game):
 	voting_text = ""
 	voting_success = False
 	for player in game.player_sequence:
-	if game.board.state.votes_anarquia[player.uid] == "Ja":
-	    voting_text += game.playerlist[player.uid].name + " votó Ja!\n"
-	elif game.board.state.votes_anarquia[player.uid] == "Nein":
-	    voting_text += game.playerlist[player.uid].name + " votó Nein!\n"
+		if game.board.state.votes_anarquia[player.uid] == "Ja":
+			voting_text += game.playerlist[player.uid].name + " votó Ja!\n"
+		elif game.board.state.votes_anarquia[player.uid] == "Nein":
+			voting_text += game.playerlist[player.uid].name + " votó Nein!\n"
 	if list(game.board.state.votes_anarquia.values()).count("Ja") > (len(game.player_sequence) / 2):  # because player_sequence doesnt include dead
 		# VOTING WAS SUCCESSFUL
 		log.info("Vamos a anarquia!")
 		voting_text += "Debido a que la mayoria de los jugador ha decidido ir a anarquia se ejecuta la anarquia.")		
 		game.board.state.nominated_president = None
-		game.board.state.nominated_chancellor = None		
+		game.board.state.nominated_chancellor = None
 		bot.send_message(game.cid, voting_text, ParseMode.MARKDOWN)
 		bot.send_message(game.cid, "\nNo se puede hablar ahora.")
 		game.history.append(("Ronda %d.%d\n\n" % (game.board.state.liberal_track + game.board.state.fascist_track + 1, game.board.state.failed_votes + 1) ) + voting_text)
