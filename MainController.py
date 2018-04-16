@@ -649,46 +649,45 @@ def start_next_round(bot, game):
 
 
 def decide_anarquia(bot, game):
-        log.info('decide_anarquia called')
-        #When voting starts we start the counter to see later with the vote command if we can see you voted.
-        game.dateinitvote = datetime.datetime.now()
+	log.info('decide_anarquia called')
+	#When voting starts we start the counter to see later with the vote command if we can see you voted.
 	game.board.state.votes_anarquia = {}
-        strcid = str(game.cid)
-        btns = [[InlineKeyboardButton("Ja", callback_data=strcid + "_JaAna"),
+	strcid = str(game.cid)
+	btns = [[InlineKeyboardButton("Ja", callback_data=strcid + "_JaAna"),
 	InlineKeyboardButton("Nein", callback_data=strcid + "_NeinAna")]]
-        voteMarkup = InlineKeyboardMarkup(btns)
-        for uid in game.playerlist:
-                if not game.playerlist[uid].is_dead and not debugging:                        
+	voteMarkup = InlineKeyboardMarkup(btns)
+	for uid in game.playerlist:
+		if not game.playerlist[uid].is_dead and not debugging:                        
 			bot.send_message(uid, game.board.print_board(game.player_sequence))
-                        bot.send_message(uid, "¿Quieres ir a anarquia?", reply_markup=voteMarkup)
+			bot.send_message(uid, "¿Quieres ir a anarquia?", reply_markup=voteMarkup)
 			
 def handle_voting_anarquia(bot, update):
-    callback = update.callback_query
-    log.info('handle_voting_anarquia called: %s' % callback.data)
-    regex = re.search("(-[0-9]*)_(.*)", callback.data)
-    cid = int(regex.group(1))
-    answer = regex.group(2)
-    strcid = regex.group(1)
-    try:
-        game = GamesController.games[cid]
-        uid = callback.from_user.id
-	answer = answer.replace("Ana", "")
-        bot.edit_message_text("Gracias por tu voto: %s para la anarquia" % (answer), uid, callback.message.message_id)
-        log.info("Player %s (%d) voted %s" % (callback.from_user.first_name, uid, answer))
-        
-        #if uid not in game.board.state.last_votes:
-        game.board.state.votes_anarquia[uid] = answer
-        
-        #Allow player to change his vote
-        btns = [[InlineKeyboardButton("Ja", callback_data=strcid + "_JaAna"),
-	InlineKeyboardButton("Nein", callback_data=strcid + "_NeinAna")]]
-        voteMarkup = InlineKeyboardMarkup(btns)
-        bot.send_message(uid, "Puedes cambiar tu voto aquí.\n¿Quieres ir a anarquia?", reply_markup=voteMarkup)
-        
-        if len(game.board.state.votes_anarquia) == len(game.player_sequence):
-                count_votes_anarquia(bot, game)
-    except Exception as e:
-        log.error(str(e))
+	callback = update.callback_query
+	log.info('handle_voting_anarquia called: %s' % callback.data)
+	regex = re.search("(-[0-9]*)_(.*)", callback.data)
+	cid = int(regex.group(1))
+	answer = regex.group(2)
+	strcid = regex.group(1)
+	try:
+		game = GamesController.games[cid]
+		uid = callback.from_user.id
+		answer = answer.replace("Ana", "")
+		bot.edit_message_text("Gracias por tu voto: %s para la anarquia" % (answer), uid, callback.message.message_id)
+		log.info("Player %s (%d) voted %s" % (callback.from_user.first_name, uid, answer))
+
+		#if uid not in game.board.state.last_votes:
+		game.board.state.votes_anarquia[uid] = answer
+
+		#Allow player to change his vote
+		btns = [[InlineKeyboardButton("Ja", callback_data=strcid + "_JaAna"),
+		InlineKeyboardButton("Nein", callback_data=strcid + "_NeinAna")]]
+		voteMarkup = InlineKeyboardMarkup(btns)
+		bot.send_message(uid, "Puedes cambiar tu voto aquí.\n¿Quieres ir a anarquia?", reply_markup=voteMarkup)
+
+		if len(game.board.state.votes_anarquia) == len(game.player_sequence):
+			count_votes_anarquia(bot, game)
+	except Exception as e:
+		log.error(str(e))
 
 def count_votes_anarquia(bot, game):
 	# La votacion ha finalizado.
