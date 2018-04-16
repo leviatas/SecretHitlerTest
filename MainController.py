@@ -648,6 +648,84 @@ def start_next_round(bot, game):
         start_round(bot, game)
 
 
+def decide_anarquia(bot, game):
+        log.info('decide_anarquia called')
+        #When voting starts we start the counter to see later with the vote command if we can see you voted.
+        game.dateinitvote = datetime.datetime.now()
+	game.board.state.votes_anarquia = {}
+        strcid = str(game.cid)
+        btns = [[InlineKeyboardButton("Ja", callback_data=strcid + "_JaAna"),
+	InlineKeyboardButton("Nein", callback_data=strcid + "_NeinAna")]]
+        voteMarkup = InlineKeyboardMarkup(btns)
+        for uid in game.playerlist:
+                if not game.playerlist[uid].is_dead and not debugging:                        
+			bot.send_message(uid, game.board.print_board(game.player_sequence))
+                        bot.send_message(uid, "¿Quieres ir a anarquia?", reply_markup=voteMarkup)
+			
+def handle_voting_anarquia(bot, update):
+    callback = update.callback_query
+    log.info('handle_voting_anarquia called: %s' % callback.data)
+    regex = re.search("(-[0-9]*)_(.*)", callback.data)
+    cid = int(regex.group(1))
+    answer = regex.group(2)
+    strcid = regex.group(1)
+    try:
+        game = GamesController.games[cid]
+        uid = callback.from_user.id
+	answer = answer.replace("Ana", "")
+        bot.edit_message_text("Gracias por tu voto: %s para la anarquia" % (answer), uid, callback.message.message_id)
+        log.info("Player %s (%d) voted %s" % (callback.from_user.first_name, uid, answer))
+        
+        #if uid not in game.board.state.last_votes:
+        game.board.state.votes_anarquia[uid] = answer
+        
+        #Allow player to change his vote
+        btns = [[InlineKeyboardButton("Ja", callback_data=strcid + "_JaAna"),
+	InlineKeyboardButton("Nein", callback_data=strcid + "_NeinAna")]]
+        voteMarkup = InlineKeyboardMarkup(btns)
+        bot.send_message(uid, "Puedes cambiar tu voto aquí.\n¿Quieres ir a anarquia?", reply_markup=voteMarkup)
+        
+        if len(game.board.state.votes_anarquia) == len(game.player_sequence):
+                count_votes_anarquia(bot, game)
+    except Exception as e:
+        log.error(str(e))
+
+def count_votes_anarquia(bot, game):
+	# La votacion ha finalizado.
+	game.dateinitvote = None
+	# La votacion ha finalizado.
+	log.info('count_votes_anarquia called')
+	voting_text = ""
+	voting_success = False
+	for player in game.player_sequence:
+	if game.board.state.votes_anarquia[player.uid] == "Ja":
+	    voting_text += game.playerlist[player.uid].name + " votó Ja!\n"
+	elif game.board.state.votes_anarquia[player.uid] == "Nein":
+	    voting_text += game.playerlist[player.uid].name + " votó Nein!\n"
+	if list(game.board.state.votes_anarquia.values()).count("Ja") > (len(game.player_sequence) / 2):  # because player_sequence doesnt include dead
+		# VOTING WAS SUCCESSFUL
+		log.info("Vamos a anarquia!")
+		voting_text += "Debido a que la mayoria de los jugador ha decidido ir a anarquia se ejecuta la anarquia.")		
+		game.board.state.nominated_president = None
+		game.board.state.nominated_chancellor = None		
+		bot.send_message(game.cid, voting_text, ParseMode.MARKDOWN)
+		bot.send_message(game.cid, "\nNo se puede hablar ahora.")
+		game.history.append(("Ronda %d.%d\n\n" % (game.board.state.liberal_track + game.board.state.fascist_track + 1, game.board.state.failed_votes + 1) ) + voting_text)
+		# Avanzo la cantidad del lider asi el lider queda correctamente asignado
+		# Se incrementa como mucho 2 ya que el ultimo incremento lo hace la anarquia
+		for i in range(2 - game.board.state.failed_votes):
+			increment_player_counter(game)		
+		do_anarchy(bot, game)
+	else:
+		log.info("La gente no quiere anarquia")
+		voting_text += "Al no quiso ir a anarquia"
+		game.board.state.nominated_president = None
+		game.board.state.nominated_chancellor = None
+		bot.send_message(game.cid, voting_text, ParseMode.MARKDOWN)
+		game.history.append(("Ronda %d.%d\n\n" % (game.board.state.liberal_track + game.board.state.fascist_track + 1, game.board.state.failed_votes + 1) ) + voting_text)
+		#game.board.state.failed_votes == 3
+		
+			
 ##
 #
 # End of round
@@ -859,6 +937,7 @@ def main():
 	dp.add_handler(CallbackQueryHandler(pattern="(-[0-9]*)_(yesveto|noveto)", callback=choose_veto))
 	dp.add_handler(CallbackQueryHandler(pattern="(-[0-9]*)_(liberal|fascista|veto)", callback=choose_policy))
 	dp.add_handler(CallbackQueryHandler(pattern="(-[0-9]*)_(Ja|Nein)", callback=handle_voting))
+	dp.add_handler(CallbackQueryHandler(pattern="(-[0-9]*)_(JaAna|NeinAna)", callback=handle_voting_anarquia))
 
 
 	# log all errors
