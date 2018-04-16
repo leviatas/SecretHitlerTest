@@ -379,7 +379,7 @@ def command_claim(bot, update, args):
 						claimtext = ' '.join(args)
 						claimtexttohistory = "El juegador %s declara: %s" % (game.playerlist[uid].name, claimtext)
 						bot.send_message(cid, "Tu declaración: %s fue agregada al historial." % (claimtext))
-						game.history.append("\n\n%s" % (claimtexttohistory))
+						game.history.append("%s" % (claimtexttohistory))
 					else:					
 						bot.send_message(cid, "Debes mandar un mensaje para hacer una declaración.")
 
@@ -507,4 +507,30 @@ def command_reloadgame(bot, update):
 			
 	except Exception as e:
 		bot.send_message(cid, str(e))
+	
+def command_anarquia(bot, update, args):	
+	try:
+		#Send message of executing command   
+		cid = update.message.chat_id
+		#Check if there is a current game 
+		if cid in GamesController.games.keys():
+			uid = update.message.from_user.id
+			game = GamesController.games.get(cid, None)			
+			if uid in game.playerlist:
+				# Se pregunta a los jugadores si irian a anarquia,
+				# esto se hace para no tener que estar pasando 3 formular y esperar que todos voten
+				# SI, mitad + 1 de jugadores decide ir por anarquia.
+				# Se hace y se indica quienes quisieron ir a anarquia				
+				MainController.decide_anarquia(bot, game)
+			else:
+				bot.send_message(cid, "Debes ser un jugador del partido para preguntar por anarquia.")
+
+		else:
+			bot.send_message(cid, "No hay juego en este chat. Crea un nuevo juego con /newgame")
+	except Exception as e:
+		bot.send_message(cid, str(e))
+		log.error("Unknown error: " + str(e))    
+	
+	
+	
 	
