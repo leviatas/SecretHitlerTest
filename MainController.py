@@ -704,7 +704,7 @@ def count_votes_anarquia(bot, game):
 	if list(game.board.state.votes_anarquia.values()).count("Ja") > (len(game.player_sequence) / 2):  # because player_sequence doesnt include dead
 		# VOTING WAS SUCCESSFUL
 		log.info("Vamos a anarquia!")
-		voting_text += "Debido a que la mayoria de los jugador ha decidido ir a anarquia se ejecuta la anarquia.")		
+		voting_text += "Debido a que la mayoria de los jugador ha decidido ir a anarquia se ejecuta la anarquia."		
 		game.board.state.nominated_president = None
 		game.board.state.nominated_chancellor = None
 		bot.send_message(game.cid, voting_text, ParseMode.MARKDOWN)
