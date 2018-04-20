@@ -777,24 +777,24 @@ def showHiddenhistory(cid):
 		log.error("Unknown error: " + str(e)) 
         
 def inform_players(bot, game, cid, player_number):
-    log.info('inform_players called')
-    bot.send_message(cid,
-                     "Vamos a comenzar el juego con %d jugadores!\n%s\nVe a nuestro chat privado y mira tu rol secreto!" % (
-                         player_number, print_player_info(player_number)))
-    available_roles = list(playerSets[player_number]["roles"])  # copy not reference because we need it again later
-    for uid in game.playerlist:
-        random_index = randrange(len(available_roles))
-        #log.info(str(random_index))
-        role = available_roles.pop(random_index)
-        #log.info(str(role))
-        party = get_membership(role)
-        game.playerlist[uid].role = role
-        game.playerlist[uid].party = party
-        # I comment so tyhe player aren't discturbed in testing, uncomment when deploy to production
-        #if not game.is_debugging:
-	bot.send_message(uid, "Tu rol secreto es: %s\nTu afiliación política es: %s" % (role, party))
-        #else:
-        #bot.send_message(ADMIN, "El jugador %s es %s y su afiliación política es: %s" % (game.playerlist[uid].name, role, party))
+	log.info('inform_players called')
+	bot.send_message(cid,
+		"Vamos a comenzar el juego con %d jugadores!\n%s\nVe a nuestro chat privado y mira tu rol secreto!" % (
+		player_number, print_player_info(player_number)))
+	available_roles = list(playerSets[player_number]["roles"])  # copy not reference because we need it again later
+	for uid in game.playerlist:
+		random_index = randrange(len(available_roles))
+		#log.info(str(random_index))
+		role = available_roles.pop(random_index)
+		#log.info(str(role))
+		party = get_membership(role)
+		game.playerlist[uid].role = role
+		game.playerlist[uid].party = party
+		# I comment so tyhe player aren't discturbed in testing, uncomment when deploy to production
+		#if not game.is_debugging:
+		bot.send_message(uid, "Tu rol secreto es: %s\nTu afiliación política es: %s" % (role, party))
+		#else:
+		#bot.send_message(ADMIN, "El jugador %s es %s y su afiliación política es: %s" % (game.playerlist[uid].name, role, party))
 
 
 def print_player_info(player_number):
