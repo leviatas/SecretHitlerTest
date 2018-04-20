@@ -533,7 +533,12 @@ def command_anarquia(bot, update, args):
 	except Exception as e:
 		bot.send_message(cid, str(e))
 		log.error("Unknown error: " + str(e))    
-	
-	
-	
-	
+
+def command_toggle_debugging(bot, update):
+	uid = update.message.from_user.id
+	if uid == ADMIN:
+		cid = update.message.chat_id
+		game = GamesController.games.get(cid, None)
+		# Informo que el modo de debugging ha cambiado
+		game.is_debugging = True if not game.is_debugging else False
+		bot.send_message(cid, "Debug Mode: ON" if game.is_debugging else "Debug Mode: OFF")
