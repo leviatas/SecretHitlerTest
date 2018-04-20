@@ -78,12 +78,15 @@ def command_board(bot, update):
 	if cid in GamesController.games.keys():
 		game = GamesController.games[cid]
 		if game.board:			
-			bot.send_message(cid, game.board.print_board(game.player_sequence))
+			print_board(bot, game)
 		else:
 			bot.send_message(cid, "No hay juego comenzado en este chat.  Por favor comience el juego con /startgame")
 	else:
 		bot.send_message(cid, "No hay juego en este chat. Crea un nuevo juego con /newgame")
 
+def print_board(bot, game):
+	bot.send_message(game.cid, game.board.print_board(game.player_sequence), ParseMode.MARKDOWN)
+		
 def command_start(bot, update):
     cid = update.message.chat_id
     bot.send_message(cid,
@@ -155,7 +158,7 @@ def command_newgame(bot, update):
 			if game:
 				GamesController.games[cid] = game
 				bot.send_message(cid, "Hay un juego comenzado en este chat. Si quieres terminarlo escribe /cancelgame!")				
-				bot.send_message(cid, game.board.print_board(game.player_sequence))				
+				print_board(bot, game)
 				# Ask the president to choose a chancellor
 				
 				
@@ -251,7 +254,7 @@ def command_startgame(bot, update):
 		log.info("len(games) Command_startgame: " + str(len(GamesController.games)))
 		game.shuffle_player_sequence()
 		game.board.state.player_counter = 0
-		bot.send_message(game.cid, game.board.print_board(game.player_sequence))
+		print_board(bot, game)
 		#group_name = update.message.chat.title
 		#bot.send_message(ADMIN, "Game of Secret Hitler started in group %s (%d)" % (group_name, cid))		
 		MainController.start_round(bot, game)
@@ -491,7 +494,7 @@ def command_reloadgame(bot, update):
 			if game:
 				GamesController.games[cid] = game
 				bot.send_message(cid, "Hay un juego comenzado en este chat. Si quieres terminarlo escribe /cancelgame!")				
-				bot.send_message(cid, game.board.print_board(game.player_sequence))				
+				print_board(bot, game)				
 				# Ask the president to choose a chancellor
 								
 				if game.board.state.nominated_chancellor:
