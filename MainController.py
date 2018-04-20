@@ -658,7 +658,7 @@ def decide_anarquia(bot, game):
 	voteMarkup = InlineKeyboardMarkup(btns)
 	for uid in game.playerlist:
 		if not game.playerlist[uid].is_dead and not game.is_debugging:                      
-			Commands.print_board(bot, game, uid):
+			Commands.print_board(bot, game, uid)
 			bot.send_message(uid, game.board.print_board(game.player_sequence))
 			bot.send_message(uid, "¿Quieres ir a anarquia?", reply_markup=voteMarkup)
 			
