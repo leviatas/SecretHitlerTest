@@ -261,10 +261,10 @@ def voting_aftermath(bot, game, voting_success):
 		elif game.board.state.fascist_track >= 3 and game.board.state.chancellor.role != "Hitler" and game.board.state.chancellor not in game.board.state.not_hitlers:
 			game.board.state.not_hitlers.append(game.board.state.chancellor)
 			draw_policies(bot, game)
-	else:
-		# voting was successful and Hitler was not nominated as chancellor after 3 fascist policies
-		draw_policies(bot, game)
 		else:
+			# voting was successful and Hitler was not nominated as chancellor after 3 fascist policies
+			draw_policies(bot, game)
+	else:
 		Commands.print_board(bot, game, game.cid)
 		start_next_round(bot, game)
 
