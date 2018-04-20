@@ -251,22 +251,22 @@ def count_votes(bot, game):
 
 
 def voting_aftermath(bot, game, voting_success):
-    log.info('voting_aftermath called')
-    game.board.state.last_votes = {}
-    if voting_success:
-        if game.board.state.fascist_track >= 3 and game.board.state.chancellor.role == "Hitler":
-            # fascists win, because Hitler was elected as chancellor after 3 fascist policies
-            game.board.state.game_endcode = -2
-            end_game(bot, game, game.board.state.game_endcode)
-        elif game.board.state.fascist_track >= 3 and game.board.state.chancellor.role != "Hitler" and game.board.state.chancellor not in game.board.state.not_hitlers:
-            game.board.state.not_hitlers.append(game.board.state.chancellor)
-            draw_policies(bot, game)
-        else:
-            # voting was successful and Hitler was not nominated as chancellor after 3 fascist policies
-            draw_policies(bot, game)
-    else:
-	Commands.print_board(bot, game, game.cid)
-        start_next_round(bot, game)
+	log.info('voting_aftermath called')
+	game.board.state.last_votes = {}
+	if voting_success:
+		if game.board.state.fascist_track >= 3 and game.board.state.chancellor.role == "Hitler":
+			# fascists win, because Hitler was elected as chancellor after 3 fascist policies
+			game.board.state.game_endcode = -2
+			end_game(bot, game, game.board.state.game_endcode)
+		elif game.board.state.fascist_track >= 3 and game.board.state.chancellor.role != "Hitler" and game.board.state.chancellor not in game.board.state.not_hitlers:
+			game.board.state.not_hitlers.append(game.board.state.chancellor)
+			draw_policies(bot, game)
+	else:
+		# voting was successful and Hitler was not nominated as chancellor after 3 fascist policies
+		draw_policies(bot, game)
+		else:
+		Commands.print_board(bot, game, game.cid)
+		start_next_round(bot, game)
 
 
 def draw_policies(bot, game):
