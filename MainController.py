@@ -155,23 +155,22 @@ def nominate_chosen_chancellor(bot, update):
 
 
 def vote(bot, game):
-        log.info('vote called')
-        #When voting starts we start the counter to see later with the vote command if we can see you voted.
-        game.dateinitvote = datetime.datetime.now()
+	log.info('vote called')
+	#When voting starts we start the counter to see later with the vote command if we can see you voted.
+	game.dateinitvote = datetime.datetime.now()
 
-        strcid = str(game.cid)
-        btns = [[InlineKeyboardButton("Ja", callback_data=strcid + "_Ja"),
-        InlineKeyboardButton("Nein", callback_data=strcid + "_Nein")]]
-        voteMarkup = InlineKeyboardMarkup(btns)
-        for uid in game.playerlist:
-                if not game.playerlist[uid].is_dead and not game.is_debugging:
-                        if game.playerlist[uid] is not game.board.state.nominated_president:
-                        # the nominated president already got the board before nominating a chancellor
-                                Commands.print_board(bot, game, uid)
-				bot.send_message(uid, game.board.print_board(game.player_sequence))
-                        bot.send_message(uid, "Quieres elegir al Presidente %s y al canciller %s?" % (
-                                game.board.state.nominated_president.name, game.board.state.nominated_chancellor.name),
-                                reply_markup=voteMarkup)
+	strcid = str(game.cid)
+	btns = [[InlineKeyboardButton("Ja", callback_data=strcid + "_Ja"),
+	InlineKeyboardButton("Nein", callback_data=strcid + "_Nein")]]
+	voteMarkup = InlineKeyboardMarkup(btns)
+	for uid in game.playerlist:
+		if not game.playerlist[uid].is_dead and not game.is_debugging:
+			if game.playerlist[uid] is not game.board.state.nominated_president:
+				# the nominated president already got the board before nominating a chancellor
+				Commands.print_board(bot, game, uid)
+			bot.send_message(uid, "Quieres elegir al Presidente %s y al canciller %s?" % (
+				game.board.state.nominated_president.name, game.board.state.nominated_chancellor.name),
+					reply_markup=voteMarkup)
 
 
 def handle_voting(bot, update):
