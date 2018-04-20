@@ -116,8 +116,8 @@ def choose_chancellor(bot, game):
     chancellorMarkup = InlineKeyboardMarkup(btns)
         #descomentar al entrar en produccion
         
-    if(game.is_debugging):
-        game.board.state.nominated_president.uid = ADMIN      
+    #if(game.is_debugging):
+    #    game.board.state.nominated_president.uid = ADMIN      
     bot.send_message(game.board.state.nominated_president.uid, game.board.print_board(game.player_sequence), ParseMode.MARKDOWN)
     bot.send_message(game.board.state.nominated_president.uid, 'Por favor nomina a tu canciller!',
                      reply_markup=chancellorMarkup)
@@ -130,8 +130,8 @@ def nominate_chosen_chancellor(bot, update):
     regex = re.search("(-[0-9]*)_chan_([0-9]*)", callback.data)
     cid = int(regex.group(1))
     chosen_uid = int(regex.group(2))
-    if(game.is_debugging):
-        chosen_uid = ADMIN   
+    #if(game.is_debugging):
+    #    chosen_uid = ADMIN   
     try:
         game = GamesController.games.get(cid, None)
         #log.info(game.playerlist)
@@ -164,7 +164,8 @@ def vote(bot, game):
 	InlineKeyboardButton("Nein", callback_data=strcid + "_Nein")]]
 	voteMarkup = InlineKeyboardMarkup(btns)
 	for uid in game.playerlist:
-		if not game.playerlist[uid].is_dead and not game.is_debugging:
+		if not game.playerlist[uid].is_dead:
+			# and not game.is_debugging:
 			if game.playerlist[uid] is not game.board.state.nominated_president:
 				# the nominated president already got the board before nominating a chancellor
 				Commands.print_board(bot, game, uid)
@@ -657,7 +658,8 @@ def decide_anarquia(bot, game):
 	InlineKeyboardButton("Nein", callback_data=strcid + "_NeinAna")]]
 	voteMarkup = InlineKeyboardMarkup(btns)
 	for uid in game.playerlist:
-		if not game.playerlist[uid].is_dead and not game.is_debugging:                      
+		if not game.playerlist[uid].is_dead:
+			#and not game.is_debugging:                      
 			Commands.print_board(bot, game, uid)
 			bot.send_message(uid, game.board.print_board(game.player_sequence))
 			bot.send_message(uid, "¿Quieres ir a anarquia?", reply_markup=voteMarkup)
@@ -789,10 +791,10 @@ def inform_players(bot, game, cid, player_number):
         game.playerlist[uid].role = role
         game.playerlist[uid].party = party
         # I comment so tyhe player aren't discturbed in testing, uncomment when deploy to production
-        if not game.is_debugging:
-                bot.send_message(uid, "Tu rol secreto es: %s\nTu afiliación política es: %s" % (role, party))
-        else:
-                bot.send_message(ADMIN, "El jugador %s es %s y su afiliación política es: %s" % (game.playerlist[uid].name, role, party))
+        #if not game.is_debugging:
+	bot.send_message(uid, "Tu rol secreto es: %s\nTu afiliación política es: %s" % (role, party))
+        #else:
+        #bot.send_message(ADMIN, "El jugador %s es %s y su afiliación política es: %s" % (game.playerlist[uid].name, role, party))
 
 
 def print_player_info(player_number):
@@ -811,32 +813,31 @@ def print_player_info(player_number):
 
 
 def inform_fascists(bot, game, player_number):
-    log.info('inform_fascists called')
+	log.info('inform_fascists called')
 
-    for uid in game.playerlist:
-        role = game.playerlist[uid].role
-        if role == "Fascista":
-            fascists = game.get_fascists()
-            if player_number > 6:
-                fstring = ""
-                for f in fascists:
-                    if f.uid != uid:
-                        fstring += f.name + ", "
-                fstring = fstring[:-2]
-                if not game.is_debugging:
-                        bot.send_message(uid, "Tus compañeros fascistas son: %s" % fstring)
-            hitler = game.get_hitler()
-            if not game.is_debugging:
-                        bot.send_message(uid, "Hitler es: %s" % hitler.name) #Uncoomend on production
-        elif role == "Hitler":
-            if player_number <= 6:
-                fascists = game.get_fascists()
-                if not game.is_debugging:
-                        bot.send_message(uid, "Tu compañero fascista es: %s" % fascists[0].name)
-        elif role == "Liberal":
-            pass
-        else:
-            log.error("inform_fascists: can\'t handle the role %s" % role)
+	for uid in game.playerlist:
+		role = game.playerlist[uid].role
+		if role == "Fascista":
+			fascists = game.get_fascists()
+			if player_number > 6:
+				fstring = ""
+				for f in fascists:
+					if f.uid != uid:
+						fstring += f.name + ", "
+				fstring = fstring[:-2]
+				#if not game.is_debugging:
+				bot.send_message(uid, "Tus compañeros fascistas son: %s" % fstring)
+			hitler = game.get_hitler()
+			#if not game.is_debugging:
+			bot.send_message(uid, "Hitler es: %s" % hitler.name) #Uncoomend on production
+		elif role == "Hitler":
+			if player_number <= 6:
+				fascists = game.get_fascists()
+				bot.send_message(uid, "Tu compañero fascista es: %s" % fascists[0].name)
+		elif role == "Liberal":
+			pass
+		else:
+			log.error("inform_fascists: can\'t handle the role %s" % role)
 
 
 def get_membership(role):
