@@ -657,6 +657,10 @@ def decide_anarquia(bot, game):
 			Commands.print_board(bot, game, uid)
 			bot.send_message(uid, game.board.print_board(game.player_sequence))
 			bot.send_message(uid, "¿Quieres ir a anarquia? (CUIDADO si la mitad de los jugadores elige SI no se espera)", reply_markup=voteMarkup)
+		else:
+			Commands.print_board(bot, game, uid)
+			bot.send_message(ADMIN, game.board.print_board(game.player_sequence))
+			bot.send_message(ADMIN, "¿Quieres ir a anarquia? (CUIDADO si la mitad de los jugadores elige SI no se espera)", reply_markup=voteMarkup)
 			
 def handle_voting_anarquia(bot, update):
 	callback = update.callback_query
@@ -674,6 +678,11 @@ def handle_voting_anarquia(bot, update):
 
 		#if uid not in game.board.state.last_votes:
 		game.board.state.votes_anarquia[uid] = answer
+		
+		if game.is_debugging:
+			for uid in game.playerlist:
+				if not game.playerlist[uid].is_dead:
+					game.board.state.votes_anarquia[uid] = answer			
 
 		#Allow player to change his vote
 		btns = [[InlineKeyboardButton("Ja", callback_data=strcid + "_JaAna"),
