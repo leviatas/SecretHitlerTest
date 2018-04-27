@@ -511,7 +511,7 @@ def command_reloadgame(bot, update):
 	except Exception as e:
 		bot.send_message(cid, str(e))
 	
-def command_anarquia(bot, update, args):	
+def command_anarquia(bot, update):	
 	try:
 		#Send message of executing command   
 		cid = update.message.chat_id
