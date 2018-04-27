@@ -658,7 +658,7 @@ def decide_anarquia(bot, game):
 			#and not game.is_debugging:                      
 			Commands.print_board(bot, game, uid)
 			bot.send_message(uid, game.board.print_board(game.player_sequence))
-			bot.send_message(uid, "¿Quieres ir a anarquia?", reply_markup=voteMarkup)
+			bot.send_message(uid, "¿Quieres ir a anarquia? (CUIDADO si la mitad de los jugadores elige SI no se espera)", reply_markup=voteMarkup)
 			
 def handle_voting_anarquia(bot, update):
 	callback = update.callback_query
@@ -681,9 +681,12 @@ def handle_voting_anarquia(bot, update):
 		btns = [[InlineKeyboardButton("Ja", callback_data=strcid + "_JaAna"),
 		InlineKeyboardButton("Nein", callback_data=strcid + "_NeinAna")]]
 		voteMarkup = InlineKeyboardMarkup(btns)
-		bot.send_message(uid, "Puedes cambiar tu voto aquí.\n¿Quieres ir a anarquia?", reply_markup=voteMarkup)
-
+		bot.send_message(uid, "Puedes cambiar tu voto aquí.\n¿Quieres ir a anarquia? (CUIDADO si la mitad de los jugadores elige SI no se espera)", reply_markup=voteMarkup)
+		
 		if len(game.board.state.votes_anarquia) == len(game.player_sequence):
+			count_votes_anarquia(bot, game)
+		elif list(game.board.state.votes_anarquia.values()).count("Si") >= (len(game.player_sequence) / 2):
+			# Caso especial si ya la mitad o mas de los jugadores decidio ir a anarquia se va no más.
 			count_votes_anarquia(bot, game)
 	except Exception as e:
 		log.error(str(e))
