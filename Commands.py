@@ -502,6 +502,7 @@ def command_reloadgame(bot, update):
 						MainController.count_votes(bot, game)
 					else:
 						print_board(bot, game, cid)
+						MainController.vote(bot, game)
 						bot.send_message(cid, "Hay una votación en progreso utiliza /calltovote para decirles a los otros jugadores. ")
 				else:
 					MainController.start_round(bot, game)
