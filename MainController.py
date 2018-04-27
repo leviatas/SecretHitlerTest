@@ -88,43 +88,38 @@ def start_round(bot, game):
 
 
 def choose_chancellor(bot, game):
-    log.info('choose_chancellor called')
-    strcid = str(game.cid)
-    pres_uid = 0
-    chan_uid = 0
-    btns = []
-    if game.board.state.president is not None:
-        pres_uid = game.board.state.president.uid
-    if game.board.state.chancellor is not None:
-        chan_uid = game.board.state.chancellor.uid
-    for uid in game.playerlist:
-        # If there are only five players left in the
-        # game, only the last elected Chancellor is
-        # ineligible to be Chancellor Candidate; the
-        # last President may be nominated.
-        if len(game.player_sequence) > 5:
-            if uid != game.board.state.nominated_president.uid and game.playerlist[
-                uid].is_dead == False and uid != pres_uid and uid != chan_uid:
-                name = game.playerlist[uid].name
-                btns.append([InlineKeyboardButton(name, callback_data=strcid + "_chan_" + str(uid))])
-        else:
-            if uid != game.board.state.nominated_president.uid and game.playerlist[
-                uid].is_dead == False and uid != chan_uid:
-                name = game.playerlist[uid].name
-                btns.append([InlineKeyboardButton(name, callback_data=strcid + "_chan_" + str(uid))])
+	log.info('choose_chancellor called')
+	strcid = str(game.cid)
+	pres_uid = 0
+	chan_uid = 0
+	btns = []
+	if game.board.state.president is not None:
+		pres_uid = game.board.state.president.uid
+	if game.board.state.chancellor is not None:
+		chan_uid = game.board.state.chancellor.uid
+	for uid in game.playerlist:
+		# If there are only five players left in the
+		# game, only the last elected Chancellor is
+		# ineligible to be Chancellor Candidate; the
+		# last President may be nominated.
+		if len(game.player_sequence) > 5:
+			if uid != game.board.state.nominated_president.uid and game.playerlist[uid].is_dead == False and uid != pres_uid and uid != chan_uid:
+				name = game.playerlist[uid].name
+				btns.append([InlineKeyboardButton(name, callback_data=strcid + "_chan_" + str(uid))])
+		else:
+			if uid != game.board.state.nominated_president.uid and game.playerlist[uid].is_dead == False and uid != chan_uid:
+				name = game.playerlist[uid].name
+				btns.append([InlineKeyboardButton(name, callback_data=strcid + "_chan_" + str(uid))])
 
-    chancellorMarkup = InlineKeyboardMarkup(btns)
-        #descomentar al entrar en produccion
-        
-    if game.is_debugging:
-    	bot.send_message(ADMIN, game.board.print_board(game.player_sequence), ParseMode.MARKDOWN)
-    	bot.send_message(ADMIN, 'Por favor nomina a tu canciller!',
-                     reply_markup=chancellorMarkup)      
-    else:
-	bot.send_message(game.board.state.nominated_president.uid, game.board.print_board(game.player_sequence), ParseMode.MARKDOWN)
-    	bot.send_message(game.board.state.nominated_president.uid, 'Por favor nomina a tu canciller!',
-                     reply_markup=chancellorMarkup)
+	chancellorMarkup = InlineKeyboardMarkup(btns)
+	#descomentar al entrar en produccion
 
+	if game.is_debugging:
+		bot.send_message(ADMIN, game.board.print_board(game.player_sequence), ParseMode.MARKDOWN)
+		bot.send_message(ADMIN, 'Por favor nomina a tu canciller!', reply_markup=chancellorMarkup)      
+	else:
+		bot.send_message(game.board.state.nominated_president.uid, game.board.print_board(game.player_sequence), ParseMode.MARKDOWN)
+		bot.send_message(game.board.state.nominated_president.uid, 'Por favor nomina a tu canciller!', reply_markup=chancellorMarkup)
 
 def nominate_chosen_chancellor(bot, update):
     log.info('nominate_chosen_chancellor called')
