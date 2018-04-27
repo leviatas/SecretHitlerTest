@@ -654,8 +654,8 @@ def decide_anarquia(bot, game):
 	#When voting starts we start the counter to see later with the vote command if we can see you voted.
 	game.board.state.votes_anarquia = {}
 	strcid = str(game.cid)
-	btns = [[InlineKeyboardButton("Ja", callback_data=strcid + "_JaAna"),
-	InlineKeyboardButton("Nein", callback_data=strcid + "_NeinAna")]]
+	btns = [[InlineKeyboardButton("Ja", callback_data=strcid + "_SiAna"),
+	InlineKeyboardButton("Nein", callback_data=strcid + "_NoAna")]]
 	voteMarkup = InlineKeyboardMarkup(btns)
 	for uid in game.playerlist:
 		if not game.playerlist[uid].is_dead:
@@ -700,11 +700,11 @@ def count_votes_anarquia(bot, game):
 	voting_text = ""
 	voting_success = False
 	for player in game.player_sequence:
-		if game.board.state.votes_anarquia[player.uid] == "Ja":
+		if game.board.state.votes_anarquia[player.uid] == "Si":
 			voting_text += game.playerlist[player.uid].name + " votó Ja!\n"
-		elif game.board.state.votes_anarquia[player.uid] == "Nein":
+		elif game.board.state.votes_anarquia[player.uid] == "No":
 			voting_text += game.playerlist[player.uid].name + " votó Nein!\n"
-	if list(game.board.state.votes_anarquia.values()).count("Ja") >= (len(game.player_sequence) / 2):  # because player_sequence doesnt include dead
+	if list(game.board.state.votes_anarquia.values()).count("Si") >= (len(game.player_sequence) / 2):  # because player_sequence doesnt include dead
 		# VOTING WAS SUCCESSFUL
 		log.info("Vamos a anarquia!")
 		voting_text += "Debido a que la mayoria de los jugador ha decidido ir a anarquia se ejecuta la anarquia."		
@@ -940,7 +940,7 @@ def main():
 	dp.add_handler(CallbackQueryHandler(pattern="(-[0-9]*)_(yesveto|noveto)", callback=choose_veto))
 	dp.add_handler(CallbackQueryHandler(pattern="(-[0-9]*)_(liberal|fascista|veto)", callback=choose_policy))
 	dp.add_handler(CallbackQueryHandler(pattern="(-[0-9]*)_(Ja|Nein)", callback=handle_voting))
-	dp.add_handler(CallbackQueryHandler(pattern="(-[0-9]*)_(JaAna|NeinAna)", callback=handle_voting_anarquia))
+	dp.add_handler(CallbackQueryHandler(pattern="(-[0-9]*)_(SiAna|NoAna)", callback=handle_voting_anarquia))
 
 
 	# log all errors
