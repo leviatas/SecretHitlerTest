@@ -781,7 +781,7 @@ def showHiddenhistory(bot, game):
 		history_text = "Historial Oculto:\n\n" 
 		for x in game.hiddenhistory:				
 			history_text += x + "\n"
-		bot.send_message(cid, history_text, ParseMode.MARKDOWN)
+		bot.send_message(game.cid, history_text, ParseMode.MARKDOWN)
 	except Exception as e:
 		bot.send_message(cid, str(e))
 		log.error("Unknown error: " + str(e)) 
