@@ -494,15 +494,16 @@ def command_reloadgame(bot, update):
 			if game:
 				GamesController.games[cid] = game
 				bot.send_message(cid, "Hay un juego comenzado en este chat. Si quieres terminarlo escribe /cancelgame!")				
-				print_board(bot, game, cid)				
-				# Ask the president to choose a chancellor
-								
+				
+				# Ask the president to choose a chancellor								
 				if game.board.state.nominated_chancellor:
 					if len(game.board.state.last_votes) == len(game.player_sequence):
+						print_board(bot, game, cid)
 						MainController.count_votes(bot, game)
 					else:
+						print_board(bot, game, cid)
 						bot.send_message(cid, "Hay una votación en progreso utiliza /calltovote para decirles a los otros jugadores. ")
-				else:				
+				else:
 					MainController.start_round(bot, game)
 			else:				
 				bot.send_message(cid, "No hay juego que recargar! Crea un nuevo juego con /newgame!")
