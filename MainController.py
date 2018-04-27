@@ -309,7 +309,7 @@ def choose_policy(bot, update):
 			callback.message.message_id)
 			# remove policy from drawn cards and add to discard pile, pass the other two policies
 			# Grabo en Hidden History que descarta el presidente.
-			game.hiddenhistory.append(("El presidente descartó " % (game.board.state.liberal_track + game.board.state.fascist_track + 1, game.board.state.failed_votes + 1) ) + answer + "\n")
+			game.hiddenhistory.append(("El presidente descartó " + answer + "\n")
 			for i in range(3):
 				if game.board.state.drawn_policies[i] == answer:
 					game.board.discards.append(game.board.state.drawn_policies.pop(i))                                
