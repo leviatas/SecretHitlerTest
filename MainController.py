@@ -285,9 +285,14 @@ def draw_policies(bot, game):
         game.hiddenhistory.append(("Ronda %d.%d El presidente recibió " % (game.board.state.liberal_track + game.board.state.fascist_track + 1, game.board.state.failed_votes + 1) ) + hiddenhistory_text + "\n")        
         
         choosePolicyMarkup = InlineKeyboardMarkup(btns)
-        bot.send_message(game.board.state.president.uid,
-                     "Has robado las siguientes 3 politicas. Cual quieres descartar?",
-                     reply_markup=choosePolicyMarkup)
+	if not game.is_debugging:
+		bot.send_message(game.board.state.president.uid,
+			     "Has robado las siguientes 3 politicas. Cual quieres descartar?",
+			     reply_markup=choosePolicyMarkup)
+	else:
+		bot.send_message(ADMIN,
+			     "Has robado las siguientes 3 politicas. Cual quieres descartar?",
+			     reply_markup=choosePolicyMarkup)
 
 
 def choose_policy(bot, update):
@@ -348,30 +353,35 @@ def choose_policy(bot, update):
 
 
 def pass_two_policies(bot, game):
-    log.info('pass_two_policies called')
-    strcid = str(game.cid)
-    btns = []
-    for policy in game.board.state.drawn_policies:
-        btns.append([InlineKeyboardButton(policy, callback_data=strcid + "_" + policy)])
-    if game.board.state.fascist_track == 5 and not game.board.state.veto_refused:
-        btns.append([InlineKeyboardButton("Veto", callback_data=strcid + "_veto")])
-        choosePolicyMarkup = InlineKeyboardMarkup(btns)
-        bot.send_message(game.cid,
-                         "El presidente %s entregó dos políticas al Canciller %s." % (
-                             game.board.state.president.name, game.board.state.chancellor.name))
-        bot.send_message(game.board.state.chancellor.uid,
-                         "El Presidente %s te entregó las siguientes 2 políticas. Cuál quieres promulgar? También puedes usar el poder de Veto." % game.board.state.president.name,
-                         reply_markup=choosePolicyMarkup)
-    elif game.board.state.veto_refused:
-        choosePolicyMarkup = InlineKeyboardMarkup(btns)
-        bot.send_message(game.board.state.chancellor.uid,
-                         "El presidente %s ha rechazado tu Veto. Ahora tienes que elegir. Cuál quieres promulgar?" % game.board.state.president.name,
-                         reply_markup=choosePolicyMarkup)
-    elif game.board.state.fascist_track < 5:
-        choosePolicyMarkup = InlineKeyboardMarkup(btns)
-        bot.send_message(game.board.state.chancellor.uid,
-                         "El Presidente %s te entregó las siguientes 2 políticas. Cuál quieres promulgar?" % game.board.state.president.name,
-                         reply_markup=choosePolicyMarkup)
+	log.info('pass_two_policies called')
+	strcid = str(game.cid)
+	btns = []
+	for policy in game.board.state.drawn_policies:
+		btns.append([InlineKeyboardButton(policy, callback_data=strcid + "_" + policy)])
+	if game.board.state.fascist_track == 5 and not game.board.state.veto_refused:
+		btns.append([InlineKeyboardButton("Veto", callback_data=strcid + "_veto")])
+		choosePolicyMarkup = InlineKeyboardMarkup(btns)
+		bot.send_message(game.cid,
+			"El presidente %s entregó dos políticas al Canciller %s." % (
+			game.board.state.president.name, game.board.state.chancellor.name))
+		bot.send_message(game.board.state.chancellor.uid,
+			"El Presidente %s te entregó las siguientes 2 políticas. Cuál quieres promulgar? También puedes usar el poder de Veto." % game.board.state.president.name,
+		reply_markup=choosePolicyMarkup)
+	elif game.board.state.veto_refused:
+		choosePolicyMarkup = InlineKeyboardMarkup(btns)
+		bot.send_message(game.board.state.chancellor.uid,
+			"El presidente %s ha rechazado tu Veto. Ahora tienes que elegir. Cuál quieres promulgar?" % game.board.state.president.name,
+			reply_markup=choosePolicyMarkup)
+	elif game.board.state.fascist_track < 5:
+		choosePolicyMarkup = InlineKeyboardMarkup(btns)
+		if not game.is_debugging:
+			bot.send_message(game.board.state.chancellor.uid,
+				"El Presidente %s te entregó las siguientes 2 políticas. Cuál quieres promulgar?" % game.board.state.president.name,
+				reply_markup=choosePolicyMarkup)
+		else:
+			bot.send_message(ADMIN,
+				"El Presidente %s te entregó las siguientes 2 políticas. Cuál quieres promulgar?" % game.board.state.president.name,
+				reply_markup=choosePolicyMarkup)
 
 
 def enact_policy(bot, game, policy, anarchy):
