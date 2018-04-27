@@ -656,7 +656,7 @@ def decide_anarquia(bot, game):
 		if not game.is_debugging:
 			if not game.playerlist[uid].is_dead:                      
 				Commands.print_board(bot, game, uid)
-				bot.send_message(uid, game.board.print_board(game.player_sequence))
+				bot.send_message(uid, game.board.print_board(game.player_sequence), ParseMode.MARKDOWN))
 				bot.send_message(uid, "¿Quieres ir a anarquia? (CUIDADO si la mitad de los jugadores elige SI no se espera)", reply_markup=voteMarkup)
 		else:
 			bot.send_message(ADMIN, game.board.print_board(game.player_sequence))
