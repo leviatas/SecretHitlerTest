@@ -233,7 +233,7 @@ def count_votes(bot, game):
         bot.send_message(game.cid, voting_text, ParseMode.MARKDOWN)
         bot.send_message(game.cid, "\nNo se puede hablar ahora.")
         game.history.append(("Ronda %d.%d\n\n" % (game.board.state.liberal_track + game.board.state.fascist_track + 1, game.board.state.failed_votes + 1) ) + voting_text)
-        log.info(game.history[game.board.state.currentround])
+        #log.info(game.history[game.board.state.currentround])
         voting_aftermath(bot, game, voting_success)
     else:
         log.info("Voting failed")
@@ -244,7 +244,7 @@ def count_votes(bot, game):
         game.board.state.failed_votes += 1
         bot.send_message(game.cid, voting_text)
         game.history.append(("Ronda %d.%d\n\n" % (game.board.state.liberal_track + game.board.state.fascist_track + 1, game.board.state.failed_votes) ) + voting_text)
-        log.info(game.history[game.board.state.currentround])
+        #log.info(game.history[game.board.state.currentround])
         if game.board.state.failed_votes == 3:
             do_anarchy(bot, game)
         else:
@@ -285,7 +285,7 @@ def draw_policies(bot, game):
                 hiddenhistory_text += policy
         
         # Guardo Historial secreto
-        #game.hiddenhistory.append(("Ronda %d.%d El presidente recibió " % (game.board.state.liberal_track + game.board.state.fascist_track + 1, game.board.state.failed_votes + 1) ) + hiddenhistory_text + "\n")        
+        game.hiddenhistory.append(("Ronda %d.%d El presidente recibió " % (game.board.state.liberal_track + game.board.state.fascist_track + 1, game.board.state.failed_votes + 1) ) + hiddenhistory_text + "\n")        
         
         choosePolicyMarkup = InlineKeyboardMarkup(btns)
         bot.send_message(game.board.state.president.uid,
@@ -309,7 +309,7 @@ def choose_policy(bot, update):
                                                 callback.message.message_id)
                         # remove policy from drawn cards and add to discard pile, pass the other two policies
                         # Grabo en Hidden History que descarta el presidente.
-                        #game.hiddenhistory.append(("El presidente descartó " % (game.board.state.liberal_track + game.board.state.fascist_track + 1, game.board.state.failed_votes + 1) ) + answer + "\n")
+                        game.hiddenhistory.append(("El presidente descartó " % (game.board.state.liberal_track + game.board.state.fascist_track + 1, game.board.state.failed_votes + 1) ) + answer + "\n")
                         for i in range(3):
                                 if game.board.state.drawn_policies[i] == answer:
                                         game.board.discards.append(game.board.state.drawn_policies.pop(i))                                
@@ -388,12 +388,12 @@ def enact_policy(bot, game, policy, anarchy):
         bot.send_message(game.cid,
                          "El Presidente %s y el Canciller %s promulgaron una política %s!" % (
                              game.board.state.president.name, game.board.state.chancellor.name, policy))
-        game.history[game.board.state.currentround] += "\n\nEl Presidente %s y el Canciller %s promulgaron una política %s!" % (
-                             game.board.state.president.name, game.board.state.chancellor.name, policy)
+        game.history.append("\n\nEl Presidente %s y el Canciller %s promulgaron una política %s!" % (
+                             game.board.state.president.name, game.board.state.chancellor.name, policy))
     else:
         bot.send_message(game.cid,
                          "La política en la cima del mazo ha sido promulgada y es %s" % policy)
-        game.history[game.board.state.currentround] += "\n\nLa política en la cima del mazo ha sido promulgada y es %s" % policy
+        game.history.append("\n\nLa política en la cima del mazo ha sido promulgada y es %s" % policy)
     sleep(3)
     bot.send_message(game.cid, game.board.print_board(game.player_sequence), ParseMode.MARKDOWN)
     # end of round
@@ -419,7 +419,7 @@ def enact_policy(bot, game, policy, anarchy):
                                                                                               "en el mazo. El Presidente puede compartir "
                                                                                               "(o mentir al respecto!) los resultados de su "
                                                                                               "investigación a su propia discreción." % game.board.state.president.name)
-                game.history[game.board.state.currentround] += "\n\nEl presidente %s ahora conoce las proximas 3 políticas en el mazo." % game.board.state.president.name
+                game.history.append("\n\nEl presidente %s ahora conoce las proximas 3 políticas en el mazo." % game.board.state.president.name)
                 action_policy(bot, game)                
             elif action == "kill":
                 bot.send_message(game.cid,
@@ -548,8 +548,7 @@ def choose_kill(bot, update):
                              "El Presidente %s ha matado a %s que no era Hitler. %s, ahora estás muerto y no puedes hablar más!" % (
                                  game.board.state.president.name, chosen.name, chosen.name))
             bot.send_message(game.cid, game.board.print_board(game.player_sequence), ParseMode.MARKDOWN)
-            game.history[game.board.state.currentround] += "\n\nEl Presidente %s ha matado a %s que no era Hitler!" % (
-                                 game.board.state.president.name, chosen.name)
+            game.history.append("\n\nEl Presidente %s ha matado a %s que no era Hitler!" % (game.board.state.president.name, chosen.name))
             start_next_round(bot, game)
     except:
         log.error("choose_kill: Game or board should not be None!")
@@ -590,8 +589,7 @@ def choose_choose(bot, update):
         bot.send_message(game.cid,
                          "El Presidente %s ha elegido a %s como próximo presidente." % (
                              game.board.state.president.name, chosen.name))
-        game.history[game.board.state.currentround] += "\n\nEl Presidente %s ha elegido a %s como próximo presidente." % (
-                game.board.state.president.name, chosen.name)
+        game.history.append("\n\nEl Presidente %s ha elegido a %s como próximo presidente." % (game.board.state.president.name, chosen.name))
         start_next_round(bot, game)
     except:
         log.error("choose_choose: Game or board should not be None!")
@@ -631,7 +629,7 @@ def choose_inspect(bot, update):
                               callback.message.message_id)
         chosen.was_investigated = True
         bot.send_message(game.cid, "El Presidente %s ha inspeccionado a %s." % (game.board.state.president.name, chosen.name))
-        game.history[game.board.state.currentround] += "\n\nEl President %s ha inspeccionado a %s." % (game.board.state.president.name, chosen.name)
+        game.history.append("\n\nEl President %s ha inspeccionado a %s." % (game.board.state.president.name, chosen.name))
         start_next_round(bot, game)
     except:
         log.error("choose_inspect: Game or board should not be None!")
@@ -928,6 +926,7 @@ def main():
 	dp.add_handler(CommandHandler("reload", Commands.command_reloadgame))
 	dp.add_handler(CommandHandler("debug", Commands.command_toggle_debugging))
 	dp.add_handler(CommandHandler("anarchy", Commands.command_anarquia))
+	dp.add_handler(CommandHandler("prueba", Commands.command_prueba))
 
 	#Testing commands
 	dp.add_handler(CommandHandler("ja", Commands.command_ja))
