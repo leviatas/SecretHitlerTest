@@ -79,7 +79,8 @@ def start_round(bot, game):
         else:
                 game.board.state.nominated_president = game.board.state.chosen_president
                 game.board.state.chosen_president = None
-        
+		
+        Commands.print_board(bot, game, game.cid)
         msgtext =  "El próximo candidato a presidente es [%s](tg://user?id=%d).\n%s, por favor nomina a un canciller en nuestro chat privado!" % (game.board.state.nominated_president.name, game.board.state.nominated_president.uid, game.board.state.nominated_president.name)
         bot.send_message(game.cid, msgtext, ParseMode.MARKDOWN)
         choose_chancellor(bot, game)
@@ -398,8 +399,7 @@ def enact_policy(bot, game, policy, anarchy):
         bot.send_message(game.cid,
                          "La política en la cima del mazo ha sido promulgada y es %s" % policy)
         game.history.append("\n\nLa política en la cima del mazo ha sido promulgada y es %s" % policy)
-    sleep(3)
-    bot.send_message(game.cid, game.board.print_board(game.player_sequence), ParseMode.MARKDOWN)
+    sleep(3)    
     # end of round
     if game.board.state.liberal_track == 5:
         game.board.state.game_endcode = 1
@@ -471,8 +471,7 @@ def choose_veto(bot, update):
             shuffle_policy_pile(bot, game)  
             if game.board.state.failed_votes == 3:
                 do_anarchy(bot, game)
-            else:
-                bot.send_message(game.cid, game.board.print_board(game.player_sequence), ParseMode.MARKDOWN)
+            else:                
                 start_next_round(bot, game)
         elif answer == "noveto":
             log.info("Player %s (%d) declined the veto" % (callback.from_user.first_name, uid))
@@ -489,14 +488,13 @@ def choose_veto(bot, update):
 
 
 def do_anarchy(bot, game):
-    #log.info('do_anarchy called')
-    bot.send_message(game.cid, game.board.print_board(game.player_sequence), ParseMode.MARKDOWN)
-    bot.send_message(game.cid, "ANARCHY!!")
-    game.board.state.president = None
-    game.board.state.chancellor = None
-    top_policy = game.board.policies.pop(0)
-    game.board.state.last_votes = {}
-    enact_policy(bot, game, top_policy, True)
+	#log.info('do_anarchy called')	
+	bot.send_message(game.cid, "ANARCHY!!")
+	game.board.state.president = None
+	game.board.state.chancellor = None
+	top_policy = game.board.policies.pop(0)
+	game.board.state.last_votes = {}
+	enact_policy(bot, game, top_policy, True)
 
 
 def action_policy(bot, game):
