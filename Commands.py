@@ -543,11 +543,13 @@ def command_prueba(bot, update):
 	uid = update.message.from_user.id
 	if uid == ADMIN:
 		cid = update.message.chat_id
-		game = GamesController.games.get(cid, None)
+		MainController.showHiddenhistory(cid)
+		'''game = GamesController.games.get(cid, None)
 		history_text = "Historial Oculto:\n\n" 
 		for x in game.hiddenhistory:				
 			history_text += x + "\n"
 		bot.send_message(ADMIN, history_text, ParseMode.MARKDOWN)
+		'''
 		
 def command_toggle_debugging(bot, update):
 	uid = update.message.from_user.id
