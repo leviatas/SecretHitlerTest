@@ -162,8 +162,7 @@ def vote(bot, game):
 	InlineKeyboardButton("Nein", callback_data=strcid + "_Nein")]]
 	voteMarkup = InlineKeyboardMarkup(btns)
 	for uid in game.playerlist:
-		if not game.playerlist[uid].is_dead:
-			# and not game.is_debugging:
+		if not game.playerlist[uid].is_dead and not game.is_debugging:
 			if game.playerlist[uid] is not game.board.state.nominated_president:
 				# the nominated president already got the board before nominating a chancellor
 				Commands.print_board(bot, game, uid)
@@ -654,8 +653,7 @@ def decide_anarquia(bot, game):
 	InlineKeyboardButton("Nein", callback_data=strcid + "_NoAna")]]
 	voteMarkup = InlineKeyboardMarkup(btns)
 	for uid in game.playerlist:
-		if not game.playerlist[uid].is_dead:
-			#and not game.is_debugging:                      
+		if not game.playerlist[uid].is_dead and not game.is_debugging:                      
 			Commands.print_board(bot, game, uid)
 			bot.send_message(uid, game.board.print_board(game.player_sequence))
 			bot.send_message(uid, "¿Quieres ir a anarquia? (CUIDADO si la mitad de los jugadores elige SI no se espera)", reply_markup=voteMarkup)
@@ -790,10 +788,10 @@ def inform_players(bot, game, cid, player_number):
 		game.playerlist[uid].role = role
 		game.playerlist[uid].party = party
 		# I comment so tyhe player aren't discturbed in testing, uncomment when deploy to production
-		#if not game.is_debugging:
-		bot.send_message(uid, "Tu rol secreto es: %s\nTu afiliación política es: %s" % (role, party))
-		#else:
-		#bot.send_message(ADMIN, "El jugador %s es %s y su afiliación política es: %s" % (game.playerlist[uid].name, role, party))
+		if not game.is_debugging:
+			bot.send_message(uid, "Tu rol secreto es: %s\nTu afiliación política es: %s" % (role, party))
+		else:
+			bot.send_message(ADMIN, "El jugador %s es %s y su afiliación política es: %s" % (game.playerlist[uid].name, role, party))
 
 
 def print_player_info(player_number):
@@ -824,11 +822,11 @@ def inform_fascists(bot, game, player_number):
 					if f.uid != uid:
 						fstring += f.name + ", "
 				fstring = fstring[:-2]
-				#if not game.is_debugging:
-				bot.send_message(uid, "Tus compañeros fascistas son: %s" % fstring)
+				if not game.is_debugging:
+					bot.send_message(uid, "Tus compañeros fascistas son: %s" % fstring)
 			hitler = game.get_hitler()
-			#if not game.is_debugging:
-			bot.send_message(uid, "Hitler es: %s" % hitler.name) #Uncoomend on production
+			if not game.is_debugging:
+				bot.send_message(uid, "Hitler es: %s" % hitler.name) #Uncoomend on production
 		elif role == "Hitler":
 			if player_number <= 6:
 				fascists = game.get_fascists()
