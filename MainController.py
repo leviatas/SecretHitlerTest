@@ -116,10 +116,13 @@ def choose_chancellor(bot, game):
     chancellorMarkup = InlineKeyboardMarkup(btns)
         #descomentar al entrar en produccion
         
-    #if(game.is_debugging):
-    #    game.board.state.nominated_president.uid = ADMIN      
-    bot.send_message(game.board.state.nominated_president.uid, game.board.print_board(game.player_sequence), ParseMode.MARKDOWN)
-    bot.send_message(game.board.state.nominated_president.uid, 'Por favor nomina a tu canciller!',
+    if game.is_debugging:
+    	bot.send_message(ADMIN, game.board.print_board(game.player_sequence), ParseMode.MARKDOWN)
+    	bot.send_message(ADMIN, 'Por favor nomina a tu canciller!',
+                     reply_markup=chancellorMarkup)      
+    else:
+	bot.send_message(game.board.state.nominated_president.uid, game.board.print_board(game.player_sequence), ParseMode.MARKDOWN)
+    	bot.send_message(game.board.state.nominated_president.uid, 'Por favor nomina a tu canciller!',
                      reply_markup=chancellorMarkup)
 
 
