@@ -346,9 +346,8 @@ def choose_policy(bot, update):
                 else:
                         log.error("choose_policy: drawn_policies should be 3 or 2, but was " + str(
                                 len(game.board.state.drawn_policies)))
-        except:
-                log.error("choose_policy: Game or board should not be None!")
-
+        except Exception as e:
+		log.error("choose_policy:" + str(e))
 
 def pass_two_policies(bot, game):
 	log.info('pass_two_policies called')
