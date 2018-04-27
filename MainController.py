@@ -843,7 +843,8 @@ def inform_fascists(bot, game, player_number):
 		elif role == "Hitler":
 			if player_number <= 6:
 				fascists = game.get_fascists()
-				bot.send_message(uid, "Tu compañero fascista es: %s" % fascists[0].name)
+				if not game.is_debugging:
+					bot.send_message(uid, "Tu compañero fascista es: %s" % fascists[0].name)
 		elif role == "Liberal":
 			pass
 		else:
