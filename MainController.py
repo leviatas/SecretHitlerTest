@@ -268,31 +268,29 @@ def voting_aftermath(bot, game, voting_success):
 
 
 def draw_policies(bot, game):
-        log.info('draw_policies called')
-        strcid = str(game.cid)
-        game.board.state.veto_refused = False
-        # shuffle discard pile with rest if rest < 3
-        shuffle_policy_pile(bot, game)
-        btns = []
-        hiddenhistory_text = ""
-        for i in range(3):
-                game.board.state.drawn_policies.append(game.board.policies.pop(0))
-        for policy in game.board.state.drawn_policies:
-                btns.append([InlineKeyboardButton(policy, callback_data=strcid + "_" + policy)])
-                hiddenhistory_text += policy
-        
-        # Guardo Historial secreto
-        game.hiddenhistory.append(("Ronda %d.%d El presidente recibió " % (game.board.state.liberal_track + game.board.state.fascist_track + 1, game.board.state.failed_votes + 1) ) + hiddenhistory_text + "\n")        
-        
-        choosePolicyMarkup = InlineKeyboardMarkup(btns)
+	log.info('draw_policies called')
+	strcid = str(game.cid)
+	game.board.state.veto_refused = False
+	# shuffle discard pile with rest if rest < 3
+	shuffle_policy_pile(bot, game)
+	btns = []
+	hiddenhistory_text = ""
+	for i in range(3):
+		game.board.state.drawn_policies.append(game.board.policies.pop(0))
+	for policy in game.board.state.drawn_policies:
+		btns.append([InlineKeyboardButton(policy, callback_data=strcid + "_" + policy)])
+		hiddenhistory_text += policy + " "
+	hiddenhistory_text[:-1]
+	# Guardo Historial secreto
+	game.hiddenhistory.append(("Ronda %d.%d El presidente recibió " % (game.board.state.liberal_track + game.board.state.fascist_track + 1, game.board.state.failed_votes + 1) ) + hiddenhistory_text + "\n")        
+
+	choosePolicyMarkup = InlineKeyboardMarkup(btns)
 	if not game.is_debugging:
-		bot.send_message(game.board.state.president.uid,
-			     "Has robado las siguientes 3 politicas. Cual quieres descartar?",
-			     reply_markup=choosePolicyMarkup)
+		bot.send_message(game.board.state.president.uid, "Has robado las siguientes 3 politicas. Cual quieres descartar?",
+			reply_markup=choosePolicyMarkup)
 	else:
-		bot.send_message(ADMIN,
-			     "Has robado las siguientes 3 politicas. Cual quieres descartar?",
-			     reply_markup=choosePolicyMarkup)
+		bot.send_message(ADMIN, "Has robado las siguientes 3 politicas. Cual quieres descartar?",
+			reply_markup=choosePolicyMarkup)
 
 
 def choose_policy(bot, update):
