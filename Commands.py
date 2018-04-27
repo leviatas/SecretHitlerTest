@@ -533,7 +533,17 @@ def command_anarquia(bot, update):
 	except Exception as e:
 		bot.send_message(cid, str(e))
 		log.error("Unknown error: " + str(e))    
-
+		
+def command_prueba(bot, update):	
+	uid = update.message.from_user.id
+	if uid == ADMIN:
+		cid = update.message.chat_id
+		game = GamesController.games.get(cid, None)
+		history_text = "Historial Oculto:\n\n" 
+		for x in game.hiddenhistory:				
+			history_text += x + "\n\n"
+		bot.send_message(ADMIN, history_text, ParseMode.MARKDOWN)
+		
 def command_toggle_debugging(bot, update):
 	uid = update.message.from_user.id
 	if uid == ADMIN:
