@@ -294,13 +294,13 @@ def draw_policies(bot, game):
 
 
 def choose_policy(bot, update):
-        log.info('choose_policy called')
+	log.info('choose_policy called')
         callback = update.callback_query
         regex = re.search("(-[0-9]*)_(.*)", callback.data)
         cid = int(regex.group(1))
         answer = regex.group(2)
         try:
-                game = GamesController.games[cid]
+		game = GamesController.games[cid]
                 strcid = str(game.cid)
                 uid = callback.from_user.id
                 if len(game.board.state.drawn_policies) == 3:
