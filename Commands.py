@@ -546,7 +546,7 @@ def command_prueba(bot, update):
 		game = GamesController.games.get(cid, None)
 		history_text = "Historial Oculto:\n\n" 
 		for x in game.hiddenhistory:				
-			history_text += x + "\n\n"
+			history_text += x + "\n"
 		bot.send_message(ADMIN, history_text, ParseMode.MARKDOWN)
 		
 def command_toggle_debugging(bot, update):
