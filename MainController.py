@@ -770,15 +770,14 @@ def end_game(bot, game, game_endcode):
                         bot.send_message(game.cid, "Juego finalizado! Los liberales ganaron promulgando 5 políticas liberales!\n\n%s" % game.print_roles())
                 if game_endcode == 2:
                         bot.send_message(game.cid, "Juego finalizado! Los liberales ganaron matando a Hitler!\n\n%s" % game.print_roles())
-        showHiddenhistory(game.cid)
+        showHiddenhistory(bot, game)
         del GamesController.games[game.cid]
         Commands.delete_game(game.cid)
 
-def showHiddenhistory(cid):
+def showHiddenhistory(bot, game):
 	#game.pedrote = 3
 	try:
-		#Check if there is a current game		
-		game = GamesController.games.get(cid, None)
+		#Check if there is a current game
 		history_text = "Historial Oculto:\n\n" 
 		for x in game.hiddenhistory:				
 			history_text += x + "\n"
