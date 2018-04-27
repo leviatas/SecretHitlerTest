@@ -295,58 +295,58 @@ def draw_policies(bot, game):
 
 def choose_policy(bot, update):
 	log.info('choose_policy called')
-        callback = update.callback_query
-        regex = re.search("(-[0-9]*)_(.*)", callback.data)
-        cid = int(regex.group(1))
-        answer = regex.group(2)
-        try:
+	callback = update.callback_query
+	regex = re.search("(-[0-9]*)_(.*)", callback.data)
+	cid = int(regex.group(1))
+	answer = regex.group(2)
+	try:
 		game = GamesController.games[cid]
-                strcid = str(game.cid)
-                uid = callback.from_user.id
-                if len(game.board.state.drawn_policies) == 3:
-                        log.info("Player %s (%d) discarded %s" % (callback.from_user.first_name, uid, answer))
-                        bot.edit_message_text("La polítca %s va a ser descartada!" % answer, uid,
-                                                callback.message.message_id)
-                        # remove policy from drawn cards and add to discard pile, pass the other two policies
-                        # Grabo en Hidden History que descarta el presidente.
-                        game.hiddenhistory.append(("El presidente descartó " % (game.board.state.liberal_track + game.board.state.fascist_track + 1, game.board.state.failed_votes + 1) ) + answer + "\n")
-                        for i in range(3):
-                                if game.board.state.drawn_policies[i] == answer:
-                                        game.board.discards.append(game.board.state.drawn_policies.pop(i))                                
-                                        break
-                        pass_two_policies(bot, game)
-                elif len(game.board.state.drawn_policies) == 2:
-                        if answer == "veto":
-                                log.info("Player %s (%d) suggested a veto" % (callback.from_user.first_name, uid))
-                                bot.edit_message_text("Has sugerido vetas al Presidente %s" % game.board.state.president.name, uid,
-                                                        callback.message.message_id)
-                                bot.send_message(game.cid,
-                                                "El canciller %s sugirío Vetar al Presidente %s." % (
-                                                        game.board.state.chancellor.name, game.board.state.president.name))
+		strcid = str(game.cid)
+		uid = callback.from_user.id
+		if len(game.board.state.drawn_policies) == 3:
+			log.info("Player %s (%d) discarded %s" % (callback.from_user.first_name, uid, answer))
+			bot.edit_message_text("La polítca %s va a ser descartada!" % answer, uid,
+			callback.message.message_id)
+			# remove policy from drawn cards and add to discard pile, pass the other two policies
+			# Grabo en Hidden History que descarta el presidente.
+			game.hiddenhistory.append(("El presidente descartó " % (game.board.state.liberal_track + game.board.state.fascist_track + 1, game.board.state.failed_votes + 1) ) + answer + "\n")
+			for i in range(3):
+				if game.board.state.drawn_policies[i] == answer:
+					game.board.discards.append(game.board.state.drawn_policies.pop(i))                                
+					break
+			pass_two_policies(bot, game)
+		elif len(game.board.state.drawn_policies) == 2:
+			if answer == "veto":
+				log.info("Player %s (%d) suggested a veto" % (callback.from_user.first_name, uid))
+				bot.edit_message_text("Has sugerido vetas al Presidente %s" % game.board.state.president.name, uid,
+					callback.message.message_id)
+				bot.send_message(game.cid,
+					"El canciller %s sugirío Vetar al Presidente %s." % (
+					game.board.state.chancellor.name, game.board.state.president.name))
 
-                                btns = [[InlineKeyboardButton("Veto! (aceptar sugerencia)", callback_data=strcid + "_yesveto")],
-                                        [InlineKeyboardButton("No Veto! (rechazar sugerencia)", callback_data=strcid + "_noveto")]]
+				btns = [[InlineKeyboardButton("Veto! (aceptar sugerencia)", callback_data=strcid + "_yesveto")],
+				[InlineKeyboardButton("No Veto! (rechazar sugerencia)", callback_data=strcid + "_noveto")]]
 
-                                vetoMarkup = InlineKeyboardMarkup(btns)
-                                bot.send_message(game.board.state.president.uid,
-                                                "El canciller %s te sugirío Vetar. Quieres vetar (descartar) estas cartas?" % game.board.state.chancellor.name,
-                                                reply_markup=vetoMarkup)
-                        else:
-                                log.info("Player %s (%d) chose a %s policy" % (callback.from_user.first_name, uid, answer))
-                                bot.edit_message_text("La politica %s será promulgada!" % answer, uid,
-                                                        callback.message.message_id)
-                                # remove policy from drawn cards and enact, discard the other card
-                                for i in range(2):
-                                        if game.board.state.drawn_policies[i] == answer:
-                                                game.board.state.drawn_policies.pop(i)
-                                                break
-                                game.board.discards.append(game.board.state.drawn_policies.pop(0))
-                                assert len(game.board.state.drawn_policies) == 0
-                                enact_policy(bot, game, answer, False)
-                else:
-                        log.error("choose_policy: drawn_policies should be 3 or 2, but was " + str(
-                                len(game.board.state.drawn_policies)))
-        except Exception as e:
+				vetoMarkup = InlineKeyboardMarkup(btns)
+				bot.send_message(game.board.state.president.uid,
+					"El canciller %s te sugirío Vetar. Quieres vetar (descartar) estas cartas?" % game.board.state.chancellor.name,
+					reply_markup=vetoMarkup)
+			else:
+				log.info("Player %s (%d) chose a %s policy" % (callback.from_user.first_name, uid, answer))
+				bot.edit_message_text("La politica %s será promulgada!" % answer, uid,
+				callback.message.message_id)
+				# remove policy from drawn cards and enact, discard the other card
+				for i in range(2):
+					if game.board.state.drawn_policies[i] == answer:
+						game.board.state.drawn_policies.pop(i)
+						break
+				game.board.discards.append(game.board.state.drawn_policies.pop(0))
+				assert len(game.board.state.drawn_policies) == 0
+				enact_policy(bot, game, answer, False)
+		else:
+			log.error("choose_policy: drawn_policies should be 3 or 2, but was " + str(
+				len(game.board.state.drawn_policies)))
+	except Exception as e:
 		log.error("choose_policy:" + str(e))
 
 def pass_two_policies(bot, game):
