@@ -927,7 +927,7 @@ def main():
 	dp.add_handler(CommandHandler("claim", Commands.command_claim, pass_args = True))
 	dp.add_handler(CommandHandler("reload", Commands.command_reloadgame))
 	dp.add_handler(CommandHandler("debug", Commands.command_toggle_debugging))
-	dp.add_handler(CommandHandler("anarquia", Commands.command_anarquia))
+	dp.add_handler(CommandHandler("anarchy", Commands.command_anarquia))
 
 	#Testing commands
 	dp.add_handler(CommandHandler("ja", Commands.command_ja))
