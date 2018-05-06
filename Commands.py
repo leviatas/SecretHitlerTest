@@ -230,6 +230,7 @@ def command_join(bot, update, args):
 			for uid in game.playerlist:
 				jugadoresActuales += "%s\n" % game.playerlist[uid].name
 			bot.send_message(game.cid, jugadoresActuales)
+			save_game(cid, "Game in join state", game)
 		except Exception:
 			bot.send_message(game.cid,
 				fname + ", No te puedo enviar un mensaje privado. Por favor, ve a @secrethitlertestlbot y has pincha \"Start\".\nLuego necesitas escribir /join de nuevo.")
