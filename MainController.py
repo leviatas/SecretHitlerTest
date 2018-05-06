@@ -938,6 +938,8 @@ def main():
 	dp.add_handler(CommandHandler("debug", Commands.command_toggle_debugging))
 	dp.add_handler(CommandHandler("anarchy", Commands.command_anarquia))
 	dp.add_handler(CommandHandler("prueba", Commands.command_prueba))
+	
+	dp.add_handler(CommandHandler("jugadores", Commands.command_jugadores))
 
 	#Testing commands
 	dp.add_handler(CommandHandler("ja", Commands.command_ja))
