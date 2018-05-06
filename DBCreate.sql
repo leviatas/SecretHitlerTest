@@ -1,6 +1,7 @@
 --DROP TABLE IF EXISTS users;
 --DROP TABLE IF EXISTS games;
 
+
 CREATE TABLE IF NOT EXISTS users (
     id bigint PRIMARY KEY,
     name text NOT NULL
