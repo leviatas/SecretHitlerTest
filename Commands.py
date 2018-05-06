@@ -444,10 +444,12 @@ def load_game(cid):
 		for uid in game.playerlist:
 			temp_player_list[int(uid)] = game.playerlist[uid]
 		game.playerlist = temp_player_list
-		temp_last_votes = {}	
-		for uid in game.board.state.last_votes:
-			temp_last_votes[int(uid)] = game.board.state.last_votes[uid]
-		game.board.state.last_votes = temp_last_votes
+		
+		if game.board is not None and game.board.state is not None:
+			temp_last_votes = {}	
+			for uid in game.board.state.last_votes:
+				temp_last_votes[int(uid)] = game.board.state.last_votes[uid]
+			game.board.state.last_votes = temp_last_votes
 		#bot.send_message(cid, game.print_roles())
 		return game
 	else:
