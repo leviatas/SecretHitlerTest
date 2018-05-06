@@ -563,3 +563,13 @@ def command_toggle_debugging(bot, update):
 		# Informo que el modo de debugging ha cambiado
 		game.is_debugging = True if not game.is_debugging else False
 		bot.send_message(cid, "Debug Mode: ON" if game.is_debugging else "Debug Mode: OFF")
+
+def command_jugadores(bot, update):	
+	uid = update.message.from_user.id
+	cid = update.message.chat_id
+	game = GamesController.games.get(cid, None)
+	jugadoresActuales = "Los jugadores que se han unido al momento son:\n"
+	for uid in game.playerlist:
+		jugadoresActuales += "%s\n" % game.playerlist[uid].name
+					
+	bot.send_message(game.cid, jugadoresActuales)	
