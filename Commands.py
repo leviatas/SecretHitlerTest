@@ -85,7 +85,7 @@ def command_board(bot, update):
 		bot.send_message(cid, "No hay juego en este chat. Crea un nuevo juego con /newgame")
 
 def print_board(bot, game, target):
-	bot.send_message(target, game.board.print_board(game.player_sequence))
+	bot.send_message(target, game.board.print_board(game.player_sequence), ParseMode.MARKDOWN)
 		
 def command_start(bot, update):
     cid = update.message.chat_id
