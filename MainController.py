@@ -80,7 +80,7 @@ def start_round(bot, game):
 
 	Commands.print_board(bot, game, game.cid)
 	msgtext =  "El próximo candidato a presidente es [%s](tg://user?id=%d).\n%s, por favor nomina a un canciller en nuestro chat privado!" % (game.board.state.nominated_president.name, game.board.state.nominated_president.uid, game.board.state.nominated_president.name)
-	bot.send_message(game.cid, msgtext, ParseMode.MARKDOWN)
+	bot.send_message(game.cid, msgtext.replace("_", " "), ParseMode.MARKDOWN)
 	choose_chancellor(bot, game)
 	# --> nominate_chosen_chancellor --> vote --> handle_voting --> count_votes --> voting_aftermath --> draw_policies
 	# --> choose_policy --> pass_two_policies --> choose_policy --> enact_policy --> start_round
@@ -114,7 +114,7 @@ def choose_chancellor(bot, game):
 	#descomentar al entrar en produccion
 
 	if game.is_debugging:
-		bot.send_message(ADMIN, game.board.print_board(game.player_sequence), ParseMode.MARKDOWN)
+		Commands.print_board(bot, game, ADMIN)
 		bot.send_message(ADMIN, 'Por favor nomina a tu canciller!', reply_markup=chancellorMarkup)      
 	else:
 		Commands.print_board(bot, game, game.board.state.nominated_president.uid)
@@ -227,7 +227,7 @@ def count_votes(bot, game):
         game.board.state.nominated_president = None
         game.board.state.nominated_chancellor = None
         voting_success = True
-        bot.send_message(game.cid, voting_text.replace("_", ""), ParseMode.MARKDOWN)
+        bot.send_message(game.cid, voting_text.replace("_", " "), ParseMode.MARKDOWN)
         bot.send_message(game.cid, "\nNo se puede hablar ahora.")
         game.history.append(("Ronda %d.%d\n\n" % (game.board.state.liberal_track + game.board.state.fascist_track + 1, game.board.state.failed_votes + 1) ) + voting_text)
         #log.info(game.history[game.board.state.currentround])
@@ -508,19 +508,19 @@ def action_policy(bot, game):
 
 
 def action_kill(bot, game):
-    log.info('action_kill called')
-    strcid = str(game.cid)
-    btns = []
-    for uid in game.playerlist:
-        if uid != game.board.state.president.uid and game.playerlist[uid].is_dead == False:
-            name = game.playerlist[uid].name
-            btns.append([InlineKeyboardButton(name, callback_data=strcid + "_kill_" + str(uid))])
+	log.info('action_kill called')
+	strcid = str(game.cid)
+	btns = []
+	for uid in game.playerlist:
+		if uid != game.board.state.president.uid and game.playerlist[uid].is_dead == False:
+			name = game.playerlist[uid].name
+			btns.append([InlineKeyboardButton(name, callback_data=strcid + "_kill_" + str(uid))])
 
-    killMarkup = InlineKeyboardMarkup(btns)
-    bot.send_message(game.board.state.president.uid, game.board.print_board(game.player_sequence), ParseMode.MARKDOWN)
-    bot.send_message(game.board.state.president.uid,
-                     'Tienes que matar a una persona. Puedes discutir tu decisión con los otros. Elige sabiamente!',
-                     reply_markup=killMarkup)
+	killMarkup = InlineKeyboardMarkup(btns)
+	Commands.print_board(bot, game, game.board.state.president.uid)
+	bot.send_message(game.board.state.president.uid,
+		'Tienes que matar a una persona. Puedes discutir tu decisión con los otros. Elige sabiamente!',
+		reply_markup=killMarkup)
 
 
 def choose_kill(bot, update):
@@ -547,7 +547,7 @@ def choose_kill(bot, update):
             bot.send_message(game.cid,
                              "El Presidente %s ha matado a %s que no era Hitler. %s, ahora estás muerto y no puedes hablar más!" % (
                                  game.board.state.president.name, chosen.name, chosen.name))
-            bot.send_message(game.cid, game.board.print_board(game.player_sequence), ParseMode.MARKDOWN)
+            
             game.history.append("\n\nEl Presidente %s ha matado a %s que no era Hitler!" % (game.board.state.president.name, chosen.name))
             start_next_round(bot, game)
     except:
@@ -565,7 +565,7 @@ def action_choose(bot, game):
             btns.append([InlineKeyboardButton(name, callback_data=strcid + "_choo_" + str(uid))])
 
     inspectMarkup = InlineKeyboardMarkup(btns)
-    bot.send_message(game.board.state.president.uid, game.board.print_board(game.player_sequence), ParseMode.MARKDOWN)
+    Commands.print_board(bot, game, game.board.state.president.uid)
     bot.send_message(game.board.state.president.uid,
                      'Puedes elegir al próximo candidato a presidente. Después el orden vuelve a la normalidad. Elige sabiamente!',
                      reply_markup=inspectMarkup)
@@ -605,7 +605,7 @@ def action_inspect(bot, game):
             btns.append([InlineKeyboardButton(name, callback_data=strcid + "_insp_" + str(uid))])
 
     inspectMarkup = InlineKeyboardMarkup(btns)
-    bot.send_message(game.board.state.president.uid, game.board.print_board(game.player_sequence), ParseMode.MARKDOWN)
+    Commands.print_board(bot, game, game.board.state.president.uid)
     bot.send_message(game.board.state.president.uid,
                      'Puedes ver la afiliación política de un jugador. A quien quieres elegir? Elige sabiamente!',
                      reply_markup=inspectMarkup)
@@ -658,8 +658,7 @@ def decide_anarquia(bot, game):
 	for uid in game.playerlist:
 		if not game.is_debugging:
 			if not game.playerlist[uid].is_dead:                      
-				Commands.print_board(bot, game, uid)
-				bot.send_message(uid, game.board.print_board(game.player_sequence), ParseMode.MARKDOWN)
+				Commands.print_board(bot, game, uid)				
 				bot.send_message(uid, "¿Quieres ir a anarquia? (CUIDADO si la mitad de los jugadores elige SI no se espera)", reply_markup=voteMarkup)
 		else:
 			bot.send_message(ADMIN, game.board.print_board(game.player_sequence))
@@ -719,7 +718,7 @@ def count_votes_anarquia(bot, game):
 		voting_text += "Debido a que la mayoria de los jugador ha decidido ir a anarquia se ejecuta la anarquia."		
 		game.board.state.nominated_president = None
 		game.board.state.nominated_chancellor = None
-		bot.send_message(game.cid, voting_text, ParseMode.MARKDOWN)
+		bot.send_message(game.cid, voting_text.replace("_", " "), ParseMode.MARKDOWN)
 		bot.send_message(game.cid, "\nNo se puede hablar ahora.")
 		game.history.append(("Ronda %d.%d\n\n" % (game.board.state.liberal_track + game.board.state.fascist_track + 1, game.board.state.failed_votes + 1) ) + voting_text)
 		# Avanzo la cantidad del lider asi el lider queda correctamente asignado
@@ -732,7 +731,7 @@ def count_votes_anarquia(bot, game):
 		voting_text += "Al no quiso ir a anarquia"
 		game.board.state.nominated_president = None
 		game.board.state.nominated_chancellor = None
-		bot.send_message(game.cid, voting_text, ParseMode.MARKDOWN)
+		bot.send_message(game.cid, voting_text.replace("_", " "), ParseMode.MARKDOWN)
 		game.history.append(("Ronda %d.%d\n\n" % (game.board.state.liberal_track + game.board.state.fascist_track + 1, game.board.state.failed_votes + 1) ) + voting_text)
 		#game.board.state.failed_votes == 3
 		
@@ -779,7 +778,7 @@ def showHiddenhistory(bot, game):
 		history_text = "Historial Oculto:\n\n" 
 		for x in game.hiddenhistory:				
 			history_text += x + "\n"
-		bot.send_message(game.cid, history_text, ParseMode.MARKDOWN)
+		bot.send_message(game.cid, history_text.replace("_", " "), ParseMode.MARKDOWN)
 	except Exception as e:
 		bot.send_message(cid, str(e))
 		log.error("Unknown error: " + str(e)) 
