@@ -49,6 +49,7 @@ class Board(object):
 
         board += "\n--- Orden Presidencial  ---\n"        
         for player in player_sequence:
+            nombre = player.name.replace("_", "")
             if self.state.nominated_president == player:
                 board += "*" + player.name + "*" + " " + u"\u27A1\uFE0F" + " "
             else:
