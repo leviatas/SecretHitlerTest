@@ -49,11 +49,11 @@ class Board(object):
 
         board += "\n--- Orden Presidencial  ---\n"        
         for player in player_sequence:
-            nombre = player.name.replace("_", "")
+            nombre = player.name.replace("_", " ")
             if self.state.nominated_president == player:
-                board += "*" + player.name + "*" + " " + u"\u27A1\uFE0F" + " "
+                board += "*" + nombre + "*" + " " + u"\u27A1\uFE0F" + " "
             else:
-                board += player.name + " " + u"\u27A1\uFE0F" + " "
+                board += nombre + " " + u"\u27A1\uFE0F" + " "
         board = board[:-3]
         board += u"\U0001F501"
         board += "\n\nHay " + str(len(self.policies)) + " politicas restantes en el mazo de politicas."
