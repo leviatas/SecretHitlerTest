@@ -117,7 +117,8 @@ def choose_chancellor(bot, game):
 		bot.send_message(ADMIN, game.board.print_board(game.player_sequence), ParseMode.MARKDOWN)
 		bot.send_message(ADMIN, 'Por favor nomina a tu canciller!', reply_markup=chancellorMarkup)      
 	else:
-		bot.send_message(game.board.state.nominated_president.uid, game.board.print_board(game.player_sequence), ParseMode.MARKDOWN)
+		Commands.print_board(bot, game, game.board.state.nominated_president.uid)
+		
 		bot.send_message(game.board.state.nominated_president.uid, 'Por favor nomina a tu canciller!', reply_markup=chancellorMarkup)
 
 def nominate_chosen_chancellor(bot, update):
