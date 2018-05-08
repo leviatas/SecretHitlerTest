@@ -79,8 +79,8 @@ def start_round(bot, game):
 		game.board.state.chosen_president = None
 
 	Commands.print_board(bot, game, game.cid)
-	msgtext =  "El próximo candidato a presidente es [%s](tg://user?id=%d).\n%s, por favor nomina a un canciller en nuestro chat privado!" % (game.board.state.nominated_president.name, game.board.state.nominated_president.uid, game.board.state.nominated_president.name)
-	bot.send_message(game.cid, msgtext.replace("_", " "), ParseMode.MARKDOWN)
+	msgtext =  "El próximo candidato a presidente es [%s](tg://user?id=%d).\n%s, por favor nomina a un canciller en nuestro chat privado!" % (game.board.state.nominated_president.name, game.board.state.nominated_president.uid, game.board.state.nominated_president.name.replace("_", " "))
+	bot.send_message(game.cid, msgtext, ParseMode.MARKDOWN)
 	choose_chancellor(bot, game)
 	# --> nominate_chosen_chancellor --> vote --> handle_voting --> count_votes --> voting_aftermath --> draw_policies
 	# --> choose_policy --> pass_two_policies --> choose_policy --> enact_policy --> start_round
@@ -211,10 +211,11 @@ def count_votes(bot, game):
     voting_text = ""
     voting_success = False
     for player in game.player_sequence:
+	nombre_jugador = game.playerlist[player.uid].name.replace("_", " ")
         if game.board.state.last_votes[player.uid] == "Ja":
-            voting_text += game.playerlist[player.uid].name + " votó Ja!\n"
+            voting_text += nombre_jugador + " votó Ja!\n"
         elif game.board.state.last_votes[player.uid] == "Nein":
-            voting_text += game.playerlist[player.uid].name + " votó Nein!\n"
+            voting_text += nombre_jugador + " votó Nein!\n"
     if list(game.board.state.last_votes.values()).count("Ja") > (
         len(game.player_sequence) / 2):  # because player_sequence doesnt include dead
         # VOTING WAS SUCCESSFUL
@@ -227,7 +228,7 @@ def count_votes(bot, game):
         game.board.state.nominated_president = None
         game.board.state.nominated_chancellor = None
         voting_success = True
-        bot.send_message(game.cid, voting_text.replace("_", " "), ParseMode.MARKDOWN)
+        bot.send_message(game.cid, voting_text, ParseMode.MARKDOWN)
         bot.send_message(game.cid, "\nNo se puede hablar ahora.")
         game.history.append(("Ronda %d.%d\n\n" % (game.board.state.liberal_track + game.board.state.fascist_track + 1, game.board.state.failed_votes + 1) ) + voting_text)
         #log.info(game.history[game.board.state.currentround])
@@ -282,7 +283,7 @@ def draw_policies(bot, game):
 		hiddenhistory_text += policy.title() + " "
 	hiddenhistory_text[:-1]
 	# Guardo Historial secreto
-	game.hiddenhistory.append(("*Ronda %d.%d*\nEl presidente %s recibió " % (game.board.state.liberal_track + game.board.state.fascist_track + 1, game.board.state.failed_votes + 1, game.board.state.president.name) ) + hiddenhistory_text)
+	game.hiddenhistory.append(("*Ronda %d.%d*\nEl presidente %s recibió " % (game.board.state.liberal_track + game.board.state.fascist_track + 1, game.board.state.failed_votes + 1, game.board.state.president.name.replace("_", " ")) ) + hiddenhistory_text)
 	choosePolicyMarkup = InlineKeyboardMarkup(btns)
 	if not game.is_debugging:
 		bot.send_message(game.board.state.president.uid, "Has robado las siguientes 3 politicas. Cual quieres descartar?",
@@ -708,10 +709,11 @@ def count_votes_anarquia(bot, game):
 	voting_text = ""
 	voting_success = False
 	for player in game.player_sequence:
+		nombre_jugador = game.playerlist[player.uid].name.replace("_", " ")
 		if game.board.state.votes_anarquia[player.uid] == "Si":
-			voting_text += game.playerlist[player.uid].name + " votó Ja!\n"
+			voting_text += nombre_jugador + " votó Ja!\n"
 		elif game.board.state.votes_anarquia[player.uid] == "No":
-			voting_text += game.playerlist[player.uid].name + " votó Nein!\n"
+			voting_text += nombre_jugador + " votó Nein!\n"
 	if list(game.board.state.votes_anarquia.values()).count("Si") >= (len(game.player_sequence) / 2):  # because player_sequence doesnt include dead
 		# VOTING WAS SUCCESSFUL
 		log.info("Vamos a anarquia!")
@@ -778,7 +780,7 @@ def showHiddenhistory(bot, game):
 		history_text = "Historial Oculto:\n\n" 
 		for x in game.hiddenhistory:				
 			history_text += x + "\n"
-		bot.send_message(game.cid, history_text.replace("_", " "), ParseMode.MARKDOWN)
+		bot.send_message(game.cid, history_text, ParseMode.MARKDOWN)
 	except Exception as e:
 		bot.send_message(cid, str(e))
 		log.error("Unknown error: " + str(e)) 
