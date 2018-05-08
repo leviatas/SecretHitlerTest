@@ -189,13 +189,13 @@ def command_join(bot, update, args):
 	game = GamesController.games.get(cid, None)
 	if len(args) <= 0:
 		# if not args, use normal behaviour
-		fname = update.message.from_user.first_name
+		fname = update.message.from_user.first_name.replace("_", " ")
 		uid = update.message.from_user.id
 	else:
 		uid = update.message.from_user.id
 		if uid == ADMIN:
 			for i,k in zip(args[0::2], args[1::2]):
-				fname = i
+				fname = i.replace("_", " ")
 				uid = int(k)
 				player = Player(fname, uid)
 				game.add_player(uid, player)
@@ -547,7 +547,11 @@ def command_prueba(bot, update):
 	if uid == ADMIN:
 		cid = update.message.chat_id
 		game = GamesController.games.get(cid, None)
-		MainController.showHiddenhistory(bot, game)
+		
+		for player in game.playerlist:
+			player.name = player.name.replace("_", " ")
+		.replace("_", " ")
+		#MainController.showHiddenhistory(bot, game)
 		'''game = GamesController.games.get(cid, None)
 		history_text = "Historial Oculto:\n\n" 
 		for x in game.hiddenhistory:				
