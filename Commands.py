@@ -550,7 +550,7 @@ def command_prueba(bot, update):
 		
 		for player in game.playerlist:
 			player.name = player.name.replace("_", " ")
-		.replace("_", " ")
+		
 		#MainController.showHiddenhistory(bot, game)
 		'''game = GamesController.games.get(cid, None)
 		history_text = "Historial Oculto:\n\n" 
