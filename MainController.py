@@ -211,7 +211,7 @@ def count_votes(bot, game):
 	voting_text = ""
 	voting_success = False
 	for player in game.player_sequence:
-		nombre_jugador = game.playerlist[player.uid].name
+		nombre_jugador = game.playerlist[player.uid].name.replace("_", " ")
 		if game.board.state.last_votes[player.uid] == "Ja":
 			voting_text += nombre_jugador + " votó Ja!\n"
 		elif game.board.state.last_votes[player.uid] == "Nein":
