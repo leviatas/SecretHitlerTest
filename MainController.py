@@ -228,7 +228,7 @@ def count_votes(bot, game):
 		game.board.state.nominated_president = None
 		game.board.state.nominated_chancellor = None
 		voting_success = True
-		bot.send_message(ADMIN, voting_text)
+		
 		bot.send_message(game.cid, voting_text, ParseMode.MARKDOWN)
 		bot.send_message(game.cid, "\nNo se puede hablar ahora.")
 		game.history.append(("Ronda %d.%d\n\n" % (game.board.state.liberal_track + game.board.state.fascist_track + 1, game.board.state.failed_votes + 1) ) + voting_text)
