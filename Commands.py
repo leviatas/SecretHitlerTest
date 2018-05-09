@@ -548,8 +548,8 @@ def command_prueba(bot, update):
 		cid = update.message.chat_id
 		game = GamesController.games.get(cid, None)
 		
-		for player in game.playerlist:
-			player.name = player.name.replace("_", " ")
+		for uid in game.playerlist:
+			game.playerlist[uid].name = game.playerlist[uid].name.replace("_", " ")
 		
 		#MainController.showHiddenhistory(bot, game)
 		'''game = GamesController.games.get(cid, None)
