@@ -393,7 +393,7 @@ def enact_policy(bot, game, policy, anarchy):
         bot.send_message(game.cid,
                          "El Presidente %s y el Canciller %s promulgaron una política %s!" % (
                              game.board.state.president.name, game.board.state.chancellor.name, policy))
-        game.history.append("\n\nEl Presidente %s y el Canciller %s promulgaron una política %s!" % (
+        game.history.append("El Presidente %s y el Canciller %s promulgaron una política %s!" % (
                              game.board.state.president.name, game.board.state.chancellor.name, policy))
     else:
         bot.send_message(game.cid,
@@ -872,7 +872,7 @@ def increment_player_counter(game):
 def shuffle_policy_pile(bot, game):
 	log.info('shuffle_policy_pile called')
 	if len(game.board.policies) < 3:
-		game.history[game.board.state.currentround] += "\n\nNo habia cartas suficientes en el mazo de políticas asi que he mezclado el resto con el mazo de descarte!"
+		game.history.append("\n\nNo habia cartas suficientes en el mazo de políticas asi que he mezclado el resto con el mazo de descarte!")
 		game.hiddenhistory.append("No habia cartas suficientes en el mazo de políticas asi que he mezclado el resto con el mazo de descarte!")
 		game.board.discards += game.board.policies
 		game.board.policies = random.sample(game.board.discards, len(game.board.discards))
