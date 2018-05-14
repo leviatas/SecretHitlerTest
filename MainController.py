@@ -398,7 +398,7 @@ def enact_policy(bot, game, policy, anarchy):
     else:
         bot.send_message(game.cid,
                          "La política en la cima del mazo ha sido promulgada y es %s" % policy)
-        game.history.append("\n\nLa política en la cima del mazo ha sido promulgada y es %s" % policy)
+        game.history.append("La política en la cima del mazo ha sido promulgada y es %s" % policy)
     sleep(3)    
     # end of round
     if game.board.state.liberal_track == 5:
@@ -423,7 +423,7 @@ def enact_policy(bot, game, policy, anarchy):
                                                                                               "en el mazo. El Presidente puede compartir "
                                                                                               "(o mentir al respecto!) los resultados de su "
                                                                                               "investigación a su propia discreción." % game.board.state.president.name)
-                game.history.append("\n\nEl presidente %s ahora conoce las proximas 3 políticas en el mazo." % game.board.state.president.name)
+                game.history.append("El presidente %s ahora conoce las proximas 3 políticas en el mazo." % game.board.state.president.name)
                 action_policy(bot, game)                
             elif action == "kill":
                 bot.send_message(game.cid,
@@ -550,7 +550,7 @@ def choose_kill(bot, update):
                              "El Presidente %s ha matado a %s que no era Hitler. %s, ahora estás muerto y no puedes hablar más!" % (
                                  game.board.state.president.name, chosen.name, chosen.name))
             
-            game.history.append("\n\nEl Presidente %s ha matado a %s que no era Hitler!" % (game.board.state.president.name, chosen.name))
+            game.history.append("El Presidente %s ha matado a %s que no era Hitler!" % (game.board.state.president.name, chosen.name))
             start_next_round(bot, game)
     except:
         log.error("choose_kill: Game or board should not be None!")
@@ -631,7 +631,7 @@ def choose_inspect(bot, update):
                               callback.message.message_id)
         chosen.was_investigated = True
         bot.send_message(game.cid, "El Presidente %s ha inspeccionado a %s." % (game.board.state.president.name, chosen.name))
-        game.history.append("\n\nEl President %s ha inspeccionado a %s." % (game.board.state.president.name, chosen.name))
+        game.history.append("El President %s ha inspeccionado a %s." % (game.board.state.president.name, chosen.name))
         start_next_round(bot, game)
     except:
         log.error("choose_inspect: Game or board should not be None!")
