@@ -591,7 +591,7 @@ def choose_choose(bot, update):
         bot.send_message(game.cid,
                          "El Presidente %s ha elegido a %s como próximo presidente." % (
                              game.board.state.president.name, chosen.name))
-        game.history.append("\n\nEl Presidente %s ha elegido a %s como próximo presidente." % (game.board.state.president.name, chosen.name))
+        game.history.append("El Presidente %s ha elegido a %s como próximo presidente." % (game.board.state.president.name, chosen.name))
         start_next_round(bot, game)
     except:
         log.error("choose_choose: Game or board should not be None!")
