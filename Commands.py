@@ -259,7 +259,7 @@ def command_startgame(bot, update):
 		log.info("len(games) Command_startgame: " + str(len(GamesController.games)))
 		game.shuffle_player_sequence()
 		game.board.state.player_counter = 0
-		print_board(bot, game, cid)
+		#print_board(bot, game, cid)
 		#group_name = update.message.chat.title
 		#bot.send_message(ADMIN, "Game of Secret Hitler started in group %s (%d)" % (group_name, cid))		
 		MainController.start_round(bot, game)
