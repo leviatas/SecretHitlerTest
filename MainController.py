@@ -696,9 +696,10 @@ def handle_voting_anarquia(bot, update):
 		
 		if len(game.board.state.votes_anarquia) == len(game.player_sequence):
 			count_votes_anarquia(bot, game)
-		elif list(game.board.state.votes_anarquia.values()).count("Si") >= (len(game.player_sequence) / 2):
+		'''elif list(game.board.state.votes_anarquia.values()).count("Si") >= (len(game.player_sequence) / 2):
 			# Caso especial si ya la mitad o mas de los jugadores decidio ir a anarquia se va no más.
 			count_votes_anarquia(bot, game)
+		'''
 	except Exception as e:
 		log.error(str(e))
 
