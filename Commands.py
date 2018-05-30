@@ -578,6 +578,6 @@ def command_jugadores(bot, update):
 	game = GamesController.games.get(cid, None)
 	jugadoresActuales = "Los jugadores que se han unido al momento son:\n"
 	for uid in game.playerlist:
-		jugadoresActuales += "%s\n" % game.playerlist[uid].name
+		jugadoresActuales += "[%s](tg://user?id=%d)\n" % (game.playerlist[uid].name, uid)
 					
 	bot.send_message(game.cid, jugadoresActuales)	
