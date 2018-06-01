@@ -580,4 +580,4 @@ def command_jugadores(bot, update):
 	for uid in game.playerlist:
 		jugadoresActuales += "[%s](tg://user?id=%d)\n" % (game.playerlist[uid].name, uid)
 					
-	bot.send_message(game.cid, jugadoresActuales)	
+	bot.send_message(game.cid, jugadoresActuales, ParseMode.MARKDOWN)	
