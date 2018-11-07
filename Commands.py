@@ -381,7 +381,7 @@ def command_claim(bot, update, args):
 			uid = update.message.from_user.id
 			game = GamesController.games.get(cid, None)			
 			if uid in game.playerlist:				
-				if game.board.state.currentround != 0:
+				if (game.board.state.liberal_track + game.board.state.fascist_track) > 0:
 					if len(args) > 0:
 						#Data is being claimed
 						claimtext = ' '.join(args)
@@ -392,7 +392,7 @@ def command_claim(bot, update, args):
 						bot.send_message(cid, "Debes mandar un mensaje para hacer una declaración.")
 
 				else:
-					bot.send_message(cid, "No puedes hacer declaraciones en la primera ronda.")
+					bot.send_message(cid, "No puedes hacer sin promulgar al menos una política.")
 			else:
 				bot.send_message(cid, "Debes ser un jugador del partido para declarar algo.")
 				
