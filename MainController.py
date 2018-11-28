@@ -22,6 +22,7 @@ import datetime
 
 import os
 import psycopg2
+from psycopg2 import sql
 import urllib.parse
 
 # Enable logging
@@ -763,7 +764,9 @@ def get_stats(bot, cid):
 def set_stats(column_name, value, bot, cid):
 	try:
 		cursor = conn.cursor()
-		cursor.execute("UPDATE stats SET %s=%s", (column_name, value));
+		#cursor.execute("UPDATE stats SET %s=%s", (column_name, value));		
+		cursor.execute(sql.SQL("UPDATE stats set {}=%s ").format(sql.Identifier(column_name)), value)
+		
 		conn.commit()
 	except Exception as e:
 		bot.send_message(cid, 'No se ejecuto el comandoset_stats debido a: '+str(e))
