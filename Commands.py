@@ -581,3 +581,32 @@ def command_jugadores(bot, update):
 		jugadoresActuales += "[%s](tg://user?id=%d)\n" % (game.playerlist[uid].name, uid)
 					
 	bot.send_message(game.cid, jugadoresActuales, ParseMode.MARKDOWN)	
+		
+def command_newgame_sql_command(bot, update, args):
+	cid, uid = update.message.chat_id, update.message.from_user.id
+	if uid == ADMIN:
+		try:
+			#Check if game is in DB first
+			cursor = conn.cursor()			
+			log.info("Executing in DB")
+			#query = "select * from games;"
+			query = " ".join(args)
+			cursor.execute(query)
+			#dbdata = cur.fetchone()
+			if cursor.rowcount > 0:
+				bot.send_message(cid, 'Resultado de la consulta:')
+				for table in cursor.fetchall():
+					#bot.send_message(cid, len(str(table)))
+					tabla_str = str(table)
+					# Si supera el maximo de caracteres lo parto
+					if len(tabla_str) < 4096:
+						bot.send_message(cid, table)
+					else:
+						bot.send_message(cid, tabla_str[:-4090])
+						bot.send_message(cid, tabla_str[4090:])
+			else:
+				bot.send_message(cid, 'No se obtuvo nada de la consulta')
+		except Exception as e:
+			bot.send_message(cid, 'No se ejecuto el comando debido a: '+str(e))
+			conn.rollback()
+
