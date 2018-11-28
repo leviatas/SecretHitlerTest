@@ -782,27 +782,27 @@ def end_game(bot, game, game_endcode):
 	stats = get_stats()
 	if game_endcode == 99:
 		if GamesController.games[game.cid].board is not None:
-                        bot.send_message(game.cid, "Juego cancelado!\n\n%s" % game.print_roles())
-                else:
-                        bot.send_message(game.cid, "Juego cancelado!")
+			bot.send_message(game.cid, "Juego cancelado!\n\n%s" % game.print_roles())
+		else:
+			bot.send_message(game.cid, "Juego cancelado!")
 		set_stats("cancelgame", stats[5] + 1)
-        else:
-                if game_endcode == -2:
-                        bot.send_message(game.cid, "Juego finalizado! Los fascistas ganaron eligiendo a Hitler como Canciller!\n\n%s" % game.print_roles())
+	else:
+		if game_endcode == -2:
+			bot.send_message(game.cid, "Juego finalizado! Los fascistas ganaron eligiendo a Hitler como Canciller!\n\n%s" % game.print_roles())
 			set_stats("fascistwinhitler", stats[1] + 1)
-                if game_endcode == -1:
-                        bot.send_message(game.cid, "Juego finalizado! Los fascistas ganaron promulgando 6 políticas fascistas!\n\n%s" % game.print_roles())
+		if game_endcode == -1:
+			bot.send_message(game.cid, "Juego finalizado! Los fascistas ganaron promulgando 6 políticas fascistas!\n\n%s" % game.print_roles())
 			set_stats("fascistwinpolicies", stats[2] + 1)
-                if game_endcode == 1:
-                        bot.send_message(game.cid, "Juego finalizado! Los liberales ganaron promulgando 5 políticas liberales!\n\n%s" % game.print_roles())
+		if game_endcode == 1:
+			bot.send_message(game.cid, "Juego finalizado! Los liberales ganaron promulgando 5 políticas liberales!\n\n%s" % game.print_roles())
 			set_stats("liberalwinpolicies", stats[3] + 1)
-                if game_endcode == 2:
-                        bot.send_message(game.cid, "Juego finalizado! Los liberales ganaron matando a Hitler!\n\n%s" % game.print_roles())
-			set_stats("liberalwinkillhitler", stats[4] + 1)			
-        showHiddenhistory(bot, game)
-        del GamesController.games[game.cid]
-        Commands.delete_game(game.cid)
-
+		if game_endcode == 2:
+			bot.send_message(game.cid, "Juego finalizado! Los liberales ganaron matando a Hitler!\n\n%s" % game.print_roles())
+			set_stats("liberalwinkillhitler", stats[4] + 1)
+		showHiddenhistory(bot, game)
+	del GamesController.games[game.cid]
+	Commands.delete_game(game.cid)
+	
 def showHiddenhistory(bot, game):
 	#game.pedrote = 3
 	try:
