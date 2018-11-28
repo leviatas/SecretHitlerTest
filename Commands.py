@@ -122,10 +122,10 @@ def command_stats(bot, update):
 	if uid == ADMIN:
 		stats = MainController.get_stats(bot, cid)		
 		stattext = "+++ Statistics +++\n" + \
-				"Victorias Liberales (politicas): " + str(stats[3]) + "\n" + \
-				"Victorias Liberales (mataron a Hitler): " + str(stats[4]) + "\n" + \
-				"Victorias Fascistas (politicas): " + str(stats[2]) + "\n" + \
-				"Victorias Fascistas (Hitler canciller): " + str(stats[1]) + "\n" + \
+				"Triunfo Liberal (Politicas): " + str(stats[3]) + "\n" + \
+				"Triunfo Liberal (Muere Hitler): " + str(stats[4]) + "\n" + \
+				"Triunfo Fascista (Politicas): " + str(stats[2]) + "\n" + \
+				"Triunfo Fascista (Hitler canciller): " + str(stats[1]) + "\n" + \
 				"Juegos cancelados: " + str(stats[5]) + "\n\n"		
 		bot.send_message(cid, stattext)
 		
