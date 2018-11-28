@@ -768,19 +768,17 @@ def set_stats(column_name, value):
 	except Exception as e:
 		bot.send_message(cid, 'No se ejecuto el comandoset_stats debido a: '+str(e))
 		conn.rollback()	
-		
+##
+# game_endcode:
+#   -2  fascists win by electing Hitler as chancellor
+#   -1  fascists win with 6 fascist policies
+#   0   not ended
+#   1   liberals win with 5 liberal policies
+#   2   liberals win by killing Hitler
+#   99  game cancelled
+#		
 def end_game(bot, game, game_endcode):
-        log.info('end_game called')
-        ##
-        # game_endcode:
-        #   -2  fascists win by electing Hitler as chancellor
-        #   -1  fascists win with 6 fascist policies
-        #   0   not ended
-        #   1   liberals win with 5 liberal policies
-        #   2   liberals win by killing Hitler
-        #   99  game cancelled
-        #
-
+	log.info('end_game called')
 	stats = get_stats()
 	if game_endcode == 99:
 		if GamesController.games[game.cid].board is not None:
