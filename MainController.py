@@ -780,9 +780,10 @@ def end_game(bot, game, game_endcode):
         #   2   liberals win by killing Hitler
         #   99  game cancelled
         #
+
 	stats = get_stats()
-        if game_endcode == 99:
-                if GamesController.games[game.cid].board is not None:
+	if game_endcode == 99:
+		if GamesController.games[game.cid].board is not None:
                         bot.send_message(game.cid, "Juego cancelado!\n\n%s" % game.print_roles())
                 else:
                         bot.send_message(game.cid, "Juego cancelado!")
