@@ -120,7 +120,7 @@ def command_ping(bot, update):
 def command_stats(bot, update):
 	cid, uid = update.message.chat_id, update.message.from_user.id
 	if uid == ADMIN:
-		stats = MainController.get_stats(bot)		
+		stats = MainController.get_stats(bot, cid)		
 		stattext = "+++ Statistics +++\n" + \
 				"Liberal Wins (policies): " + str(stats[3]) + "\n" + \
 				"Liberal Wins (killed Hitler): " + str(stats[4]) + "\n" + \
