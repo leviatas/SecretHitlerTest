@@ -749,7 +749,7 @@ def count_votes_anarquia(bot, game):
 #
 ##
 
-def get_stats(bot):
+def get_stats(bot, cid):
 	try:
 		cur = conn.cursor()
 		query = "select * from stats"
@@ -760,7 +760,7 @@ def get_stats(bot):
 		bot.send_message(cid, 'No se ejecuto el comando get_stats debido a: '+str(e))
 		conn.rollback()	
 
-def set_stats(column_name, value, bot):
+def set_stats(column_name, value, bot, cid):
 	try:
 		cursor = conn.cursor()
 		cursor.execute("UPDATE stats SET %s=%s", (column_name, value));
@@ -779,26 +779,26 @@ def set_stats(column_name, value, bot):
 #		
 def end_game(bot, game, game_endcode):
 	log.info('end_game called')
-	stats = get_stats(bot)
+	stats = get_stats(bot, cid)
 	if game_endcode == 99:
 		if GamesController.games[game.cid].board is not None:
 			bot.send_message(game.cid, "Juego cancelado!\n\n%s" % game.print_roles())
 		else:
 			bot.send_message(game.cid, "Juego cancelado!")
-		set_stats("cancelgame", stats[5] + 1, bot)
+		set_stats("cancelgame", stats[5] + 1, bot, cid)
 	else:
 		if game_endcode == -2:
 			bot.send_message(game.cid, "Juego finalizado! Los fascistas ganaron eligiendo a Hitler como Canciller!\n\n%s" % game.print_roles())
-			set_stats("fascistwinhitler", stats[1] + 1, bot)
+			set_stats("fascistwinhitler", stats[1] + 1, bot, cid)
 		if game_endcode == -1:
 			bot.send_message(game.cid, "Juego finalizado! Los fascistas ganaron promulgando 6 políticas fascistas!\n\n%s" % game.print_roles())
-			set_stats("fascistwinpolicies", stats[2] + 1, bot)
+			set_stats("fascistwinpolicies", stats[2] + 1, bot, cid)
 		if game_endcode == 1:
 			bot.send_message(game.cid, "Juego finalizado! Los liberales ganaron promulgando 5 políticas liberales!\n\n%s" % game.print_roles())
-			set_stats("liberalwinpolicies", stats[3] + 1, bot)
+			set_stats("liberalwinpolicies", stats[3] + 1, bot, cid)
 		if game_endcode == 2:
 			bot.send_message(game.cid, "Juego finalizado! Los liberales ganaron matando a Hitler!\n\n%s" % game.print_roles())
-			set_stats("liberalwinkillhitler", stats[4] + 1, bot)
+			set_stats("liberalwinkillhitler", stats[4] + 1, bot, cid)
 		showHiddenhistory(bot, game)
 	del GamesController.games[game.cid]
 	Commands.delete_game(game.cid)
