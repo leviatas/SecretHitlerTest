@@ -749,6 +749,26 @@ def count_votes_anarquia(bot, game):
 #
 ##
 
+def get_stats():
+	try:
+		cur = conn.cursor()
+		query = "select * from stats"
+		cur.execute(query)
+		dbdata = cur.fetchone()
+		return dbdata
+	except Exception as e:
+		bot.send_message(cid, 'No se ejecuto el comando get_stats debido a: '+str(e))
+		conn.rollback()	
+
+def set_stats(column_name, value):
+	try:
+		cursor = conn.cursor()
+		cursor.execute("UPDATE stats SET %s=%s", (column_name, value));
+		conn.commit()
+	except Exception as e:
+		bot.send_message(cid, 'No se ejecuto el comandoset_stats debido a: '+str(e))
+		conn.rollback()	
+	
 def end_game(bot, game, game_endcode):
         log.info('end_game called')
         ##
