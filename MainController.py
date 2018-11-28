@@ -779,7 +779,7 @@ def set_stats(column_name, value, bot, cid):
 #		
 def end_game(bot, game, game_endcode):
 	log.info('end_game called')
-	stats = get_stats(bot, cid)
+	stats = get_stats(bot, game.cid)
 	if game_endcode == 99:
 		if GamesController.games[game.cid].board is not None:
 			bot.send_message(game.cid, "Juego cancelado!\n\n%s" % game.print_roles())
