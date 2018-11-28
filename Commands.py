@@ -593,19 +593,25 @@ def command_newgame_sql_command(bot, update, args):
 			query = " ".join(args)
 			cursor.execute(query)
 			#dbdata = cur.fetchone()
-			if cursor.rowcount > 0:
-				bot.send_message(cid, 'Resultado de la consulta:')
-				for table in cursor.fetchall():
-					#bot.send_message(cid, len(str(table)))
-					tabla_str = str(table)
-					# Si supera el maximo de caracteres lo parto
-					if len(tabla_str) < 4096:
-						bot.send_message(cid, table)
-					else:
-						bot.send_message(cid, tabla_str[:-4090])
-						bot.send_message(cid, tabla_str[4090:])
+			
+			if 'update' in args or 'insert' in args:
+				conn.commit()
+				bot.send_message(cid, 'Consulta commiteada')
 			else:
-				bot.send_message(cid, 'No se obtuvo nada de la consulta')
+					
+				if cursor.rowcount > 0:
+					bot.send_message(cid, 'Resultado de la consulta:')
+					for table in cursor.fetchall():
+						#bot.send_message(cid, len(str(table)))
+						tabla_str = str(table)
+						# Si supera el maximo de caracteres lo parto
+						if len(tabla_str) < 4096:
+							bot.send_message(cid, table)
+						else:
+							bot.send_message(cid, tabla_str[:-4090])
+							bot.send_message(cid, tabla_str[4090:])
+				else:
+					bot.send_message(cid, 'No se obtuvo nada de la consulta')
 		except Exception as e:
 			bot.send_message(cid, 'No se ejecuto el comando debido a: '+str(e))
 			conn.rollback()
