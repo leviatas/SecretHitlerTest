@@ -21,4 +21,4 @@ CREATE TABLE IF NOT EXISTS stats (
     cancelgame INTEGER NOT NULL
 );
 
-INSERT INTO stats VALUES (1, 0, 0, 0, 0, 0);
+--INSERT INTO stats VALUES (1, 0, 0, 0, 0, 0);
