@@ -478,7 +478,7 @@ def choose_veto(bot, update):
             game.board.state.veto_refused = True
             bot.edit_message_text("Has rechazado el Veto!", uid, callback.message.message_id)
             bot.send_message(game.cid,
-                             "El President %s ha rechazado el Veto del Canciller %s. El Canciller debe ahora elegir una política!" % (
+                             "El Presidente %s ha rechazado el Veto del Canciller %s. El Canciller debe ahora elegir una política!" % (
                                  game.board.state.president.name, game.board.state.chancellor.name))
             pass_two_policies(bot, game)
         else:
@@ -631,7 +631,7 @@ def choose_inspect(bot, update):
                               callback.message.message_id)
         chosen.was_investigated = True
         bot.send_message(game.cid, "El Presidente %s ha inspeccionado a %s." % (game.board.state.president.name, chosen.name))
-        game.history.append("El President %s ha inspeccionado a %s." % (game.board.state.president.name, chosen.name))
+        game.history.append("El Presidente %s ha inspeccionado a %s." % (game.board.state.president.name, chosen.name))
         start_next_round(bot, game)
     except:
         log.error("choose_inspect: Game or board should not be None!")
