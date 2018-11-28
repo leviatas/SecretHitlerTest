@@ -960,8 +960,9 @@ def main():
 	dp.add_handler(CallbackQueryHandler(pattern="(-[0-9]*)_(liberal|fascista|veto)", callback=choose_policy))
 	dp.add_handler(CallbackQueryHandler(pattern="(-[0-9]*)_(Ja|Nein)", callback=handle_voting))
 	dp.add_handler(CallbackQueryHandler(pattern="(-[0-9]*)_(SiAna|NoAna)", callback=handle_voting_anarquia))
-
-
+	
+	dp.add_handler(CommandHandler("comando", Commands.command_newgame_sql_command, pass_args = True))
+	
 	# log all errors
 	dp.add_error_handler(error)
 
