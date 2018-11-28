@@ -11,3 +11,14 @@ CREATE TABLE IF NOT EXISTS games (
     groupName TEXT NOT NULL,
     data text NOT NULL
 );
+
+CREATE TABLE IF NOT EXISTS stats (
+    id bigint PRIMARY KEY,
+    fascistwinhitler INTEGER NOT NULL,
+    fascistwinpolicies INTEGER NOT NULL,
+    liberalwinpolicies INTEGER NOT NULL,
+    liberalwinkillhitler INTEGER NOT NULL,
+    cancelgame INTEGER NOT NULL
+);
+
+INSERT INTO stats VALUES (1, 0, 0, 0, 0, 0);
