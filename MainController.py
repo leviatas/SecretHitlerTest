@@ -765,7 +765,7 @@ def set_stats(column_name, value, bot, cid):
 	try:
 		cursor = conn.cursor()
 		#cursor.execute("UPDATE stats SET %s=%s", (column_name, value));		
-		cursor.execute(sql.SQL("UPDATE stats set {}=%s ").format(sql.Identifier(column_name)), value)
+		cursor.execute(sql.SQL("UPDATE stats set {}=%d ").format(sql.Identifier(column_name)), value)
 		
 		conn.commit()
 	except Exception as e:
