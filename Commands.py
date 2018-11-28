@@ -118,18 +118,15 @@ def command_ping(bot, update):
 
 # prints statistics, only ADMIN
 def command_stats(bot, update):
-    cid = update.message.chat_id
-    if cid == ADMIN:
-        with open(STATS, 'r') as f:
-            stats = json.load(f)
-        stattext = "+++ Statistics +++\n" + \
-                    "Liberal Wins (policies): " + str(stats.get("libwin_policies")) + "\n" + \
-                    "Liberal Wins (killed Hitler): " + str(stats.get("libwin_kill")) + "\n" + \
-                    "Fascist Wins (policies): " + str(stats.get("fascwin_policies")) + "\n" + \
-                    "Fascist Wins (Hitler chancellor): " + str(stats.get("fascwin_hitler")) + "\n" + \
-                    "Games cancelled: " + str(stats.get("cancelled")) + "\n\n" + \
-                    "Total amount of groups: " + str(len(stats.get("groups"))) + "\n" + \
-                    "Games running right now: "
+	cid, uid = update.message.chat_id, update.message.from_user.id
+	if uid == ADMIN:
+		stats = MainController.get_stats()
+		stattext = "+++ Statistics +++\n" + \
+			"Liberal Wins (policies): " + str(stats[3]) + "\n" + \
+			"Liberal Wins (killed Hitler): " + str(stats[4]) + "\n" + \
+			"Fascist Wins (policies): " + str(stats[2]) + "\n" + \
+			"Fascist Wins (Hitler chancellor): " + str(stats[1]) + "\n" + \
+			"Games cancelled: " + str(stats[5]) + "\n\n"		
         bot.send_message(cid, stattext)       
 
 
