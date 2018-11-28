@@ -371,6 +371,9 @@ def pass_two_policies(bot, game):
 			"El presidente %s ha rechazado tu Veto. Ahora tienes que elegir. Cuál quieres promulgar?" % game.board.state.president.name,
 			reply_markup=choosePolicyMarkup)
 	elif game.board.state.fascist_track < 5:
+		bot.send_message(game.cid,
+			"El presidente %s entregó dos políticas al Canciller %s." % (
+			game.board.state.president.name, game.board.state.chancellor.name))
 		choosePolicyMarkup = InlineKeyboardMarkup(btns)
 		if not game.is_debugging:
 			bot.send_message(game.board.state.chancellor.uid,
