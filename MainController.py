@@ -779,12 +779,13 @@ def set_stats(column_name, value, bot, cid):
 #		
 def end_game(bot, game, game_endcode):
 	log.info('end_game called')
-	stats = get_stats(bot, game.cid)
+	cid = game.cid
+	stats = get_stats(bot, cid)	
 	if game_endcode == 99:
-		if GamesController.games[game.cid].board is not None:
-			bot.send_message(game.cid, "Juego cancelado!\n\n%s" % game.print_roles())
+		if GamesController.games[cid].board is not None:
+			bot.send_message(cid, "Juego cancelado!\n\n%s" % game.print_roles())
 		else:
-			bot.send_message(game.cid, "Juego cancelado!")
+			bot.send_message(cid, "Juego cancelado!")
 		set_stats("cancelgame", stats[5] + 1, bot, cid)
 	else:
 		if game_endcode == -2:
@@ -800,8 +801,8 @@ def end_game(bot, game, game_endcode):
 			bot.send_message(game.cid, "Juego finalizado! Los liberales ganaron matando a Hitler!\n\n%s" % game.print_roles())
 			set_stats("liberalwinkillhitler", stats[4] + 1, bot, cid)
 		showHiddenhistory(bot, game)
-	del GamesController.games[game.cid]
-	Commands.delete_game(game.cid)
+	del GamesController.games[cid]
+	Commands.delete_game(cid)
 	
 def showHiddenhistory(bot, game):
 	#game.pedrote = 3
