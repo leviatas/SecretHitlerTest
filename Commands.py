@@ -88,19 +88,19 @@ def print_board(bot, game, target):
 	bot.send_message(target, game.board.print_board(game.player_sequence), ParseMode.MARKDOWN)
 		
 def command_start(bot, update):
-    cid = update.message.chat_id
-    bot.send_message(cid,
-                     "\"Secret Hitler es un juego de deducción social para 5-10 jugadores "
-                     "acerca de encontrar a Hitler y detener el ascenso del fascismo."
-                     " La mayoría de los jugadores son liberales. Si pueden aprender a "
-                     "confiar entre ellos, tienen suficientes votos para controlar el parlamento y ganar el juego."
-                     " Pero algunos jugadores son fascistas. Ellos dirán lo que sea necesario para ser electos, "
+	cid = update.message.chat_id
+	bot.send_message(cid,
+		     "\"Secret Hitler es un juego de deducción social para 5-10 jugadores "
+		     "acerca de encontrar a Hitler y detener el ascenso del fascismo."
+		     " La mayoría de los jugadores son liberales. Si pueden aprender a "
+		     "confiar entre ellos, tienen suficientes votos para controlar el parlamento y ganar el juego."
+		     " Pero algunos jugadores son fascistas. Ellos dirán lo que sea necesario para ser electos, "
 		     "promover el fascismo y culpar a los demás por la derrota de la República."
 		     " Los liberales deben trabajar juntos para descubrir la verdad antes "
 		     "de que los fascistas instalen a su desalamado líder y ganen el juego."
 		     " Traducción de la descripición oficial de Secret Hitler."
-                     " Agregame a un grupo y escribe /newgame para crear un juego!")
-    command_help(bot, update)
+		     " Agregame a un grupo y escribe /newgame para crear un juego!")
+	command_help(bot, update)
 
 
 def command_rules(bot, update):
@@ -122,12 +122,12 @@ def command_stats(bot, update):
 	if uid == ADMIN:
 		stats = MainController.get_stats()		
 		stattext = "+++ Statistics +++\n" + \
-			"Liberal Wins (policies): " + str(stats[3]) + "\n" + \
-			"Liberal Wins (killed Hitler): " + str(stats[4]) + "\n" + \
-			"Fascist Wins (policies): " + str(stats[2]) + "\n" + \
-			"Fascist Wins (Hitler chancellor): " + str(stats[1]) + "\n" + \
-			"Games cancelled: " + str(stats[5]) + "\n\n"		
-        	bot.send_message(cid, stattext)
+				"Liberal Wins (policies): " + str(stats[3]) + "\n" + \
+				"Liberal Wins (killed Hitler): " + str(stats[4]) + "\n" + \
+				"Fascist Wins (policies): " + str(stats[2]) + "\n" + \
+				"Fascist Wins (Hitler chancellor): " + str(stats[1]) + "\n" + \
+				"Games cancelled: " + str(stats[5]) + "\n\n"		
+		bot.send_message(cid, stattext)
 		
 # help page
 def command_help(bot, update):
