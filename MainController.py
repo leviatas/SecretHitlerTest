@@ -992,6 +992,10 @@ def main():
 	
 	dp.add_handler(CommandHandler("comando", Commands.command_newgame_sql_command, pass_args = True))
 	
+	# Comandos para elegir rol al unirse a la partida
+	dp.add_handler(CommandHandler("role", Commands.command_choose_posible_role))
+	dp.add_handler(CallbackQueryHandler(pattern="(-[0-9]*)\*chooserole\*(.*)\*([0-9]*)", callback=Commands.callback_choose_posible_role))
+	
 	# log all errors
 	dp.add_error_handler(error)
 
