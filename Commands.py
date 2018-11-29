@@ -125,7 +125,7 @@ def command_stats(bot, update):
 				"Vict. Liberal (Politicas): " + str(stats[3]) + "\n" + \
 				"Vict. Liberal (Hitler ☠): " + str(stats[4]) + "\n" + \
 				"Vict. Fascista (Politicas): " + str(stats[2]) + "\n" + \
-				"Vict. Fascista (Hitler Canc.): " + str(stats[1]) + "\n" + \
+				"Vict. Fascista (Hitler Canc): " + str(stats[1]) + "\n" + \
 				"Juegos cancelados: " + str(stats[5]) + "\n\n"		
 		bot.send_message(cid, stattext)
 		
