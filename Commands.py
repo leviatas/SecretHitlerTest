@@ -128,7 +128,7 @@ def command_stats(bot, update):
 				"Vict. Fascista (Hitler Canc): *" + str(stats[1]) + "*\n" + \
 				"Juegos cancelados: *" + str(stats[5]) + "*\n" + \
 				"Juegos totales: *" + str(stats[1] + stats[2] + stats[3] + stats[4]) + "*\n\n"		
-		bot.send_message(cid, stattextm, ParseMode.MARKDOWN)
+		bot.send_message(cid, stattext, ParseMode.MARKDOWN)
 		
 # help page
 def command_help(bot, update):
