@@ -633,7 +633,10 @@ def callback_choose_posible_role(bot, update):
 	log.info('callback_choose_posible_role called: %s' % callback.data)	
 	regex = re.search("(-[0-9]*)\*chooserole\*(.*)\*([0-9]*)", callback.data)
 	cid, strcid, opcion, uid, struid = int(regex.group(1)), regex.group(1), regex.group(2), int(regex.group(3)), regex.group(3)
-	bot.edit_message_text("Mensaje Editado: Has elegido el Rol: %s" % opcion, cid, callback.message.message_id)
+	try:
+		bot.edit_message_text("Mensaje Editado: Has elegido el Rol: %s" % opcion, cid, callback.message.message_id)
+	except Exception as e:
+		bot.edit_message_text("Mensaje Editado: Has elegido el Rol: %s" % opcion, uid, callback.message.message_id)
 	bot.send_message(cid, "Ventana Juego: Has elegido el Rol %s" % opcion)
 	bot.send_message(uid, "Ventana Usuario: Has elegido el Rol %s" % opcion)	
 
