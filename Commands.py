@@ -613,3 +613,38 @@ def command_newgame_sql_command(bot, update, args):
 			bot.send_message(cid, 'No se ejecuto el comando debido a: '+str(e))
 			conn.rollback()
 
+def command_choose_posible_role(bot, update):
+	cid, uid = update.message.chat_id, update.message.from_user.id
+	choose_posible_role(bot, cid, uid)
+	
+def choose_posible_role(bot, cid, uid):
+	frase_regex = "chooserole"
+	pregunta_arriba_botones = "¿Qué rol quisieras ser?"
+	chat_donde_se_pregunta = cid
+	multipurpose_choose_buttons(bot, cid, uid, chat_donde_se_pregunta, frase_regex, pregunta_arriba_botones, opciones_choose_posible_role)
+
+	def callback_choose_posible_role(bot, update):
+	callback = update.callback_query
+	log.info('callback_choose_posible_role called: %s' % callback.data)	
+	regex = re.search("(-[0-9]*)\*chooserole\*(.*)\*([0-9]*)", callback.data)
+	cid, strcid, opcion, uid, struid = int(regex.group(1)), regex.group(1), regex.group(2), int(regex.group(3)), regex.group(3)
+	bot.edit_message_text("Mensaje Editado: Has elegido el Rol: %s" % opcion, cid, callback.message.message_id)
+	bot.send_message(cid, "Ventana Juego: Has elegido el Rol %s" % opcion)
+	bot.send_message(uid, "Ventana Usuario: Has elegido el Rol %s" % opcion)	
+
+
+def multipurpose_choose_buttons(bot, cid, uid, chat_donde_se_pregunta, comando_callback, mensaje_pregunta, opciones_botones):
+	sleep(3)
+	btns = []
+	# Creo los botones para elegir al usuario
+	for opcion in opciones_botones:
+		txtBoton = ""
+		comando_op = opciones_botones[opcion]								
+		for comando in comando_op["comandos"]:
+			txtBoton += comando_op["comandos"][comando] + " "			
+		txtBoton = txtBoton[:-1]
+		datos = str(cid) + "*" + comando_callback + "*" + str(opcion) + "*" + str(uid)
+		btns.append([InlineKeyboardButton(txtBoton, callback_data=datos)])
+	btnMarkup = InlineKeyboardMarkup(btns)
+	#for uid in game.playerlist:
+	bot.send_message(chat_donde_se_pregunta, mensaje_pregunta, reply_markup=btnMarkup)
