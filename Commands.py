@@ -623,7 +623,7 @@ def choose_posible_role(bot, cid, uid):
 	chat_donde_se_pregunta = cid
 	multipurpose_choose_buttons(bot, cid, uid, chat_donde_se_pregunta, frase_regex, pregunta_arriba_botones, opciones_choose_posible_role)
 
-	def callback_choose_posible_role(bot, update):
+def callback_choose_posible_role(bot, update):
 	callback = update.callback_query
 	log.info('callback_choose_posible_role called: %s' % callback.data)	
 	regex = re.search("(-[0-9]*)\*chooserole\*(.*)\*([0-9]*)", callback.data)
