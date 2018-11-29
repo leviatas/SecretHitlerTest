@@ -122,13 +122,13 @@ def command_stats(bot, update):
 	if ADMIN == ADMIN:
 		stats = MainController.get_stats(bot, cid)		
 		stattext = "+++ Estadísticas +++\n" + \
-				"Vict. Liberal (Politicas): " + str(stats[3]) + "\n" + \
-				"Vict. Liberal (Hitler ☠): " + str(stats[4]) + "\n" + \
-				"Vict. Fascista (Politicas): " + str(stats[2]) + "\n" + \
-				"Vict. Fascista (Hitler Canc): " + str(stats[1]) + "\n" + \
-				"Juegos cancelados: " + str(stats[5]) + "\n" + \
-				"Juegos totales: " + str(stats[1] + stats[2] + stats[3] + stats[4]) + "\n\n"		
-		bot.send_message(cid, stattext)
+				"Vict. Liberal (Politicas): *" + str(stats[3]) + "*\n" + \
+				"Vict. Liberal (Hitler ☠): *" + str(stats[4]) + "*\n" + \
+				"Vict. Fascista (Politicas): *" + str(stats[2]) + "*\n" + \
+				"Vict. Fascista (Hitler Canc): *" + str(stats[1]) + "*\n" + \
+				"Juegos cancelados: *" + str(stats[5]) + "*\n" + \
+				"Juegos totales: *" + str(stats[1] + stats[2] + stats[3] + stats[4]) + "*\n\n"		
+		bot.send_message(cid, stattextm, ParseMode.MARKDOWN)
 		
 # help page
 def command_help(bot, update):
