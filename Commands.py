@@ -7,7 +7,6 @@ import os
 import psycopg2
 import urllib.parse
 
-	
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, ParseMode
 
 import MainController
