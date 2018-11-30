@@ -133,12 +133,8 @@ def nominate_chosen_chancellor(bot, update):
     #    chosen_uid = ADMIN   
     try:
         game = Commands.get_game(cid)
-        #log.info(game.playerlist)
-        #log.info(str(chosen_uid) in game.playerlist )
-        #log.info(chosen_uid in game.playerlist) 
 	
-	#Verifico que realmente el presidente este eligiendo al canciller!
-	if callback.from_user.id is not game.board.state.nominated_president.uid:
+	if callback.from_user.id != game.board.state.nominated_president.uid:
 		bot.edit_message_text("No eres el presidente actual, no puedes nominar!", callback.from_user.id, callback.message.message_id)
 		return
 	
