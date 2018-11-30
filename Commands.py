@@ -464,7 +464,7 @@ def command_ja(bot, update):
 	uid = update.message.from_user.id
 	if uid == ADMIN:
 		cid = update.message.chat_id
-		game = GamesController.games.get(cid, None)
+		game = get_game(cid)
 		answer = "Ja"
 		for uid in game.playerlist:
 			game.board.state.last_votes[uid] = answer
@@ -475,7 +475,7 @@ def command_nein(bot, update):
 	uid = update.message.from_user.id
 	if uid == ADMIN:
 		cid = update.message.chat_id
-		game = GamesController.games.get(cid, None)
+		game = get_game(cid)
 		answer = "Nein"
 		for uid in game.playerlist:
 			game.board.state.last_votes[uid] = answer
@@ -522,9 +522,10 @@ def command_anarquia(bot, update):
 		#Send message of executing command   
 		cid = update.message.chat_id
 		#Check if there is a current game 
-		if cid in GamesController.games.keys():
+		game = get_game(cid)
+		
+		if game:
 			uid = update.message.from_user.id
-			game = GamesController.games.get(cid, None)			
 			if uid in game.playerlist:
 				# Se pregunta a los jugadores si irian a anarquia,
 				# esto se hace para no tener que estar pasando 3 formular y esperar que todos voten
