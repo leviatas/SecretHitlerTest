@@ -344,8 +344,7 @@ def command_showhistory(bot, update):
 		cid = update.message.chat_id
 		#Check if there is a current game 
 		game = get_game(cid)
-		if game:
-			game = GamesController.games.get(cid, None)  
+		if game:			
 			#bot.send_message(cid, "Current round: " + str(game.board.state.currentround + 1))
 			uid = update.message.from_user.id
 			history_text = "Historial:\n\n" 
