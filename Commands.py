@@ -263,14 +263,16 @@ def command_cancelgame(bot, update):
 	log.info('command_cancelgame called')
 	cid = update.message.chat_id	
 	#Always try to delete in DB
-	delete_game(cid)
-	if cid in GamesController.games.keys():
-		game = GamesController.games[cid]
+	
+	game = get_game(cid)
+	
+	#delete_game(cid)
+	if game:		
 		status = bot.getChatMember(cid, update.message.from_user.id).status
 		if update.message.from_user.id == game.initiator or status in ("administrator", "creator"):
 			MainController.end_game(bot, game, 99)
 		else:
-			bot.send_message(cid, "Solo el creador del juego o el adminsitrador del grupo pueden cancelar el juego con /cancelgame")
+			bot.send_message(cid, "Solo el creador del juego o el administrador del grupo pueden cancelar el juego con /cancelgame")
 	else:
 		bot.send_message(cid, "No hay juego en este chat. Crea un nuevo juego con /newgame")
 
