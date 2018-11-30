@@ -174,42 +174,40 @@ def vote(bot, game):
 
 
 def handle_voting(bot, update):
-    callback = update.callback_query
-    log.info('handle_voting called: %s' % callback.data)
-    regex = re.search("(-[0-9]*)_(.*)", callback.data)
-    cid = int(regex.group(1))
-    answer = regex.group(2)
-    strcid = regex.group(1)
-    try:
-        game = Commands.get_game(cid)
-        uid = callback.from_user.id
-	
-	#
-	if game.dateinitvote is None:
-		bot.edit_message_text("No es el momento de votar!", uid, callback.message.message_id)
-		return
-	
-        bot.edit_message_text("Gracias por tu voto: %s para el Presidente %s y el canciller %s" % (
-                answer, game.board.state.nominated_president.name, game.board.state.nominated_chancellor.name), uid,
-                        callback.message.message_id)
-        log.info("Player %s (%d) voted %s" % (callback.from_user.first_name, uid, answer))
-        
-        #if uid not in game.board.state.last_votes:
-        game.board.state.last_votes[uid] = answer
-        
-        #Allow player to change his vote
-        btns = [[InlineKeyboardButton("Ja", callback_data=strcid + "_Ja"),
-        InlineKeyboardButton("Nein", callback_data=strcid + "_Nein")]]
-        voteMarkup = InlineKeyboardMarkup(btns)
-        bot.send_message(uid, "Puedes cambiar tu voto aquí.\nQuieres elegir al Presidente %s y al canciller %s?" % (
-                                game.board.state.nominated_president.name, game.board.state.nominated_chancellor.name),
-                                reply_markup=voteMarkup)
-        Commands.save_game(game.cid, "Saved Round %d" % (game.board.state.currentround), game)
-        if len(game.board.state.last_votes) == len(game.player_sequence):
-                count_votes(bot, game)
-    except Exception as e:
-        log.error(str(e))
+	callback = update.callback_query
+	log.info('handle_voting called: %s' % callback.data)
+	regex = re.search("(-[0-9]*)_(.*)", callback.data)
+	cid = int(regex.group(1))
+	answer = regex.group(2)
+	strcid = regex.group(1)
+	try:
+		game = Commands.get_game(cid)
+		uid = callback.from_user.id
+		#
+		if game.dateinitvote is None:
+			bot.edit_message_text("No es el momento de votar!", uid, callback.message.message_id)
+			return
 
+		bot.edit_message_text("Gracias por tu voto: %s para el Presidente %s y el canciller %s" % (
+			answer, game.board.state.nominated_president.name, game.board.state.nominated_chancellor.name), uid,
+			callback.message.message_id)
+		log.info("Player %s (%d) voted %s" % (callback.from_user.first_name, uid, answer))
+
+		#if uid not in game.board.state.last_votes:
+		game.board.state.last_votes[uid] = answer
+
+		#Allow player to change his vote
+		btns = [[InlineKeyboardButton("Ja", callback_data=strcid + "_Ja"),
+				InlineKeyboardButton("Nein", callback_data=strcid + "_Nein")]]
+		voteMarkup = InlineKeyboardMarkup(btns)
+		bot.send_message(uid, "Puedes cambiar tu voto aquí.\nQuieres elegir al Presidente %s y al canciller %s?" % (
+				game.board.state.nominated_president.name, game.board.state.nominated_chancellor.name),
+				reply_markup=voteMarkup)
+		Commands.save_game(game.cid, "Saved Round %d" % (game.board.state.currentround), game)
+		if len(game.board.state.last_votes) == len(game.player_sequence):
+			count_votes(bot, game)
+	except Exception as e:
+		log.error(str(e))
 
 def count_votes(bot, game):
 	# La votacion ha finalizado.
