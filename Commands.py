@@ -15,8 +15,8 @@ import re
 
 from Constants.Config import STATS
 from Constants.Config import ADMIN
-
 from Constants.Cards import opciones_choose_posible_role
+
 from Boardgamebox.Board import Board
 from Boardgamebox.Game import Game
 from Boardgamebox.Player import Player
