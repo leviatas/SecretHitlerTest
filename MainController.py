@@ -142,6 +142,7 @@ def nominate_chosen_chancellor(bot, update):
 		bot.edit_message_text("No eres el presidente actual, no puedes nominar!", callback.from_user.id, callback.message.message_id)
 		return
 	
+	
         game.board.state.nominated_chancellor = game.playerlist[chosen_uid]
         log.info("El Presidente %s (%d) nominó a %s (%d)" % (
                 game.board.state.nominated_president.name, game.board.state.nominated_president.uid,
