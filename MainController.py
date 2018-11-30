@@ -123,39 +123,37 @@ def choose_chancellor(bot, game):
 		bot.send_message(game.board.state.nominated_president.uid, 'Por favor nomina a tu canciller!', reply_markup=chancellorMarkup)
 
 def nominate_chosen_chancellor(bot, update):
-    log.info('nominate_chosen_chancellor called')
-    log.info(update.callback_query.data)
-    callback = update.callback_query
-    regex = re.search("(-[0-9]*)_chan_([0-9]*)", callback.data)
-    cid = int(regex.group(1))
-    chosen_uid = int(regex.group(2))
-    #if(game.is_debugging):
-    #    chosen_uid = ADMIN   
-    try:
-        game = Commands.get_game(cid)
-	
-	if callback.from_user.id != game.board.state.nominated_president.uid:
-		bot.edit_message_text("No eres el presidente actual, no puedes nominar!", callback.from_user.id, callback.message.message_id)
-		return
-	
-	
-        game.board.state.nominated_chancellor = game.playerlist[chosen_uid]
-        log.info("El Presidente %s (%d) nominó a %s (%d)" % (
-                game.board.state.nominated_president.name, game.board.state.nominated_president.uid,
-                game.board.state.nominated_chancellor.name, game.board.state.nominated_chancellor.uid))
-        bot.edit_message_text("Tú nominaste a %s como canciller!" % game.board.state.nominated_chancellor.name,
-                          callback.from_user.id, callback.message.message_id)
-        bot.send_message(game.cid,
-                     "El presidente %s nominó a %s como canciller. Por favor, vota ahora!" % (
-                         game.board.state.nominated_president.name, game.board.state.nominated_chancellor.name))
-        vote(bot, game)
-    except AttributeError as e:
-        log.error("nominate_chosen_chancellor: Game or board should not be None! Eror: " + str(e))
-    except Exception as e:
-        log.error("Unknown error: " + repr(e))
-        log.exception(e)
+	log.info('nominate_chosen_chancellor called')
+	log.info(update.callback_query.data)
+	callback = update.callback_query
+	regex = re.search("(-[0-9]*)_chan_([0-9]*)", callback.data)
+	cid = int(regex.group(1))
+	chosen_uid = int(regex.group(2))
+	#if(game.is_debugging):
+	#    chosen_uid = ADMIN   
+	try:
+		game = Commands.get_game(cid)
 
+		if callback.from_user.id != game.board.state.nominated_president.uid:
+			bot.edit_message_text("No eres el presidente actual, no puedes nominar!", callback.from_user.id, callback.message.message_id)
+			return
 
+		game.board.state.nominated_chancellor = game.playerlist[chosen_uid]
+		log.info("El Presidente %s (%d) nominó a %s (%d)" % (
+					game.board.state.nominated_president.name, game.board.state.nominated_president.uid,
+					game.board.state.nominated_chancellor.name, game.board.state.nominated_chancellor.uid))
+		bot.edit_message_text("Tú nominaste a %s como canciller!" % game.board.state.nominated_chancellor.name,
+					callback.from_user.id, callback.message.message_id)
+		bot.send_message(game.cid,
+					"El presidente %s nominó a %s como canciller. Por favor, vota ahora!" % (
+					game.board.state.nominated_president.name, game.board.state.nominated_chancellor.name))
+		vote(bot, game)
+	except AttributeError as e:
+		log.error("nominate_chosen_chancellor: Game or board should not be None! Eror: " + str(e))
+	except Exception as e:
+		log.error("Unknown error: " + repr(e))
+		log.exception(e)
+		
 def vote(bot, game):
 	log.info('vote called')
 	#When voting starts we start the counter to see later with the vote command if we can see you voted.
