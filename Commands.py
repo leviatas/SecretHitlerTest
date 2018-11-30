@@ -70,6 +70,21 @@ symbols = [
     u"\u2620" + ' Fascistas ganan'  # skull
 ]
 
+def get_game(cid):
+	# Busco el juego actual
+	game = GamesController.games.get(cid, None)	
+	if game:
+		# Si esta lo devuelvo.
+		return game
+	else:
+		# Si no esta lo busco en BD y lo pongo en GamesController.games
+		game = load_game(cid)
+		if game:
+			GamesController.games[cid] = game
+			return game
+		else:
+			None
+
 def command_symbols(bot, update):
     cid = update.message.chat_id
     symbol_text = "Los siguientes símbolos aparecen en el tablero: \n"
@@ -80,8 +95,8 @@ def command_symbols(bot, update):
 
 def command_board(bot, update):
 	cid = update.message.chat_id
-	if cid in GamesController.games.keys():
-		game = GamesController.games[cid]
+	game = get_game(cid)
+	if game:		
 		if game.board:			
 			print_board(bot, game, cid)
 		else:
@@ -147,38 +162,15 @@ def command_newgame(bot, update):
 	cid = update.message.chat_id
 		
 	try:
-		game = GamesController.games.get(cid, None)
+		game = get_game(cid)
 		groupType = update.message.chat.type
 		if groupType not in ['group', 'supergroup']:
 			bot.send_message(cid, "Tienes que agregarme a un grupo primero y escribir /newgame allá!")
 		elif game:
 			bot.send_message(cid, "Hay un juego comenzado en este chat. Si quieres terminarlo escribe /cancelgame!")
 		else:
-			
-			#Search game in DB
-			game = load_game(cid)			
-			if game:
-				GamesController.games[cid] = game
-				bot.send_message(cid, "Hay un juego comenzado en este chat. Si quieres terminarlo escribe /cancelgame!")				
-				
-				if not game.board:
-					return
-				
-				# Ask the president to choose a chancellor
-				if game.board.state.nominated_chancellor:
-					if len(game.board.state.last_votes) == len(game.player_sequence):
-						print_board(bot, game, cid)
-						MainController.count_votes(bot, game)
-					else:
-						print_board(bot, game, cid)
-						MainController.vote(bot, game)
-						bot.send_message(cid, "Hay una votación en progreso utiliza /calltovote para decirles a los otros jugadores. ")
-				else:				
-					MainController.start_round(bot, game)
-			else:
-				GamesController.games[cid] = Game(cid, update.message.from_user.id)
-				bot.send_message(cid, "Nuevo juego creado! Cada jugador debe unirse al juego con el comando /join.\nEl iniciador del juego (o el administrador) pueden unirse tambien y escribir /startgame cuando todos se hayan unido al juego!")
-			
+			GamesController.games[cid] = Game(cid, update.message.from_user.id)
+			bot.send_message(cid, "Nuevo juego creado! Cada jugador debe unirse al juego con el comando /join.\nEl iniciador del juego (o el administrador) pueden unirse tambien y escribir /startgame cuando todos se hayan unido al juego!")
 			
 	except Exception as e:
 		bot.send_message(cid, str(e))
@@ -189,7 +181,7 @@ def command_join(bot, update, args):
 	groupName = update.message.chat.title
 	cid = update.message.chat_id
 	groupType = update.message.chat.type
-	game = GamesController.games.get(cid, None)
+	game = get_game(cid)
 	if len(args) <= 0:
 		# if not args, use normal behaviour
 		fname = update.message.from_user.first_name.replace("_", " ")
@@ -243,7 +235,7 @@ def command_startgame(bot, update):
 	log.info('command_startgame called')
 	groupName = update.message.chat.title
 	cid = update.message.chat_id
-	game = GamesController.games.get(cid, None)
+	game = get_game(cid)
 	if not game:
 		bot.send_message(cid, "No hay juego en este chat. Crea un nuevo juego con /newgame")
 	elif game.board:
@@ -288,8 +280,8 @@ def command_votes(bot, update):
 		cid = update.message.chat_id
 		#bot.send_message(cid, "Looking for history...")
 		#Check if there is a current game 
-		if cid in GamesController.games.keys():
-			game = GamesController.games.get(cid, None)
+		game = get_game(cid)
+		if game:			
 			if not game.dateinitvote:
 				# If date of init vote is null, then the voting didnt start          
 				bot.send_message(cid, "La votación no ha comenzado todavia!")
@@ -320,8 +312,8 @@ def command_calltovote(bot, update):
 		cid = update.message.chat_id
 		#bot.send_message(cid, "Looking for history...")
 		#Check if there is a current game 
-		if cid in GamesController.games.keys():
-			game = GamesController.games.get(cid, None)
+		game = get_game(cid)
+		if game:			
 			if not game.dateinitvote:
 				# If date of init vote is null, then the voting didnt start          
 				bot.send_message(cid, "La votación no ha comenzado todavia!")
@@ -351,7 +343,8 @@ def command_showhistory(bot, update):
 		#Send message of executing command   
 		cid = update.message.chat_id
 		#Check if there is a current game 
-		if cid in GamesController.games.keys():
+		game = get_game(cid)
+		if game:
 			game = GamesController.games.get(cid, None)  
 			#bot.send_message(cid, "Current round: " + str(game.board.state.currentround + 1))
 			uid = update.message.from_user.id
@@ -379,9 +372,9 @@ def command_claim(bot, update, args):
 		#Send message of executing command   
 		cid = update.message.chat_id
 		#Check if there is a current game 
-		if cid in GamesController.games.keys():
+		game = get_game(cid)
+		if game:
 			uid = update.message.from_user.id
-			game = GamesController.games.get(cid, None)			
 			if uid in game.playerlist:				
 				if (game.board.state.liberal_track + game.board.state.fascist_track) > 0:
 					if len(args) > 0:
@@ -491,7 +484,7 @@ def command_nein(bot, update):
 		
 def command_reloadgame(bot, update):  
 	cid = update.message.chat_id
-		
+	
 	try:
 		game = GamesController.games.get(cid, None)
 		groupType = update.message.chat.type
@@ -552,7 +545,7 @@ def command_prueba(bot, update):
 	uid = update.message.from_user.id
 	if uid == ADMIN:
 		cid = update.message.chat_id
-		game = GamesController.games.get(cid, None)
+		game = get_game(cid)
 		
 		for uid in game.playerlist:
 			game.playerlist[uid].name = game.playerlist[uid].name.replace("_", " ")
@@ -569,7 +562,7 @@ def command_toggle_debugging(bot, update):
 	uid = update.message.from_user.id
 	if uid == ADMIN:
 		cid = update.message.chat_id
-		game = GamesController.games.get(cid, None)
+		game = get_game(cid)
 		# Informo que el modo de debugging ha cambiado
 		game.is_debugging = True if not game.is_debugging else False
 		bot.send_message(cid, "Debug Mode: ON" if game.is_debugging else "Debug Mode: OFF")
@@ -577,7 +570,8 @@ def command_toggle_debugging(bot, update):
 def command_jugadores(bot, update):	
 	uid = update.message.from_user.id
 	cid = update.message.chat_id
-	game = GamesController.games.get(cid, None)
+	
+	game = get_game(cid)
 	jugadoresActuales = "Los jugadores que se han unido al momento son:\n"
 	for uid in game.playerlist:
 		jugadoresActuales += "[%s](tg://user?id=%d)\n" % (game.playerlist[uid].name, uid)
