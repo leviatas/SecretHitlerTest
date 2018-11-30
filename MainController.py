@@ -132,10 +132,16 @@ def nominate_chosen_chancellor(bot, update):
     #if(game.is_debugging):
     #    chosen_uid = ADMIN   
     try:
-        game = GamesController.games.get(cid, None)
+        game = Commands.get_game(cid)
         #log.info(game.playerlist)
         #log.info(str(chosen_uid) in game.playerlist )
-        #log.info(chosen_uid in game.playerlist)        
+        #log.info(chosen_uid in game.playerlist) 
+	
+	#Verifico que realmente el presidente este eligiendo al canciller!
+	if callback.from_user.id is not game.board.state.nominated_president.uid:
+		bot.edit_message_text("No eres el presidente actual, no puedes nominar!", callback.from_user.id, callback.message.message_id)
+		return
+	
         game.board.state.nominated_chancellor = game.playerlist[chosen_uid]
         log.info("El Presidente %s (%d) nominó a %s (%d)" % (
                 game.board.state.nominated_president.name, game.board.state.nominated_president.uid,
@@ -180,8 +186,14 @@ def handle_voting(bot, update):
     answer = regex.group(2)
     strcid = regex.group(1)
     try:
-        game = GamesController.games[cid]
+        game = Commands.get_game(cid)
         uid = callback.from_user.id
+	
+	#
+	if game.dateinitvote is None:
+		bot.edit_message_text("No es el momento de votar!", uid, callback.message.message_id)
+		return
+	
         bot.edit_message_text("Gracias por tu voto: %s para el Presidente %s y el canciller %s" % (
                 answer, game.board.state.nominated_president.name, game.board.state.nominated_chancellor.name), uid,
                         callback.message.message_id)
@@ -302,7 +314,10 @@ def choose_policy(bot, update):
 	cid = int(regex.group(1))
 	answer = regex.group(2)
 	try:
-		game = GamesController.games[cid]
+		game = Commands.get_game(cid)
+		
+		#TODO deberia hacer alguna verificacion?
+		
 		strcid = str(game.cid)
 		uid = callback.from_user.id
 		if len(game.board.state.drawn_policies) == 3:
@@ -461,7 +476,7 @@ def choose_veto(bot, update):
     cid = int(regex.group(1))
     answer = regex.group(2)
     try:
-        game = GamesController.games[cid]
+        game = Commands.get_game(cid)
         uid = callback.from_user.id
         if answer == "yesveto":
             log.info("Player %s (%d) accepted the veto" % (callback.from_user.first_name, uid))
@@ -536,7 +551,7 @@ def choose_kill(bot, update):
     cid = int(regex.group(1))
     answer = int(regex.group(2))
     try:
-        game = GamesController.games[cid]
+        game = Commands.get_game(cid)
         chosen = game.playerlist[answer]
         chosen.is_dead = True
         if game.player_sequence.index(chosen) <= game.board.state.player_counter:
@@ -584,7 +599,7 @@ def choose_choose(bot, update):
     cid = int(regex.group(1))
     answer = int(regex.group(2))
     try:
-        game = GamesController.games[cid]
+        game = Commands.get_game(cid)
         chosen = game.playerlist[answer]
         game.board.state.chosen_president = chosen
         log.info(
@@ -624,7 +639,7 @@ def choose_inspect(bot, update):
     cid = int(regex.group(1))
     answer = int(regex.group(2))
     try:
-        game = GamesController.games[cid]
+        game = Commands.get_game(cid)
         chosen = game.playerlist[answer]
         log.info(
             "Player %s (%d) inspects %s (%d)'s party membership (%s)" % (
@@ -678,7 +693,7 @@ def handle_voting_anarquia(bot, update):
 	answer = regex.group(2)
 	strcid = regex.group(1)
 	try:
-		game = GamesController.games[cid]
+		game = Commands.get_game(cid)
 		uid = callback.from_user.id
 		answer = answer.replace("Ana", "")
 		bot.edit_message_text("Gracias por tu voto: %s para la anarquia" % (answer), uid, callback.message.message_id)
