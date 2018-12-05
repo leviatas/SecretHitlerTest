@@ -121,6 +121,7 @@ def choose_chancellor(bot, game):
 		Commands.print_board(bot, game, game.board.state.nominated_president.uid)
 		
 		bot.send_message(game.board.state.nominated_president.uid, 'Por favor nomina a tu canciller!', reply_markup=chancellorMarkup)
+	Commands.save_game(game.cid, "choose_chancellor Round %d" % (game.board.state.currentround), game)
 
 def nominate_chosen_chancellor(bot, update):
 	log.info('nominate_chosen_chancellor called')
