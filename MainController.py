@@ -834,7 +834,13 @@ def inform_players(bot, game, cid, player_number):
 		"Vamos a comenzar el juego con %d jugadores!\n%s\nVe a nuestro chat privado y mira tu rol secreto!" % (
 		player_number, print_player_info(player_number)))
 	available_roles = list(playerSets[player_number]["roles"])  # copy not reference because we need it again later
-	for uid in game.playerlist:
+	
+	# Creo una lista unica para poder repartir los roles a partir de las key de los player list
+	player_ids = list(game.playerlist.keys())
+	# Lo mezclo y lo uso para pasar por todos los jugadores
+	random.shuffle(player_ids)	
+	
+	for uid in player_ids:
 		random_index = randrange(len(available_roles))
 		#log.info(str(random_index))
 		role = available_roles.pop(random_index)
