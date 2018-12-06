@@ -396,6 +396,36 @@ def command_claim(bot, update, args):
 	except Exception as e:
 		bot.send_message(cid, str(e))
 		log.error("Unknown error: " + str(e))    
+
+		
+def command_claim_oculto(bot, update, args):
+	try:
+		#Send message of executing command   
+		cid = update.message.chat_id
+		uid = update.message.from_user.id
+		
+		# Busco en que juegos esta el jugador y agrego el historia oculto en los que este. (Futuro se
+		for game_key, game in GamesController.games.items():
+			#Solamente si el jugador esta en el partido y 
+			if uid in game.playerlist:
+				#Check if there is a current game
+				if (game.board.state.liberal_track + game.board.state.fascist_track) > 0:
+					if len(args) > 0:
+						#Data is being claimed
+						claimtext = ' '.join(args)
+						claimtexttohistory = "El jugador %s declara: %s" % (game.playerlist[uid].name, claimtext)
+						bot.send_message(uid, "Tu declaración: %s fue agregada al historial oculto." % (claimtext))
+						game.hiddenhistory.append("%s" % (claimtexttohistory))
+					else:					
+						bot.send_message(uid, "Debes mandar un mensaje para hacer una declaración.")
+
+				else:
+					bot.send_message(uid, "No puedes hacer claim oculto sin promulgar al menos una política.")
+			else:
+				bot.send_message(uid, "No puedes hacer claim oculto si no estas en algun partido.")				
+	except Exception as e:
+		bot.send_message(uid, str(e))
+		log.error("Unknown error: " + str(e))
 		
 def save_game(cid, groupName, game):
 	#Check if game is in DB first
