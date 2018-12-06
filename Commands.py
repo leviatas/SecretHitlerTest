@@ -299,7 +299,7 @@ def command_votes(bot, update):
 							history_text += "%s ha votado.\n" % (game.playerlist[player.uid].name)
 						else:
 							history_text += "%s *no* ha votado.\n" % (game.playerlist[player.uid].name)
-					bot.send_message(cid, history_text, ParseMode.MARKDOWN))
+					bot.send_message(cid, history_text, ParseMode.MARKDOWN)
 				else:
 					bot.send_message(cid, "Cinco minutos deben pasar para ver los votos") 
 		else:
