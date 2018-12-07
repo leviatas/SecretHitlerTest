@@ -834,20 +834,36 @@ def inform_players(bot, game, cid, player_number):
 		"Vamos a comenzar el juego con %d jugadores!\n%s\nVe a nuestro chat privado y mira tu rol secreto!" % (
 		player_number, print_player_info(player_number)))
 	available_roles = list(playerSets[player_number]["roles"])  # copy not reference because we need it again later
-	
+	# Mezclo los roles asi si alguien elije Fascista o Hitler no le toca siempre Fascista
+	random.shuffle(available_roles)
 	# Creo una lista unica para poder repartir los roles a partir de las key de los player list
 	player_ids = list(game.playerlist.keys())
 	# Lo mezclo y lo uso para pasar por todos los jugadores
-	random.shuffle(player_ids)	
+	random.shuffle(player_ids)
 	
 	for uid in player_ids:
-		random_index = randrange(len(available_roles))
+		# Antes de buscar un rol en particular pregunto si el jugador queria ser algo en particular
+		preferencia_jugador = game.playerlist[uid].preference_rol		
+		# Si el jugador tiene una preferencia... defecto se pone "" y daria [''] como preferencias		
+		preferencias = preferencia_jugador.split('_')
+		# El primer rol que aparece de las preferencias del jugador, devuelve None si no hay
+		indice_preferencia = next((i for i,v in enumerate(available_roles) if v in preferencias), -1)
+		
+		# Si el jugador tiene una preferencia se le asigna esta, como el orden es random no se sabe si se sabe si se
+		# cumplirá esto ya que los roles pudieron haber sido tomados ya.		
+		if indice_preferencia == -1:
+			#print "No hay indices de la preferencia"
+			random_index = random.randrange(len(available_roles))
+		else:
+			random_index = indice_preferencia
+			
 		#log.info(str(random_index))
 		role = available_roles.pop(random_index)
 		#log.info(str(role))
 		party = get_membership(role)
 		game.playerlist[uid].role = role
 		game.playerlist[uid].party = party
+		
 		# I comment so tyhe player aren't discturbed in testing, uncomment when deploy to production
 		if not game.is_debugging:
 			bot.send_message(uid, "Tu rol secreto es: %s\nTu afiliación política es: %s" % (role, party))
