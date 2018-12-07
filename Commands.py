@@ -621,7 +621,7 @@ def command_newgame_sql_command(bot, update, args):
 			cursor = conn.cursor()			
 			log.info("Executing in DB")
 			#query = "select * from games;"
-			query = " ".join(args).replace('\'', '')
+			query = " ".join(args).replace('\'s', '')
 			
 			cursor.execute(sql.SQL(query))
 			#dbdata = cur.fetchone()
