@@ -811,9 +811,9 @@ def end_game(bot, game, game_endcode):
 	cid = game.cid
 	
 	# Grabo detalles de la partida
-	save_game_details(game.print_roles(), game.board.state.game_endcode, game.board.state.liberal_track, game.board.state.fascist_track, game.board.num_players)
+	save_game_details(game.print_roles(), game_endcode, game.board.state.liberal_track, game.board.state.fascist_track, game.board.num_players)
 	
-	bot.send_message(cid, "Datos a guardar %s %s %s %s %s" % (game.print_roles(), str(game.board.state.game_endcode), str(game.board.state.liberal_track), str(game.board.state.fascist_track), str(game.board.num_players)))
+	#bot.send_message(cid, "Datos a guardar %s %s %s %s %s" % (game.print_roles(), str(game_endcode), str(game.board.state.liberal_track), str(game.board.state.fascist_track), str(game.board.num_players)))
 		
 	stats = get_stats(bot, cid)	
 	if game_endcode == 99:
