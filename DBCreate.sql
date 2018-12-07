@@ -21,4 +21,13 @@ CREATE TABLE IF NOT EXISTS stats (
     cancelgame INTEGER NOT NULL
 );
 
+CREATE TABLE IF NOT EXISTS stats_detail (
+    id SERIAL PRIMARY KEY,,
+    playerlist TEXT NOT NULL,
+    game_endcode INTEGER NOT NULL,
+    liberal_track INTEGER NOT NULL,
+    fascist_track INTEGER NOT NULL,
+    num_players INTEGER NOT NULL
+);
+
 --INSERT INTO stats VALUES (1, 0, 0, 0, 0, 0);
