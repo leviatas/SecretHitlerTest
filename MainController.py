@@ -779,7 +779,24 @@ def set_stats(column_name, value, bot, cid):
 		conn.commit()
 	except Exception as e:
 		bot.send_message(cid, 'No se ejecuto el comandoset_stats debido a: '+str(e))
-		conn.rollback()	
+		conn.rollback()
+		
+def save_game_details(print_roles, game_endcode, liberal_track, fascist_track, num_players):
+	try:
+		#Check if game is in DB first
+		cursor = conn.cursor()			
+		log.info("Executing in DB")		
+		query = "INSERT INTO stats_detail(playerlist, game_endcode, liberal_track, fascist_track, num_players) VALUES (%s, %s, %s, %s, %s);"
+		#query = "INSERT INTO games(id , groupName  , data) VALUES (%s, %s, %s) RETURNING data;"
+		cursor.execute(query, (print_roles, game_endcode, liberal_track, fascist_track, num_players))		
+		#dbdata = cur.fetchone()
+		conn.commit()
+	except Exception as e:
+		bot.send_message(cid, 'No se ejecuto el comando debido a: '+str(e))
+		conn.rollback()
+
+	
+		
 ##
 # game_endcode:
 #   -2  fascists win by electing Hitler as chancellor
@@ -792,6 +809,10 @@ def set_stats(column_name, value, bot, cid):
 def end_game(bot, game, game_endcode):
 	log.info('end_game called')
 	cid = game.cid
+	
+	# Grabo detalles de la partida
+	save_game_details(game.print_roles(), game.board.state.game_endcode, game.board.state.liberal_track, game.board.state.fascist_track, game.board.num_players)
+	
 	stats = get_stats(bot, cid)	
 	if game_endcode == 99:
 		if GamesController.games[cid].board is not None:
