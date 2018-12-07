@@ -210,7 +210,9 @@ def command_join(bot, update, args):
 		player = Player(fname, uid)
 		try:
 			#Commented to dont disturb player during testing uncomment in production
-			bot.send_message(uid, "Te has unido a un juego en %s. Pronto te dire cual es tu rol secreto." % groupName)			 
+			bot.send_message(uid, "Te has unido a un juego en %s. Pronto te dire cual es tu rol secreto." % groupName)
+			choose_posible_role(bot, cid, uid)
+			
 			game.add_player(uid, player)
 			log.info("%s (%d) joined a game in %d" % (fname, uid, game.cid))
 			if len(game.playerlist) > 4:
@@ -658,13 +660,32 @@ def callback_choose_posible_role(bot, update):
 	log.info('callback_choose_posible_role called: %s' % callback.data)	
 	regex = re.search("(-[0-9]*)\*chooserole\*(.*)\*([0-9]*)", callback.data)
 	cid, strcid, opcion, uid, struid = int(regex.group(1)), regex.group(1), regex.group(2), int(regex.group(3)), regex.group(3)
+	
+	# Busco el juego actual y le pongo al jugador su preferencia, solamente si el juego no empezo hago el seteo de preferencia
+	#bot.edit_message_text("Mensaje Editado: Has elegido el Rol: %s" % opcion, cid, callback.message.message_id)
+	mensaje_edit = ''
+	
+	game = get_game(cid)
+	
+	if game:
+		if game.board:
+			mensaje_edit = 'El juego ya comenzó, intentalo cuando el juego no haya empezado'
+		else:
+			if uid in game.playerlist:
+				mensaje_edit = 'Mensaje Editado: Has elegido el Rol: %s' % opcion
+				game.playerlist[uid].preference_rol = opcion
+			else:
+				mensaje_edit = 'No estas unido a esta partida, intentalo cuando te hayas unido'			
+	else:
+		mensaje_edit = 'No hay juego creado, intentalo cuando el juego este creado'		
+	
 	try:
-		bot.edit_message_text("Mensaje Editado: Has elegido el Rol: %s" % opcion, cid, callback.message.message_id)
+		bot.edit_message_text(mensaje_edit, cid, callback.message.message_id)
 	except Exception as e:
-		bot.edit_message_text("Mensaje Editado: Has elegido el Rol: %s" % opcion, uid, callback.message.message_id)
-	bot.send_message(cid, "Ventana Juego: Has elegido el Rol %s" % opcion)
-	bot.send_message(uid, "Ventana Usuario: Has elegido el Rol %s" % opcion)	
-
+		bot.edit_message_text(mensaje_edit, uid, callback.message.message_id)
+	
+	#bot.send_message(cid, "Ventana Juego: Has elegido el Rol %s" % opcion)
+	#bot.send_message(uid, "Ventana Usuario: Has elegido el Rol %s" % opcion)	
 
 def multipurpose_choose_buttons(bot, cid, uid, chat_donde_se_pregunta, comando_callback, mensaje_pregunta, opciones_botones):	
 	btns = []
