@@ -7,3 +7,5 @@ class Player(object):
         self.is_dead = False
         self.inspected_players = {}
         self.was_investigated = False
+        #"Liberal","Fascista","Hitler"
+        self.preference_rol = None
