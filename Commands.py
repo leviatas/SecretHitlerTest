@@ -625,7 +625,7 @@ def command_newgame_sql_command(bot, update, args):
 			cursor.execute(sql.SQL(query))
 			#dbdata = cur.fetchone()
 			
-			if 'update' in args or 'insert' in args:
+			if 'update' in args or 'insert' in args or 'UPDATE' in args or 'INSERT' in args or 'delete' in args or 'DELETE' in args:
 				conn.commit()
 				bot.send_message(cid, 'Consulta commiteada')
 			else:
