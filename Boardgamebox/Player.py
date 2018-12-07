@@ -8,4 +8,4 @@ class Player(object):
         self.inspected_players = {}
         self.was_investigated = False
         #"Liberal","Fascista","Hitler"
-        self.preference_rol = None
+        self.preference_rol = ""
