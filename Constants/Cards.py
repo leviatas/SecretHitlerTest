@@ -339,19 +339,19 @@ opciones_choose_posible_role = {
             1 : "Hitler"
         }
     },
-    "Liberal o Fascista" : {
+    "Liberal_Fascista" : {
         "comandos" : {
-            1 : "Liberal_Fascista"
+            1 : "Liberal o Fascista"
         }
     },
-    "Liberal o Hitler" : {
+    "Liberal_Hitler" : {
         "comandos" : {
-            1 : "Liberal_Hitler"
+            1 : "Liberal o Hitler"
         }
     },
-    "Fascista o Hitler" : {        
+    "Fascista_Hitler" : {        
         "comandos" : {
-            1 : "Fascista_Hitler"
+            1 : "Fascista o Hitler"
         }
     }
 }
