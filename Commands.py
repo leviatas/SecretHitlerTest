@@ -5,6 +5,7 @@ import datetime
 import jsonpickle
 import os
 import psycopg2
+from psycopg2 import sql
 import urllib.parse
 
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, ParseMode
@@ -621,7 +622,7 @@ def command_newgame_sql_command(bot, update, args):
 			log.info("Executing in DB")
 			#query = "select * from games;"
 			query = " ".join(args)
-			cursor.execute(query)
+			cursor.execute(sql.SQL(query))
 			#dbdata = cur.fetchone()
 			
 			if 'update' in args or 'insert' in args:
