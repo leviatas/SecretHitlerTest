@@ -22,7 +22,7 @@ CREATE TABLE IF NOT EXISTS stats (
 );
 
 CREATE TABLE IF NOT EXISTS stats_detail (
-    id SERIAL PRIMARY KEY,,
+    id SERIAL PRIMARY KEY,
     playerlist TEXT NOT NULL,
     game_endcode INTEGER NOT NULL,
     liberal_track INTEGER NOT NULL,
