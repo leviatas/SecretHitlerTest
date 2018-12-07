@@ -52,10 +52,12 @@ class Game(object):
 				return rtext
 			else:
 				for p in self.playerlist:
-					rtext += self.playerlist[p].name + "'s "
-					if self.playerlist[p].is_dead:
-						rtext += "(dead) "
-					rtext += "secret role was " + self.playerlist[p].role + "\n"
+					name = self.playerlist[p].name
+					role = self.playerlist[p].role
+					preference_rol = self.playerlist[p].preference_rol
+					muerto = self.playerlist[p].is_dead					
+					rtext += "El rol de %s %sera %s %s" % (name, "(muerto) " if muerto else "", role, ("" if preference_rol == "" else "queria ser " + preference_rol))										
+					rtext +=  "\n"
 				return rtext
 		except Exception as e:
 			rtext += str(e)
