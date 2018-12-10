@@ -21,7 +21,7 @@ CREATE TABLE IF NOT EXISTS stats (
     cancelgame INTEGER NOT NULL
 );
 
---DROP TABLE IF EXISTS stats_detail;
+DROP TABLE IF EXISTS stats_detail;
 
 CREATE TABLE IF NOT EXISTS stats_detail (
     id SERIAL PRIMARY KEY,
