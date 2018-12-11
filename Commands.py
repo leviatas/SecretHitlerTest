@@ -143,8 +143,8 @@ def command_stats(bot, update, args):
 	if len(args) > 0:
 		# Primero hare estadisticas de Personas
 			
-		partidas_totales, partidas_fascista, partidas_hitler, partidas_liberal, partidas murio = (0,)*5
-		partidas_fascista_gano, partidas_hitler_gano, partidas_liberal_gano = (0,)*3
+		partidas_totales, partidas_fascista, partidas_hitler, partidas_liberal, partidas murio = [0]*5
+		partidas_fascista_gano, partidas_hitler_gano, partidas_liberal_gano = [0]*3
 		try:
 			#Check if game is in DB first
 			cursor = conn.cursor()
