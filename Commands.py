@@ -718,8 +718,10 @@ def command_newgame_sql_command(bot, update, args):
 						if len(tabla_str) < 4096:
 							bot.send_message(cid, table)
 						else:
-							bot.send_message(cid, tabla_str[:-4090])
-							bot.send_message(cid, tabla_str[4090:])
+							n = 4090
+							parts = [tabla_str[i:i+n] for i in range(0, len(tabla_str), n)]
+							for part in parts:
+								bot.send_message(cid, part)
 				else:
 					bot.send_message(cid, 'No se obtuvo nada de la consulta')
 		except Exception as e:
