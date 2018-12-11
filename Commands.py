@@ -195,6 +195,7 @@ def command_stats(bot, update, args):
 					"Partidas como liberal: *{1}/{0}* Ganó: *{2}/{0}*\n".format(partidas_totales, partidas_liberal, partidas_liberal_gano) + \
 					"Partidas como Fascista:  *{1}/{0}* Ganó: *{2}/{0}*\n".format(partidas_totales, partidas_fascista, partidas_fascista_gano) + \
 					"Partidas como Hitler:  *{1}/{0}* Ganó: *{2}/{0}*\n".format(partidas_totales, partidas_hitler, partidas_hitler_gano) + \
+					"Partidas que gano:  *{1}/{0}*\n".format(partidas_totales, (partidas_hitler_gano+partidas_fascista_gano+partidas_liberal_gano)) + \
 					"Partidas que murió:  *{1}/{0}*\n".format(partidas_totales, partidas_murio)	
 				bot.send_message(cid, stattext, ParseMode.MARKDOWN)				
 				
