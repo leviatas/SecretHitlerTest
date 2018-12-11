@@ -184,7 +184,7 @@ def command_stats(bot, update, args):
 				Partidas que murió: D/X
 				Partidas totales
 				'''				
-				query = "select count(*) FROM stats_detail x where x.playerlist like '%%" + args[0] + " (dead)%%'
+				query = "select count(*) FROM stats_detail x where x.playerlist like '%%" + args[0] + " (dead)%%'"
 				#query = "INSERT INTO games(id , groupName  , data) VALUES (%s, %s, %s) RETURNING data;"
 				cursor.execute(query)
 				datamurio = cur.fetchone()
