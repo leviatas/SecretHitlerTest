@@ -154,7 +154,7 @@ def command_stats(bot, update, args):
 			#Check if game is in DB first
 			cursor = conn.cursor()
 			
-			query = "select x.game_endcode, COUNT(case when x.playerlist like '%%" + args[0] + " secret role was Fasc%%' then x.game_endcode end), COUNT(case when x.playerlist like '%%" + args[0] + " secret role was Hitl%%' then x.game_endcode end), COUNT(case when x.playerlist like '%%" + args[0] + " secret role was Libe%%' then x.game_endcode end)  FROM stats_detail x where x.playerlist like '%%" + args[0] + " secret role was%%' GROUP BY game_endcode"
+			query = "select x.game_endcode, COUNT(case when REPLACE (x.playerlist, ' (dead)', '') like '%%" + args[0] + " secret role was Fasc%%' then x.game_endcode end), COUNT(case when REPLACE (x.playerlist, ' (dead)', '') like '%%" + args[0] + " secret role was Hitl%%' then x.game_endcode end), COUNT(case when REPLACE (x.playerlist, ' (dead)', '') like '%%" + args[0] + " secret role was Libe%%' then x.game_endcode end)  FROM stats_detail x where REPLACE (x.playerlist, ' (dead)', '') like '%%" + args[0] + " secret role was%%' GROUP BY game_endcode"
 			#query = "INSERT INTO games(id , groupName  , data) VALUES (%s, %s, %s) RETURNING data;"
 			cursor.execute(query)
 			
