@@ -137,9 +137,45 @@ def command_ping(bot, update):
 
 
 # prints statistics, only ADMIN
-def command_stats(bot, update):
-	cid, uid = update.message.chat_id, update.message.from_user.id
-	if ADMIN == ADMIN:
+def command_stats(bot, update, args):
+	cid, uid = update.message.chat_id, update.message.from_user.id	
+	
+	if len(args) > 0:
+		# Primero hare estadisticas de Personas
+		'''Partidas Jugadas: X
+		Partidas como liberal: A/X Ganó: E/X
+		Partidas como Fascista: B/X Ganó: F/X
+		Partidas como Hitler: C/X Ganó: G/X
+		Partidas que murió: D/X
+		Partidas totales
+		'''		
+		
+		try:
+			#Check if game is in DB first
+			cursor = conn.cursor()
+			query = "select x.game_endcode, COUNT(case when x.playerlist like '%%s secret role was Fasc%' then x.game_endcode end), COUNT(case when x.playerlist like '%%s secret role was Hitl%' then x.game_endcode end), COUNT(case when x.playerlist like '%%s secret role was Libe%' then x.game_endcode end)  FROM stats_detail x where x.playerlist like '%%s secret role was%'  GROUP BY game_endcode"
+			#query = "INSERT INTO games(id , groupName  , data) VALUES (%s, %s, %s) RETURNING data;"
+			cursor.execute(query, (args[0]))
+			
+			if cursor.rowcount > 0:
+				bot.send_message(cid, 'Resultado de la consulta:')
+				for table in cursor.fetchall():
+					#bot.send_message(cid, len(str(table)))
+					tabla_str = str(table)
+					# Si supera el maximo de caracteres lo parto
+					if len(tabla_str) < 4096:
+						bot.send_message(cid, table)
+					else:
+						bot.send_message(cid, tabla_str[:-4090])
+						bot.send_message(cid, tabla_str[4090:])
+			else:
+				bot.send_message(cid, 'No se obtuvo nada de la consulta')
+			
+		except Exception as e:
+			bot.send_message(cid, 'No se ejecuto el comando debido a: '+str(e))
+			conn.rollback()		
+	else:
+		# Si el usuario no pone argumentos se muestran las estadisticas normales
 		stats = MainController.get_stats(bot, cid)		
 		stattext = "+++ Estadísticas +++\n" + \
 				"Vict. Liberal (Politicas): *" + str(stats[3]) + "*\n" + \
