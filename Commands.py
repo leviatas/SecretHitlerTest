@@ -183,8 +183,7 @@ def command_stats(bot, update, args):
 				Partidas como Hitler: C/X Ganó: G/X
 				Partidas que murió: D/X
 				Partidas totales
-				'''
-				select count(*) FROM stats_detail x where x.playerlist like '%Bernabé (dead)%'
+				'''				
 				query = "select count(*) FROM stats_detail x where x.playerlist like '%%" + args[0] + " (dead)%%'
 				#query = "INSERT INTO games(id , groupName  , data) VALUES (%s, %s, %s) RETURNING data;"
 				cursor.execute(query)
