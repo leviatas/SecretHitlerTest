@@ -1015,7 +1015,7 @@ def main():
 	dp.add_handler(CommandHandler("rules", Commands.command_rules))
 	dp.add_handler(CommandHandler("ping", Commands.command_ping))
 	dp.add_handler(CommandHandler("symbols", Commands.command_symbols))
-	dp.add_handler(CommandHandler("stats", Commands.command_stats))
+	dp.add_handler(CommandHandler("stats", Commands.command_stats, pass_args = True))
 	dp.add_handler(CommandHandler("newgame", Commands.command_newgame))
 	dp.add_handler(CommandHandler("startgame", Commands.command_startgame))
 	dp.add_handler(CommandHandler("cancelgame", Commands.command_cancelgame))
