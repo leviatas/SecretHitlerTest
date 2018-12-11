@@ -155,8 +155,8 @@ def command_stats(bot, update, args):
 		try:
 			#Check if game is in DB first
 			cursor = conn.cursor()
-			
-			query = "select x.game_endcode, COUNT(case when REPLACE (x.playerlist, ' (dead)', '') like '%%" + args[0] + " secret role was Fasc%%' then x.game_endcode end), COUNT(case when REPLACE (x.playerlist, ' (dead)', '') like '%%" + args[0] + " secret role was Hitl%%' then x.game_endcode end), COUNT(case when REPLACE (x.playerlist, ' (dead)', '') like '%%" + args[0] + " secret role was Libe%%' then x.game_endcode end)  FROM stats_detail x where REPLACE (x.playerlist, ' (dead)', '') like '%%" + args[0] + " secret role was%%' GROUP BY game_endcode"
+			jugador = ' '.join(args)
+			query = "select x.game_endcode, COUNT(case when REPLACE (x.playerlist, ' (dead)', '') like '%%" + jugador + " secret role was Fasc%%' then x.game_endcode end), COUNT(case when REPLACE (x.playerlist, ' (dead)', '') like '%%" + jugador + " secret role was Hitl%%' then x.game_endcode end), COUNT(case when REPLACE (x.playerlist, ' (dead)', '') like '%%" + jugador + " secret role was Libe%%' then x.game_endcode end)  FROM stats_detail x where REPLACE (x.playerlist, ' (dead)', '') like '%%" + jugador + " secret role was%%' GROUP BY game_endcode"
 			#query = "INSERT INTO games(id , groupName  , data) VALUES (%s, %s, %s) RETURNING data;"
 			cursor.execute(query)
 			
@@ -184,17 +184,17 @@ def command_stats(bot, update, args):
 				Partidas que murió: D/X
 				Partidas totales
 				'''				
-				query = "select count(*) FROM stats_detail x where x.playerlist like '%%" + args[0] + " (dead)%%'"
+				query = "select count(*) FROM stats_detail x where x.playerlist like '%%" + jugador + " (dead)%%'"
 				#query = "INSERT INTO games(id , groupName  , data) VALUES (%s, %s, %s) RETURNING data;"
 				cursor.execute(query)
 				datamurio = cursor.fetchone()
 				partidas_murio += datamurio[0]
 				
-				stattext = "+++ Estadísticas *{0}* +++\n".format(args[0]) + \
+				stattext = "+++ Estadísticas *{0}* +++\n".format(jugador) + \
 					"Partidas Jugadas: *{0}*\n".format(partidas_totales) + \
-					"Partidas como liberal: *{1}/{0}* Ganó: *{2}/{0}*\n".format(partidas_totales, partidas_liberal, partidas_liberal_gano) + \
-					"Partidas como Fascista:  *{1}/{0}* Ganó: *{2}/{0}*\n".format(partidas_totales, partidas_fascista, partidas_fascista_gano) + \
-					"Partidas como Hitler:  *{1}/{0}* Ganó: *{2}/{0}*\n".format(partidas_totales, partidas_hitler, partidas_hitler_gano) + \
+					"Partidas como liberal: *{1}/{0}* Ganó: *{2}/{1}*\n".format(partidas_totales, partidas_liberal, partidas_liberal_gano) + \
+					"Partidas como Fascista:  *{1}/{0}* Ganó: *{2}/{1}*\n".format(partidas_totales, partidas_fascista, partidas_fascista_gano) + \
+					"Partidas como Hitler:  *{1}/{0}* Ganó: *{2}/{1}*\n".format(partidas_totales, partidas_hitler, partidas_hitler_gano) + \
 					"Partidas que ganó:  *{1}/{0}* {2:.2f}%\n".format(partidas_totales, (partidas_hitler_gano+partidas_fascista_gano+partidas_liberal_gano), (partidas_hitler_gano+partidas_fascista_gano+partidas_liberal_gano) / (partidas_totales/100) ) + \
 					"Partidas que murió:  *{1}/{0}*\n".format(partidas_totales, partidas_murio)	
 				bot.send_message(cid, stattext, ParseMode.MARKDOWN)				
