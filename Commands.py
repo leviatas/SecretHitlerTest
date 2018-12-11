@@ -142,14 +142,9 @@ def command_stats(bot, update, args):
 	
 	if len(args) > 0:
 		# Primero hare estadisticas de Personas
-		'''Partidas Jugadas: X
-		Partidas como liberal: A/X Ganó: E/X
-		Partidas como Fascista: B/X Ganó: F/X
-		Partidas como Hitler: C/X Ganó: G/X
-		Partidas que murió: D/X
-		Partidas totales
-		'''		
-		
+			
+		partidas_totales = 0, partidas_fascista = 0, partidas_hitler = 0, partidas_liberal = 0, partidas murio = 0
+		partidas_fascista_gano = 0, partidas_hitler_gano = 0, partidas_liberal_gano = 0
 		try:
 			#Check if game is in DB first
 			cursor = conn.cursor()
@@ -160,6 +155,40 @@ def command_stats(bot, update, args):
 			
 			if cursor.rowcount > 0:
 				bot.send_message(cid, 'Resultado de la consulta:')
+				#|Game end_code|Fue Fascista|Fue Hitler|Fue Liberal
+				for table in cursor.fetchall():
+					game_endcode = table[0]
+					# Sumo las partidas independiente de que rol era.
+					partidas_totales += (table[1] + table[2] + table[3])
+					# Cuento las aprtidas con ciertos roles
+					partidas_fascista += table[1]
+					partidas_hitler += table[2]
+					partidas_liberal += table[3]
+					
+					if game_endcode == 1 or game_endcode == 2:
+						partidas_liberal_gano += table[3]
+					if game_endcode == -1 or game_endcode == -2:
+						partidas_fascista_gano += table[1]
+						partidas_hitler_gano += table[2]
+				'''Partidas Jugadas: X
+				Partidas como liberal: A/X Ganó: E/X
+				Partidas como Fascista: B/X Ganó: F/X
+				Partidas como Hitler: C/X Ganó: G/X
+				Partidas que murió: D/X
+				Partidas totales
+				'''	
+				partidas_totales = 0, partidas_fascista = 0, partidas_hitler = 0, partidas_liberal = 0, partidas murio = 0
+				partidas_fascista_gano = 0, partidas_hitler_gano = 0, partidas_liberal_gano = 0
+				stattext = "+++ Estadísticas {0} +++\n" + \
+					"Partidas Jugadas: *{1}*\n" + \
+					"Partidas como liberal: *{2}/{1}* Ganó: {3}/{1}\n" + \
+					"Partidas como Fascista:  *{2}/{1}* Ganó: {3}/{1}\n" + \
+					"Partidas como Hitler:  *{2}/{1}* Ganó: {3}/{1}\n" + \
+					"Partidas que murió:  *{2}/{1}*\n".format(args[0], partidas_totales, partidas_liberal, partidas_liberal_gano)	
+				bot.send_message(cid, stattext, ParseMode.MARKDOWN)
+				
+				
+				'''
 				for table in cursor.fetchall():
 					#bot.send_message(cid, len(str(table)))
 					tabla_str = str(table)
@@ -169,6 +198,7 @@ def command_stats(bot, update, args):
 					else:
 						bot.send_message(cid, tabla_str[:-4090])
 						bot.send_message(cid, tabla_str[4090:])
+				'''
 			else:
 				bot.send_message(cid, 'No se obtuvo nada de la consulta')
 			
