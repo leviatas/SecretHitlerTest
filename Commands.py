@@ -184,15 +184,20 @@ def command_stats(bot, update, args):
 				Partidas que murió: D/X
 				Partidas totales
 				'''
+				select count(*) FROM stats_detail x where x.playerlist like '%Bernabé (dead)%'
+				query = "select count(*) FROM stats_detail x where x.playerlist like '%%" + args[0] + " (dead)%%'
+				#query = "INSERT INTO games(id , groupName  , data) VALUES (%s, %s, %s) RETURNING data;"
+				cursor.execute(query)
+				datamurio = cur.fetchone()
+				partidas_murio += datamurio[0]
 				
-				stattext = "+++ Estadísticas {0} +++\n" + \
-					"Partidas Jugadas: *{1}*\n" + \
-					"Partidas como liberal: *{2}/{1}* Ganó: {3}/{1}\n" + \
-					"Partidas como Fascista:  *{2}/{1}* Ganó: {3}/{1}\n" + \
-					"Partidas como Hitler:  *{2}/{1}* Ganó: {3}/{1}\n" + \
-					"Partidas que murió:  *{2}/{1}*\n".format(args[0], partidas_totales, partidas_liberal, partidas_liberal_gano)	
-				bot.send_message(cid, stattext, ParseMode.MARKDOWN)
-				
+				stattext = "+++ Estadísticas {0} +++\n".format(args[0]) + \
+					"Partidas Jugadas: *{0}*\n".format(partidas_totales) + \
+					"Partidas como liberal: *{1}/{0}* Ganó: {2}/{0}\n".format(partidas_totales, partidas_liberal, partidas_liberal_gano) + \
+					"Partidas como Fascista:  *{1}/{0}* Ganó: {2}/{0}\n".format(partidas_totales, partidas_fascista, partidas_fascista_gano) + \
+					"Partidas como Hitler:  *{1}/{0}* Ganó: {2}/{0}\n".format(partidas_totales, partidas_hitler, partidas_hitler_gano) + \
+					"Partidas que murió:  *{1}/{0}*\n".format(args[0], partidas_totales, partidas_murio)	
+				bot.send_message(cid, stattext, ParseMode.MARKDOWN)				
 				
 				'''
 				for table in cursor.fetchall():
