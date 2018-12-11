@@ -147,7 +147,7 @@ def command_stats(bot, update, args):
 		partidas_fascista = 0
 		partidas_hitler = 0
 		partidas_liberal = 0
-		partidas murio = 0
+		partidas_murio = 0
 		partidas_fascista_gano = 0
 		partidas_hitler_gano = 0
 		partidas_liberal_gano = 0
