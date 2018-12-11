@@ -393,6 +393,8 @@ def pass_two_policies(bot, game):
 			bot.send_message(ADMIN,
 				"El Presidente %s te entregó las siguientes 2 políticas. Cuál quieres promulgar?" % game.board.state.president.name,
 				reply_markup=choosePolicyMarkup)
+	Commands.save_game(game.cid, "Pass Two Policies %d" % (game.board.state.currentround), game)
+	
 
 
 def enact_policy(bot, game, policy, anarchy):
