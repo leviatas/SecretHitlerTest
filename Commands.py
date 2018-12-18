@@ -136,6 +136,27 @@ def command_ping(bot, update):
     bot.send_message(cid, 'pong - v0.3')
 
 
+def get_stat_query(query, partidas_totales, partidas_fascista, partidas_hitler, partidas_liberal, partidas_murio, partidas_fascista_gano, partidas_hitler_gano, partidas_liberal_gano):
+	replace_dead = "regexp_replace(playerlist, ' \(dead\)| \(muerto\)', '', 'g')"
+	cursor = conn.cursor()
+	cursor.execute(query)
+	if cursor.rowcount > 0:
+		for table in cursor.fetchall():
+			game_endcode = table[0]
+			# Sumo las partidas independiente de que rol era.
+			partidas_totales += (table[1] + table[2] + table[3])
+			# Cuento las aprtidas con ciertos roles
+			partidas_fascista += table[1]
+			partidas_hitler += table[2]
+			partidas_liberal += table[3]
+
+			if game_endcode == 1 or game_endcode == 2:
+				partidas_liberal_gano += table[3]
+			if game_endcode == -1 or game_endcode == -2:
+				partidas_fascista_gano += table[1]
+				partidas_hitler_gano += table[2]
+	return partidas_totales, partidas_fascista, partidas_hitler, partidas_liberal, partidas_murio, partidas_fascista_gano, partidas_hitler_gano, partidas_liberal_gano
+	
 # prints statistics, only ADMIN
 def command_stats(bot, update, args):
 	cid, uid = update.message.chat_id, update.message.from_user.id	
@@ -153,13 +174,9 @@ def command_stats(bot, update, args):
 		partidas_liberal_gano = 0
 		
 		try:
-			#Check if game is in DB first
-			cursor = conn.cursor()
-			jugador = ' '.join(args)
-			#query = "select x.game_endcode, COUNT(case when REPLACE (x.playerlist, ' (dead)', '') like '%%" + jugador + " secret role was Fasc%%' then x.game_endcode end), COUNT(case when REPLACE (x.playerlist, ' (dead)', '') like '%%" + jugador + " secret role was Hitl%%' then x.game_endcode end), COUNT(case when REPLACE (x.playerlist, ' (dead)', '') like '%%" + jugador + " secret role was Libe%%' then x.game_endcode end)  FROM stats_detail x where REPLACE (x.playerlist, ' (dead)', '') like '%%" + jugador + " secret role was%%' GROUP BY game_endcode"
-			
-			replace_dead = "regexp_replace(playerlist, ' \(dead\)| \(muerto\)', '', 'g')"
-			
+			#Check if game is in DB first			
+			jugador = ' '.join(args)			
+			replace_dead = "regexp_replace(playerlist, ' \(dead\)| \(muerto\)', '', 'g')"			
 			'''
 			query = "select x.game_endcode, COUNT(case when " \
 				"{1} like '%%{0} secret role was Fasc%%' then x.game_endcode end)," \
@@ -172,54 +189,53 @@ def command_stats(bot, update, args):
 				.format(jugador, replace_dead)
 			'''
 			query = "SELECT x.game_endcode, COUNT(CASE " \
-				"WHEN {1} like '%%{0} secret role was Fasc%%' OR " \
-				"{1} like '%%El rol de {0} era Fasc%%' then x.game_endcode end" \
+				"WHEN {1} like '%%{0} secret role was Fasc%%' " \
+				"then x.game_endcode end" \
 				")," \
 				"COUNT(CASE " \
-				"WHEN {1} like '%%{0} secret role was Hitl%%' OR " \
-				"{1} like '%%El rol de {0} era Hitl%%' then x.game_endcode end" \
+				"WHEN {1} like '%%{0} secret role was Hitl%%' " \
+				"then x.game_endcode end" \
 				")," \
 				"COUNT(CASE " \
-				"WHEN {1} like '%%{0} secret role was Libe%%' OR " \
-				"{1} like '%%El rol de {0} era Libe%%' then x.game_endcode end" \
+				"WHEN {1} like '%%{0} secret role was Libe%%' " \
+				" then x.game_endcode end" \
 				") " \
 				"FROM stats_detail x WHERE {1} like " \
 				"'%%{0} secret role was%%' GROUP BY game_endcode" \
 				.format(jugador, replace_dead)
 			
+			query2 = "SELECT x.game_endcode, COUNT(CASE " \
+				"WHEN (" \
+				"{1} like '%%El rol de {0} era Fasc%%') then x.game_endcode end" \
+				")," \
+				"COUNT(CASE " \
+				"WHEN (" \
+				"{1} like '%%El rol de {0} era Hitl%%') then x.game_endcode end" \
+				")," \
+				"COUNT(CASE " \
+				"WHEN (" \
+				"{1} like '%%El rol de {0} era Libe%%') then x.game_endcode end" \
+				") " \
+				"FROM stats_detail x WHERE {1} like " \
+				"{1} like '%%El rol de {0} era%%' GROUP BY game_endcode" \
+				.format(jugador, replace_dead)
+			
+			partidas_totales, partidas_fascista, partidas_hitler, partidas_liberal, partidas_murio, partidas_fascista_gano,	partidas_hitler_gano, partidas_liberal_gano = get_stat_query(query, partidas_totales, partidas_fascista, partidas_hitler, partidas_liberal, partidas_murio, partidas_fascista_gano, partidas_hitler_gano, partidas_liberal_gano)
+			
+			partidas_totales, partidas_fascista, partidas_hitler, partidas_liberal, partidas_murio, partidas_fascista_gano,	partidas_hitler_gano, partidas_liberal_gano = get_stat_query(query2, partidas_totales, partidas_fascista, partidas_hitler, partidas_liberal, partidas_murio, partidas_fascista_gano, partidas_hitler_gano, partidas_liberal_gano)
+			
 			#query = "INSERT INTO games(id , groupName  , data) VALUES (%s, %s, %s) RETURNING data;"
 			cursor.execute(query)
 			
-			if cursor.rowcount > 0:
-				bot.send_message(cid, 'Resultado de la consulta:')
-				#|Game end_code|Fue Fascista|Fue Hitler|Fue Liberal
-				for table in cursor.fetchall():
-					game_endcode = table[0]
-					# Sumo las partidas independiente de que rol era.
-					partidas_totales += (table[1] + table[2] + table[3])
-					# Cuento las aprtidas con ciertos roles
-					partidas_fascista += table[1]
-					partidas_hitler += table[2]
-					partidas_liberal += table[3]
-					
-					if game_endcode == 1 or game_endcode == 2:
-						partidas_liberal_gano += table[3]
-					if game_endcode == -1 or game_endcode == -2:
-						partidas_fascista_gano += table[1]
-						partidas_hitler_gano += table[2]
-				'''Partidas Jugadas: X
-				Partidas como liberal: A/X Ganó: E/X
-				Partidas como Fascista: B/X Ganó: F/X
-				Partidas como Hitler: C/X Ganó: G/X
-				Partidas que murió: D/X
-				Partidas totales
-				'''				
+			if partidas_totales > 0:											
 				query = "select count(*) FROM stats_detail x where x.playerlist like '%%" + jugador + " (dead)%%' or x.playerlist like '%%" + jugador + " (muerto)%%'"
 				#query = "INSERT INTO games(id , groupName  , data) VALUES (%s, %s, %s) RETURNING data;"
+				cursor = conn.cursor()
 				cursor.execute(query)
 				datamurio = cursor.fetchone()
 				partidas_murio += datamurio[0]
 				
+				bot.send_message(cid, 'Resultado de la consulta:')
 				stattext = "+++ Estadísticas *{0}* +++\n".format(jugador) + \
 					"Partidas Jugadas: *{0}*\n".format(partidas_totales) + \
 					"Partidas como liberal: *{1}/{0}* Ganó: *{2}/{1}*\n".format(partidas_totales, partidas_liberal, partidas_liberal_gano) + \
@@ -227,19 +243,7 @@ def command_stats(bot, update, args):
 					"Partidas como Hitler:  *{1}/{0}* Ganó: *{2}/{1}*\n".format(partidas_totales, partidas_hitler, partidas_hitler_gano) + \
 					"Partidas que ganó:  *{1}/{0}* {2:.2f}%\n".format(partidas_totales, (partidas_hitler_gano+partidas_fascista_gano+partidas_liberal_gano), (partidas_hitler_gano+partidas_fascista_gano+partidas_liberal_gano) / (partidas_totales/100) ) + \
 					"Partidas que murió:  *{1}/{0}*\n".format(partidas_totales, partidas_murio)	
-				bot.send_message(cid, stattext, ParseMode.MARKDOWN)				
-				
-				'''
-				for table in cursor.fetchall():
-					#bot.send_message(cid, len(str(table)))
-					tabla_str = str(table)
-					# Si supera el maximo de caracteres lo parto
-					if len(tabla_str) < 4096:
-						bot.send_message(cid, table)
-					else:
-						bot.send_message(cid, tabla_str[:-4090])
-						bot.send_message(cid, tabla_str[4090:])
-				'''
+				bot.send_message(cid, stattext, ParseMode.MARKDOWN)
 			else:
 				bot.send_message(cid, 'No se obtuvo nada de la consulta')
 			
