@@ -162,11 +162,12 @@ def command_stats(bot, update, args):
 			
 			
 			query = ("select x.game_endcode, COUNT(case when REPLACE (x.playerlist, ' (dead)', '') "
-				 "like '%%" + jugador + " secret role was Fasc%%' then x.game_endcode end), "
-				 "COUNT(case when REPLACE (x.playerlist, ' (dead)', '') like '%%" + jugador + "
+				 "like '%%{0} secret role was Fasc%%' then x.game_endcode end), ".fromat(jugador)
+				 "COUNT(case when REPLACE (x.playerlist, ' (dead)', '') like '%%{0}".format(jugador)
 				 "secret role was Hitl%%' then x.game_endcode end), COUNT(case when REPLACE (x.playerlist, ' (dead)', '') "
-				 "like '%%" + jugador + " secret role was Libe%%' then x.game_endcode end)  FROM stats_detail x where "
-				 "REPLACE (x.playerlist, ' (dead)', '') like '%%" + jugador + " secret role was%%' GROUP BY game_endcode")
+				 "like '%%{0} secret role was Libe%%' then x.game_endcode end) ".format(jugador)
+				 "FROM stats_detail x where "
+				 "REPLACE (x.playerlist, ' (dead)', '') like '%%{0} secret role was%%' GROUP BY game_endcode".format(jugador))
 			
 			
 			
