@@ -177,59 +177,39 @@ def command_stats(bot, update, args):
 			#Check if game is in DB first			
 			jugador = ' '.join(args)			
 			replace_dead = "regexp_replace(playerlist, ' \(dead\)| \(muerto\)', '', 'g')"			
-			'''
-			query = "select x.game_endcode, COUNT(case when " \
-				"{1} like '%%{0} secret role was Fasc%%' then x.game_endcode end)," \
-				"COUNT(case when {1} like " \
-				"'%%{0} secret role was Hitl%%' then x.game_endcode end)," \
-				"COUNT(case when {1} like " \
-				"'%%{0} secret role was Libe%%' then x.game_endcode end) " \
-				"FROM stats_detail x where {1} like " \
-				"'%%{0} secret role was%%' GROUP BY game_endcode" \
-				.format(jugador, replace_dead)
-			'''
+			
 			query = "SELECT x.game_endcode, COUNT(CASE " \
-				"WHEN ({1} like '%%{0} secret role was Fasc%%' " \
-				"then x.game_endcode end" \
+				"WHEN {1} like '%%{0} secret role was Fasc%%' then x.game_endcode end" \
 				")," \
 				"COUNT(CASE " \
-				"WHEN ({1} like '%%{0} secret role was Hitl%%' " \
-				"then x.game_endcode end" \
+				"WHEN {1} like '%%{0} secret role was Hitl%%' then x.game_endcode end" \
 				")," \
 				"COUNT(CASE " \
-				"WHEN ({1} like '%%{0} secret role was Libe%%' " \
-				" then x.game_endcode end" \
+				"WHEN {1} like '%%{0} secret role was Libe%%' then x.game_endcode end" \
 				") " \
 				"FROM stats_detail x WHERE " \
 				"{1} like '%%{0} secret role was%%' GROUP BY game_endcode" \
 				.format(jugador, replace_dead)
 			
 			query2 = "SELECT x.game_endcode, COUNT(CASE " \
-				"WHEN (" \
-				"{1} like '%%El rol de {0} era Fasc%%') then x.game_endcode end" \
+				"WHEN {1} like '%%El rol de {0} era Fasc%%' then x.game_endcode end" \
 				")," \
 				"COUNT(CASE " \
-				"WHEN (" \
-				"{1} like '%%El rol de {0} era Hitl%%') then x.game_endcode end" \
+				"WHEN {1} like '%%El rol de {0} era Hitl%%' then x.game_endcode end" \
 				")," \
 				"COUNT(CASE " \
-				"WHEN (" \
-				"{1} like '%%El rol de {0} era Libe%%') then x.game_endcode end" \
+				"WHEN {1} like '%%El rol de {0} era Libe%%' then x.game_endcode end" \
 				") " \
 				"FROM stats_detail x WHERE " \
 				"{1} like '%%El rol de {0} era%%' GROUP BY game_endcode" \
 				.format(jugador, replace_dead)
 			
 			partidas_totales, partidas_fascista, partidas_hitler, partidas_liberal, partidas_murio, partidas_fascista_gano,	partidas_hitler_gano, partidas_liberal_gano = get_stat_query(query, partidas_totales, partidas_fascista, partidas_hitler, partidas_liberal, partidas_murio, partidas_fascista_gano, partidas_hitler_gano, partidas_liberal_gano)
-			
 			partidas_totales, partidas_fascista, partidas_hitler, partidas_liberal, partidas_murio, partidas_fascista_gano,	partidas_hitler_gano, partidas_liberal_gano = get_stat_query(query2, partidas_totales, partidas_fascista, partidas_hitler, partidas_liberal, partidas_murio, partidas_fascista_gano, partidas_hitler_gano, partidas_liberal_gano)
-			
-			#query = "INSERT INTO games(id , groupName  , data) VALUES (%s, %s, %s) RETURNING data;"
-			cursor.execute(query)
-			
+						
 			if partidas_totales > 0:											
-				query = "select count(*) FROM stats_detail x where x.playerlist like '%%" + jugador + " (dead)%%' or x.playerlist like '%%" + jugador + " (muerto)%%'"
-				#query = "INSERT INTO games(id , groupName  , data) VALUES (%s, %s, %s) RETURNING data;"
+				query = "select count(*) FROM stats_detail x where x.playerlist like '%%{0} (dead)%%' or x.playerlist like '%%{0} (muerto)%%'".format(jugador)
+				
 				cursor = conn.cursor()
 				cursor.execute(query)
 				datamurio = cursor.fetchone()
