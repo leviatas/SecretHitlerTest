@@ -161,22 +161,28 @@ def command_stats(bot, update, args):
 			replace_dead = "regexp_replace(playerlist, ' \(dead\)| \(muerto\)', '', 'g')"
 			
 			'''
-			query = "select x.game_endcode, COUNT(case when REPLACE (x.playerlist, ' (dead)', '') like " \
-				"'%%{0} secret role was Fasc%%' then x.game_endcode end)," \
-				"COUNT(case when REPLACE (x.playerlist, ' (dead)', '') like " \
+			query = "select x.game_endcode, COUNT(case when " \
+				"{1} like '%%{0} secret role was Fasc%%' then x.game_endcode end)," \
+				"COUNT(case when {1} like " \
 				"'%%{0} secret role was Hitl%%' then x.game_endcode end)," \
-				"COUNT(case when REPLACE (x.playerlist, ' (dead)', '') like " \
+				"COUNT(case when {1} like " \
 				"'%%{0} secret role was Libe%%' then x.game_endcode end) " \
-				"FROM stats_detail x where REPLACE (x.playerlist, ' (dead)', '') like " \
+				"FROM stats_detail x where {1} like " \
 				"'%%{0} secret role was%%' GROUP BY game_endcode" \
-				.format(jugador)
+				.format(jugador, replace_dead)
 			'''
-			query = "select x.game_endcode, COUNT(case when {1} like " \
-				"'%%{0} secret role was Fasc%%' then x.game_endcode end)," \
-				"COUNT(case when {1} like " \
-				"'%%{0} secret role was Hitl%%' then x.game_endcode end)," \
-				"COUNT(case when {1} like " \
-				"'%%{0} secret role was Libe%%' then x.game_endcode end) " \
+			query = "select x.game_endcode, COUNT(case " \
+				"when {1} like '%%{0} secret role was Fasc%%' then x.game_endcode end " \
+				"when {1} like '%%El rol de {0} era Fasc%%' then x.game_endcode end" \
+				")," \
+				"COUNT(case " \
+				"when {1} like '%%{0} secret role was Hitl%%' then x.game_endcode end " \
+				"when {1} like '%%El rol de {0} era Hitl%%' then x.game_endcode end" \
+				")," \
+				"COUNT(case " \
+				"when {1} like '%%{0} secret role was Libe%%' then x.game_endcode end " \
+				"when {1} like '%%El rol de {0} era Libe%%' then x.game_endcode end" \
+				") " \
 				"FROM stats_detail x where {1} like " \
 				"'%%{0} secret role was%%' GROUP BY game_endcode" \
 				.format(jugador, replace_dead)
