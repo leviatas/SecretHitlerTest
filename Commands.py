@@ -158,7 +158,7 @@ def command_stats(bot, update, args):
 			jugador = ' '.join(args)
 			#query = "select x.game_endcode, COUNT(case when REPLACE (x.playerlist, ' (dead)', '') like '%%" + jugador + " secret role was Fasc%%' then x.game_endcode end), COUNT(case when REPLACE (x.playerlist, ' (dead)', '') like '%%" + jugador + " secret role was Hitl%%' then x.game_endcode end), COUNT(case when REPLACE (x.playerlist, ' (dead)', '') like '%%" + jugador + " secret role was Libe%%' then x.game_endcode end)  FROM stats_detail x where REPLACE (x.playerlist, ' (dead)', '') like '%%" + jugador + " secret role was%%' GROUP BY game_endcode"
 			
-			replace_dead = regexp_replace(playerlist, ' \(dead\)| \(muerto\)', '', 'g')
+			#replace_dead = regexp_replace(playerlist, ' \(dead\)| \(muerto\)', '', 'g')
 			
 			
 			query = ("select x.game_endcode, COUNT(case when REPLACE (x.playerlist, ' (dead)', '') "
