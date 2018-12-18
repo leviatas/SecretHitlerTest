@@ -156,7 +156,20 @@ def command_stats(bot, update, args):
 			#Check if game is in DB first
 			cursor = conn.cursor()
 			jugador = ' '.join(args)
-			query = "select x.game_endcode, COUNT(case when REPLACE (x.playerlist, ' (dead)', '') like '%%" + jugador + " secret role was Fasc%%' then x.game_endcode end), COUNT(case when REPLACE (x.playerlist, ' (dead)', '') like '%%" + jugador + " secret role was Hitl%%' then x.game_endcode end), COUNT(case when REPLACE (x.playerlist, ' (dead)', '') like '%%" + jugador + " secret role was Libe%%' then x.game_endcode end)  FROM stats_detail x where REPLACE (x.playerlist, ' (dead)', '') like '%%" + jugador + " secret role was%%' GROUP BY game_endcode"
+			#query = "select x.game_endcode, COUNT(case when REPLACE (x.playerlist, ' (dead)', '') like '%%" + jugador + " secret role was Fasc%%' then x.game_endcode end), COUNT(case when REPLACE (x.playerlist, ' (dead)', '') like '%%" + jugador + " secret role was Hitl%%' then x.game_endcode end), COUNT(case when REPLACE (x.playerlist, ' (dead)', '') like '%%" + jugador + " secret role was Libe%%' then x.game_endcode end)  FROM stats_detail x where REPLACE (x.playerlist, ' (dead)', '') like '%%" + jugador + " secret role was%%' GROUP BY game_endcode"
+			
+			replace_dead = regexp_replace(playerlist, ' \(dead\)| \(muerto\)', '', 'g')
+			
+			
+			query = ("select x.game_endcode, COUNT(case when REPLACE (x.playerlist, ' (dead)', '') "
+				 "like '%%" + jugador + " secret role was Fasc%%' then x.game_endcode end), "
+				 "COUNT(case when REPLACE (x.playerlist, ' (dead)', '') like '%%" + jugador + "
+				 "secret role was Hitl%%' then x.game_endcode end), COUNT(case when REPLACE (x.playerlist, ' (dead)', '') "
+				 "like '%%" + jugador + " secret role was Libe%%' then x.game_endcode end)  FROM stats_detail x where "
+				 "REPLACE (x.playerlist, ' (dead)', '') like '%%" + jugador + " secret role was%%' GROUP BY game_endcode")
+			
+			
+			
 			#query = "INSERT INTO games(id , groupName  , data) VALUES (%s, %s, %s) RETURNING data;"
 			cursor.execute(query)
 			
@@ -184,7 +197,7 @@ def command_stats(bot, update, args):
 				Partidas que murió: D/X
 				Partidas totales
 				'''				
-				query = "select count(*) FROM stats_detail x where x.playerlist like '%%" + jugador + " (dead)%%'"
+				query = "select count(*) FROM stats_detail x where x.playerlist like '%%" + jugador + " (dead)%%' or x.playerlist like '%%" + jugador + " (muerto)%%'"
 				#query = "INSERT INTO games(id , groupName  , data) VALUES (%s, %s, %s) RETURNING data;"
 				cursor.execute(query)
 				datamurio = cursor.fetchone()
