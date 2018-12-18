@@ -172,17 +172,17 @@ def command_stats(bot, update, args):
 				.format(jugador, replace_dead)
 			'''
 			query = "SELECT x.game_endcode, COUNT(CASE " \
-				"WHEN {1} like '%%{0} secret role was Fasc%%' then x.game_endcode end " \
-				"WHEN {1} like '%%El rol de {0} era Fasc%%' then x.game_endcode end" \
-				"END)," \
+				"WHEN {1} like '%%{0} secret role was Fasc%%' OR " \
+				"{1} like '%%El rol de {0} era Fasc%%' then x.game_endcode end" \
+				")," \
 				"COUNT(CASE " \
-				"WHEN {1} like '%%{0} secret role was Hitl%%' then x.game_endcode end " \
-				"WHEN {1} like '%%El rol de {0} era Hitl%%' then x.game_endcode end" \
-				"END)," \
+				"WHEN {1} like '%%{0} secret role was Hitl%%' OR " \
+				"{1} like '%%El rol de {0} era Hitl%%' then x.game_endcode end" \
+				")," \
 				"COUNT(CASE " \
-				"WHEN {1} like '%%{0} secret role was Libe%%' then x.game_endcode end " \
-				"WHEN {1} like '%%El rol de {0} era Libe%%' then x.game_endcode end" \
-				"END) " \
+				"WHEN {1} like '%%{0} secret role was Libe%%' OR " \
+				"{1} like '%%El rol de {0} era Libe%%' then x.game_endcode end" \
+				") " \
 				"FROM stats_detail x WHERE {1} like " \
 				"'%%{0} secret role was%%' GROUP BY game_endcode" \
 				.format(jugador, replace_dead)
