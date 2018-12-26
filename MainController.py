@@ -974,6 +974,14 @@ def error(bot, update, error):
     #bot.send_message(387393551, 'Update "%s" caused error "%s"' % (update, error) ) 
     logger.warning('Update "%s" caused error "%s"' % (update, error))
 
+def get_TOKEN():	
+	cur = conn.cursor()
+	query = "select * from config;"
+	cur.execute(query)
+	dbdata = cur.fetchone()
+	token = dbdata[1]
+	return token
+	
 def main():
 	GamesController.init() #Call only once
 	#initialize_testdata()
@@ -999,7 +1007,7 @@ def main():
 	'''
 
 	#PORT = int(os.environ.get('PORT', '5000'))
-	updater = Updater(TOKEN)
+	updater = Updater(get_TOKEN())
 	'''
 	updater.start_webhook(listen="0.0.0.0",
 	      port=PORT,
