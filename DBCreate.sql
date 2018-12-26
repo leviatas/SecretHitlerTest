@@ -32,4 +32,11 @@ CREATE TABLE IF NOT EXISTS stats_detail (
     num_players INTEGER NOT NULL
 );
 
+CREATE TABLE IF NOT EXISTS config (
+     id bigint PRIMARY KEY,
+     token TEXT NOT NULL
+ );
+ 
+ INSERT INTO config VALUES (1, '443814179:AAH9lpzfxGUC7XAKNh8uV5r9NCDx6lGBQJM');
+
 --INSERT INTO stats VALUES (1, 0, 0, 0, 0, 0);
