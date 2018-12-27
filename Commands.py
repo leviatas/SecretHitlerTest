@@ -675,9 +675,19 @@ def command_prueba(bot, update):
 		cid = update.message.chat_id
 		game = get_game(cid)
 		
+		game.board.state.president = game.playerlist[9280148] #Tucu
+		
+		game.board.state.chancellor = game.playerlist[377488610] #Xapi
+		
+		game.board.state.player_counter = 5
+		
+		MainController.enact_policy(bot, game, "fascista", False)
+		
+		
+		'''
 		for uid in game.playerlist:
 			game.playerlist[uid].name = game.playerlist[uid].name.replace("_", " ")
-		
+		'''
 		#MainController.showHiddenhistory(bot, game)
 		'''game = GamesController.games.get(cid, None)
 		history_text = "Historial Oculto:\n\n" 
