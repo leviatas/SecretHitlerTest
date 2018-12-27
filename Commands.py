@@ -683,6 +683,7 @@ def command_prueba(bot, update):
 		
 		MainController.enact_policy(bot, game, "fascista", False)
 		
+		save_game(cid, "Game conflict state", game)
 		
 		'''
 		for uid in game.playerlist:
