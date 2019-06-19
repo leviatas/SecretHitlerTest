@@ -37,4 +37,4 @@ CREATE TABLE IF NOT EXISTS config (
      token TEXT NOT NULL
  );
 
-INSERT INTO stats VALUES (1, 32, 8, 37, 5, 5);
+--INSERT INTO stats VALUES (1, 32, 8, 37, 5, 5);
