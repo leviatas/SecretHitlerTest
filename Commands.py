@@ -674,6 +674,9 @@ def command_prueba(bot, update):
 	if uid == ADMIN:
 		cid = update.message.chat_id
 		game = get_game(cid)
+		game.board.state.fascist_track = 4
+		'''
+		
 		
 		game.board.state.president = game.playerlist[9280148] #Tucu
 		
@@ -682,6 +685,7 @@ def command_prueba(bot, update):
 		game.board.state.player_counter = 5
 		
 		MainController.enact_policy(bot, game, "fascista", False)
+		'''
 		
 		save_game(cid, "Game conflict state", game)
 		
