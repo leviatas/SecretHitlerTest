@@ -144,7 +144,7 @@ def command_rules(bot, update):
 	Si se promulga una politica fascista hay posibilidad que haya una acción para el *presidente* relacionada a ella.
 	/symbols Da un resumen de que hace cada acción.
 	"""
-	bot.send_message(cid, "Lee las reglas oficiales de Secret Hitler:", ParseMode.MARKDOWN)
+	bot.send_message(cid, msg, ParseMode.MARKDOWN)
 
 
 # pings the bot
