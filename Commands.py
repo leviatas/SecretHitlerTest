@@ -678,6 +678,8 @@ def command_prueba(bot, update):
 		
 		game.board.state.drawn_policies = []
 		
+		bot.send_message(game.cid, "Se ha vaciado el draw policies", ParseMode.MARKDOWN)
+		
 		'''
 		game.board.state.fascist_track = 4
 		'''
