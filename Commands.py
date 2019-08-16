@@ -671,11 +671,10 @@ def command_anarquia(bot, update):
 		
 def command_prueba(bot, update):	
 	uid = update.message.from_user.id
+	log.info("Ingreso en FIX")
 	if uid == ADMIN:
 		cid = update.message.chat_id
 		game = get_game(cid)
-		drawn_policies
-		
 		game.board.state.drawn_policies = []
 		
 		bot.send_message(game.cid, "Se ha vaciado el draw policies", ParseMode.MARKDOWN)
