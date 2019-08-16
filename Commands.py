@@ -674,7 +674,14 @@ def command_prueba(bot, update):
 	if uid == ADMIN:
 		cid = update.message.chat_id
 		game = get_game(cid)
+		drawn_policies
+		
+		game.board.state.drawn_policies = []
+		
+		'''
 		game.board.state.fascist_track = 4
+		'''
+		
 		'''
 		
 		
