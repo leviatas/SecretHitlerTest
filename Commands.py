@@ -125,10 +125,26 @@ def command_start(bot, update):
 
 
 def command_rules(bot, update):
-    cid = update.message.chat_id
-    btn = [[InlineKeyboardButton("Rules", url="http://www.secrethitler.com/assets/Secret_Hitler_Rules.pdf")]]
-    rulesMarkup = InlineKeyboardMarkup(btn)
-    bot.send_message(cid, "Lee las reglas oficiales de Secret Hitler:", reply_markup=rulesMarkup)
+	cid = update.message.chat_id
+	btn = [[InlineKeyboardButton("Rules", url="http://www.secrethitler.com/assets/Secret_Hitler_Rules.pdf")]]
+	rulesMarkup = InlineKeyboardMarkup(btn)
+	msg = """En cada turno el jugador activo, *Presidente* de ahora en más, elige un jugador como su *canciller*.
+	Luego todos los jugadores votan si aceptan la formula elegida.
+	Si hay mayoria de votos *JA!* (positivos) la formula se convierte en activa.
+	En ese caso el jugador *presidente* recibe 3 cartas del mazo de politicas, este esta compuesto inicialmente por
+	*11 Politicas fascistas*
+	*6 Politicas liberales*
+	Al recibir las cartas el presidente recibirá en privado una botonera con las 3 cartas y se le pedirá que
+	*DESCARTE* una de ellas para pasar las dos restantes al canciller.
+	El canciller recibirá las dos politicas restantes y eligirá una para promulgar.
+	
+	El objetivo de los fascistas es promulgar *6 politicas fascistas* o *3 y que Hitler sea elegido canciller*.
+	EL objetivo de los liberales es promulgar *5 politicas liberales* o *Matar a Hitler*
+	
+	Si se promulga una politica fascista hay posibilidad que haya una acción para el *presidente* relacionada a ella.
+	/symbols Da un resumen de que hace cada acción.
+	"""
+	bot.send_message(cid, "Lee las reglas oficiales de Secret Hitler:", ParseMode.MARKDOWN)
 
 
 # pings the bot
