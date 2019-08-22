@@ -11,7 +11,7 @@ class Player(object):
         self.preference_rol = ""
 
     def get_private_info(self, game):
-        board = "--- *Info del Jugador* {} ---\n".format(self.name)
+        board = "--- *Info del Jugador {}* ---\n".format(self.name)
         board += "Eres *{}* y tu afiliacion es *{}*\n".format(self.role, self.party)
         player_number = len(game.playerlist)
         if self.role == "Fascista":

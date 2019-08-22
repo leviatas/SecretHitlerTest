@@ -845,12 +845,15 @@ def command_info(bot, update):
 	
 	if groupType not in ['group', 'supergroup']:
 		bot.send_message(cid, "El comando solo sirve en chats que tienen un juego creado!")
-	else:		
+	else:
+		groupName = update.message.chat.title
 		game = get_game(cid)
 		if game:
 			if uid in game.playerlist:								
 				player = game.playerlist[uid]
-				bot.send_message(uid, player.get_private_info(game), ParseMode.MARKDOWN)				
+				msg = "--- *Info del grupo {}* ---\n".format(groupName)
+				msg += player.get_private_info(game)
+				bot.send_message(uid, msg, ParseMode.MARKDOWN)				
 			else:
 				bot.send_message(cid, "Debes ser un jugador del partido para obtener informacion.")
 		else:
