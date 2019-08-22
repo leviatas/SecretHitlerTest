@@ -839,3 +839,19 @@ def multipurpose_choose_buttons(bot, cid, uid, chat_donde_se_pregunta, comando_c
 	btnMarkup = InlineKeyboardMarkup(btns)
 	#for uid in game.playerlist:
 	bot.send_message(chat_donde_se_pregunta, mensaje_pregunta, reply_markup=btnMarkup)
+
+def command_info(bot, update):
+	cid, uid, groupType = update.message.chat_id, update.message.from_user.id, update.message.chat.type
+	
+	if groupType not in ['group', 'supergroup']:
+		bot.send_message(cid, "El comando solo sirve en chats que tienen un juego creado!")
+	else:		
+		game = get_game(cid)
+		if game:
+			if uid in game.playerlist:								
+				player = game.playerlist[uid]
+				bot.send_message(uid, player.get_private_info(game), ParseMode.MARKDOWN)				
+			else:
+				bot.send_message(cid, "Debes ser un jugador del partido para obtener informacion.")
+		else:
+			bot.send_message(cid, "No hay juego creado en este chat")

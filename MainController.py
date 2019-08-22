@@ -1039,7 +1039,7 @@ def main():
 	dp.add_handler(CommandHandler("anarchy", Commands.command_anarquia))
 	dp.add_handler(CommandHandler("prueba", Commands.command_prueba))
 	dp.add_handler(CommandHandler("claimoculto", Commands.command_claim_oculto, pass_args = True))
-	
+	dp.add_handler(CommandHandler("info", Commands.command_info))
 	dp.add_handler(CommandHandler("jugadores", Commands.command_jugadores))
 
 	#Testing commands
