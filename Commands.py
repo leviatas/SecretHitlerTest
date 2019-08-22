@@ -869,8 +869,8 @@ def command_show_stats(bot, update, args):
 	user_stats = MainController.load_player_stats(uid)
 	if user_stats:
 		jsonStr = jsonpickle.encode(user_stats)
-		json = json.loads(jsonStr)		
-		bot.send_message(cid, json.dumps(json, sort_keys=True, indent=4))
+		jsonbeuty = json.loads(jsonStr)		
+		bot.send_message(cid, json.dumps(jsonbeuty, sort_keys=True, indent=4))
 	else:
 		bot.send_message(cid, "El usuario no tiene stats")
 
