@@ -868,7 +868,8 @@ def command_show_stats(bot, update, args):
 	cid, uid = update.message.chat_id, update.message.from_user.id
 	user_stats = MainController.load_player_stats(uid)
 	if user_stats:
-		bot.send_message(cid, jsonpickle.encode(user_stats))
+		json = jsonpickle.encode(user_stats)		
+		bot.send_message(cid, json.dumps(json, sort_keys=True, indent=4))
 	else:
 		bot.send_message(cid, "El usuario no tiene stats")
 
