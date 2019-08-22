@@ -876,7 +876,7 @@ def command_change_stats(bot, update, args):
 	cid, uid = update.message.chat_id, update.message.from_user.id
 	
 	if len(args) > 1:
-		stat_name = args[0]
+		stat_name = args[0].replace('_', ' ')
 		amount = int(args[1])
 	else:
 		stat_name = "Partidas Jugadas"
