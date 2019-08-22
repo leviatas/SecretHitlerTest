@@ -696,9 +696,13 @@ def command_prueba(bot, update):
 	if uid == ADMIN:
 		cid = update.message.chat_id
 		game = get_game(cid)
+		game.board.state.chosen_president = game.playerlist[445782140]
+		
+		'''
 		game.board.state.drawn_policies = []
 		
 		bot.send_message(game.cid, "Se ha vaciado el draw policies", ParseMode.MARKDOWN)
+		'''
 		
 		'''
 		game.board.state.fascist_track = 4
