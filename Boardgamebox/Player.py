@@ -23,11 +23,11 @@ class Player(object):
                         fstring += f.name + ", "
                 fstring = fstring[:-2]
                 if not game.is_debugging:
-                    board += "Tus compañeros fascistas son: {}".format(fstring)
+                    board += "Tus compañeros fascistas son: *{}*\n".format(fstring)
             hitler = game.get_hitler()
-            board += "Hitler es: {}".format(hitler.name)
+            board += "Hitler es: *{}*".format(hitler.name)
         elif self.role == "Hitler":
             if player_number <= 6:
                 fascists = game.get_fascists()
-                board +=  "Tu compañero fascista es: {}".format(fascists[0].name)
+                board +=  "Tu compañero fascista es: *{}*".format(fascists[0].name)
         return board
