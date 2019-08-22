@@ -842,7 +842,7 @@ def load_player_stats(uid):
 	if cur.rowcount > 0:
 		log.info("user_stats Found")
 		jsdata = dbdata[1]
-		#log.info("jsdata = %s" % (jsdata))				
+		log.info("jsdata = {}".format(jsdata))				
 		stats = jsonpickle.decode(jsdata)
 		return stats
 	else:
