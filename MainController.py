@@ -10,7 +10,7 @@ from random import randrange
 from time import sleep
 
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, ParseMode
-from telegram.ext import (Updater, CommandHandler, CallbackQueryHandler)
+from telegram.ext import (Updater, CommandHandler, CallbackQueryHandler, MessageHandler, Filters)
 
 import Commands
 from Constants.Cards import playerSets
@@ -169,9 +169,11 @@ def vote(bot, game):
 			if game.playerlist[uid] is not game.board.state.nominated_president:
 				# the nominated president already got the board before nominating a chancellor
 				Commands.print_board(bot, game, uid)
-			bot.send_message(uid, "Quieres elegir al Presidente %s y al canciller %s?" % (
-				game.board.state.nominated_president.name, game.board.state.nominated_chancellor.name),
-					reply_markup=voteMarkup)
+			groupName = ""		
+			if hasattr(game, 'groupName'):
+				groupName += "En el grupo {}\n".format(game.groupName)
+			msg = "{}Quieres elegir al Presidente {} y al canciller {}?".format(groupName, game.board.state.nominated_president.name, game.board.state.nominated_chancellor.name)
+			bot.send_message(uid, msg,	reply_markup=voteMarkup)
 
 
 def handle_voting(bot, update):
@@ -201,9 +203,14 @@ def handle_voting(bot, update):
 		btns = [[InlineKeyboardButton("Ja", callback_data=strcid + "_Ja"),
 				InlineKeyboardButton("Nein", callback_data=strcid + "_Nein")]]
 		voteMarkup = InlineKeyboardMarkup(btns)
-		bot.send_message(uid, "Puedes cambiar tu voto aquí.\nQuieres elegir al Presidente %s y al canciller %s?" % (
-				game.board.state.nominated_president.name, game.board.state.nominated_chancellor.name),
-				reply_markup=voteMarkup)
+		 
+		groupName = ""
+		
+		if hasattr(game, 'groupName'):
+			groupName += "En el grupo {}\n".format(game.groupName)
+
+		msg = "{}\nPuedes cambiar tu voto aquí.\nQuieres elegir al Presidente {} y al canciller {}?".format(groupName, game.board.state.nominated_president.name, game.board.state.nominated_chancellor.name)
+		bot.send_message(uid, msg, reply_markup=voteMarkup)
 		Commands.save_game(game.cid, "Saved Round %d" % (game.board.state.currentround), game)
 		if len(game.board.state.last_votes) == len(game.player_sequence):
 			count_votes(bot, game)
@@ -783,7 +790,7 @@ def set_stats(column_name, value, bot, cid):
 		bot.send_message(cid, 'No se ejecuto el comandoset_stats debido a: '+str(e))
 		conn.rollback()
 		
-def save_game_details(print_roles, game_endcode, liberal_track, fascist_track, num_players):
+def save_game_details(bot, print_roles, game_endcode, liberal_track, fascist_track, num_players):
 	try:
 		#Check if game is in DB first
 		cursor = conn.cursor()			
@@ -794,8 +801,8 @@ def save_game_details(print_roles, game_endcode, liberal_track, fascist_track, n
 		#dbdata = cur.fetchone()
 		conn.commit()
 	except Exception as e:
-		bot.send_message(cid, 'No se ejecuto el comando debido a: '+str(e))
 		conn.rollback()
+		bot.send_message(ADMIN, 'No se ejecuto el comando save_game_details debido a: '+str(e))
 
 	
 		
@@ -813,7 +820,7 @@ def end_game(bot, game, game_endcode):
 	cid = game.cid
 	
 	# Grabo detalles de la partida
-	save_game_details(game.print_roles(), game_endcode, game.board.state.liberal_track, game.board.state.fascist_track, game.board.num_players)
+	save_game_details(bot, game.print_roles(), game_endcode, game.board.state.liberal_track, game.board.state.fascist_track, game.board.num_players)
 	
 	#bot.send_message(cid, "Datos a guardar %s %s %s %s %s" % (game.print_roles(), str(game_endcode), str(game.board.state.liberal_track), str(game.board.state.fascist_track), str(game.board.num_players)))
 		
@@ -974,6 +981,13 @@ def error(bot, update, error):
     #bot.send_message(387393551, 'Update "%s" caused error "%s"' % (update, error) ) 
     logger.warning('Update "%s" caused error "%s"' % (update, error))
 
+def change_groupname(bot, update):
+	cid = update.message.chat.id
+	groupname = update.message.chat.title
+	game = Commands.get_game(cid)
+	game.groupName = groupname
+	bot.send_message(ADMIN, text="El group en {cid} ha cambiado de nombre a {groupname}".format(groupname=groupname, cid=cid))
+
 def get_TOKEN():	
 	cur = conn.cursor()
 	query = "select * from config;"
@@ -1060,6 +1074,8 @@ def main():
 	# Comandos para elegir rol al unirse a la partida
 	dp.add_handler(CommandHandler("role", Commands.command_choose_posible_role))
 	dp.add_handler(CallbackQueryHandler(pattern="(-[0-9]*)\*chooserole\*(.*)\*([0-9]*)", callback=Commands.callback_choose_posible_role))
+
+	dp.add_handler(MessageHandler(Filters.status_update.new_chat_title, change_groupname))
 	
 	# log all errors
 	dp.add_error_handler(error)
