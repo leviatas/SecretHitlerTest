@@ -269,7 +269,7 @@ def command_help(bot, update):
 
 def command_newgame(bot, update):  
 	cid = update.message.chat_id
-		
+	groupName = update.message.chat.title	
 	try:
 		game = get_game(cid)
 		groupType = update.message.chat.type
@@ -278,7 +278,7 @@ def command_newgame(bot, update):
 		elif game:
 			bot.send_message(cid, "Hay un juego comenzado en este chat. Si quieres terminarlo escribe /cancelgame!")
 		else:
-			GamesController.games[cid] = Game(cid, update.message.from_user.id)
+			GamesController.games[cid] = Game(cid, update.message.from_user.id, groupName)
 			bot.send_message(cid, "Nuevo juego creado! Cada jugador debe unirse al juego con el comando /join.\nEl iniciador del juego (o el administrador) pueden unirse tambien y escribir /startgame cuando todos se hayan unido al juego!")
 			
 	except Exception as e:
@@ -457,11 +457,15 @@ def command_showhistory(bot, update):
 		#Send message of executing command   
 		cid = update.message.chat_id
 		#Check if there is a current game 
+		
+		groupName = update.message.chat.title
+
 		game = get_game(cid)
 		if game:			
 			#bot.send_message(cid, "Current round: " + str(game.board.state.currentround + 1))
 			uid = update.message.from_user.id
-			history_text = "Historial:\n\n" 
+			game.groupName = groupName
+			history_text = "Historial del grupo *{}*:\n\n".format(groupName)
 			history_textContinue = "" 
 			for x in game.history:
 				if len(history_text) < 3500:
