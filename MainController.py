@@ -1118,8 +1118,8 @@ def main():
 	dp.add_handler(CommandHandler("role", Commands.command_choose_posible_role))
 	dp.add_handler(CallbackQueryHandler(pattern="(-[0-9]*)\*chooserole\*(.*)\*([0-9]*)", callback=Commands.callback_choose_posible_role))
 
-	dp.add_handler(CommandHandler("command_show_stats", Commands.command_show_stats, pass_args = True))
-	dp.add_handler(CommandHandler("command_change_stats", Commands.command_change_stats, pass_args = True))
+	dp.add_handler(CommandHandler("showstats", Commands.command_show_stats, pass_args = True))
+	dp.add_handler(CommandHandler("changestats", Commands.command_change_stats, pass_args = True))
 
 	dp.add_handler(MessageHandler(Filters.status_update.new_chat_title, change_groupname))
 	
