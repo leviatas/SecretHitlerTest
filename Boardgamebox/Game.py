@@ -17,7 +17,8 @@ class Game(object):
 		self.history = []
 		self.hiddenhistory = []
 		self.is_debugging = False
-		self.groupName = groupName    
+		self.groupName = groupName
+		self.tipo = 'SecretHitler'   
     
 	def add_player(self, uid, player):
 		self.playerlist[uid] = player

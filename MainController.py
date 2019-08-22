@@ -17,9 +17,10 @@ from Constants.Cards import playerSets
 from Constants.Config import TOKEN, STATS, ADMIN
 from Boardgamebox.Game import Game
 from Boardgamebox.Player import Player
+from PlayerStats import PlayerStats
 import GamesController
 import datetime
-
+import jsonpickle
 import os
 import psycopg2
 from psycopg2 import sql
@@ -119,8 +120,11 @@ def choose_chancellor(bot, game):
 		bot.send_message(ADMIN, 'Por favor nomina a tu canciller!', reply_markup=chancellorMarkup)      
 	else:
 		Commands.print_board(bot, game, game.board.state.nominated_president.uid)
-		
-		bot.send_message(game.board.state.nominated_president.uid, 'Por favor nomina a tu canciller!', reply_markup=chancellorMarkup)
+		groupName = ""
+		if hasattr(game, 'groupName'):
+			groupName += "*En el grupo {}*\n".format(game.groupName)
+		msg = '{}Por favor nomina a tu canciller!'.format(groupName)
+		bot.send_message(game.board.state.nominated_president.uid, msg, reply_markup=chancellorMarkup)
 	Commands.save_game(game.cid, "choose_chancellor Round %d" % (game.board.state.currentround), game)
 
 def nominate_chosen_chancellor(bot, update):
@@ -804,8 +808,47 @@ def save_game_details(bot, print_roles, game_endcode, liberal_track, fascist_tra
 		conn.rollback()
 		bot.send_message(ADMIN, 'No se ejecuto el comando save_game_details debido a: '+str(e))
 
-	
-		
+def save_player_stats(uid, data):
+	#Check if game is in DB first
+	cur = conn.cursor()			
+	log.info("Searching Game in DB")
+	query = "select * from user_stats where id = %s;"
+	cur.execute(query, [uid])
+	#dbdata = cur.fetchone()
+	if cur.rowcount > 0:
+		log.info('Updating user_stats')
+		datajson = jsonpickle.encode(data)
+		#query = "UPDATE games SET groupName = %s, data = %s WHERE id = %s RETURNING data;"
+		query = "UPDATE user_stats SET data = %s WHERE id = %s;"
+		cur.execute(query, (datajson, uid))
+		#log.info(cur.fetchone()[0])
+		conn.commit()		
+	else:
+		log.info('Saving user_stats in DB')
+		datajson = jsonpickle.encode(data)
+		query = "INSERT INTO user_stats(id, data) VALUES (%s, %s);"
+		#query = "INSERT INTO games(id , groupName  , data) VALUES (%s, %s, %s) RETURNING data;"
+		cur.execute(query, (uid, datajson))
+		#log.info(cur.fetchone()[0])
+		conn.commit()
+
+def load_player_stats(uid):
+	cur = conn.cursor()			
+	log.info("Searching Game in DB")
+	query = "SELECT * FROM user_stats WHERE id = %s;"
+	cur.execute(query, [uid])
+	dbdata = cur.fetchone()
+
+	if cur.rowcount > 0:
+		log.info("user_stats Found")
+		jsdata = dbdata[1]
+		#log.info("jsdata = %s" % (jsdata))				
+		stats = jsonpickle.decode(jsdata)
+		return stats
+	else:
+		log.info("user_stats Not Found")
+		return None
+
 ##
 # game_endcode:
 #   -2  fascists win by electing Hitler as chancellor
@@ -1074,6 +1117,9 @@ def main():
 	# Comandos para elegir rol al unirse a la partida
 	dp.add_handler(CommandHandler("role", Commands.command_choose_posible_role))
 	dp.add_handler(CallbackQueryHandler(pattern="(-[0-9]*)\*chooserole\*(.*)\*([0-9]*)", callback=Commands.callback_choose_posible_role))
+
+	dp.add_handler(CommandHandler("command_show_stats", Commands.command_show_stats, pass_args = True))
+	dp.add_handler(CommandHandler("command_change_stats", Commands.command_change_stats, pass_args = True))
 
 	dp.add_handler(MessageHandler(Filters.status_update.new_chat_title, change_groupname))
 	

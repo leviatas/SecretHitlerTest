@@ -37,4 +37,15 @@ CREATE TABLE IF NOT EXISTS config (
      token TEXT NOT NULL
  );
 
+CREATE TABLE IF NOT EXISTS user_stats (
+    id SERIAL PRIMARY KEY,
+    data text NOT NULL
+); 
+
+CREATE TABLE IF NOT EXISTS achivements (
+    id SERIAL PRIMARY KEY,
+    name TEXT NOT NULL,
+    description text NOT NULL
+);
+
 --INSERT INTO stats VALUES (1, 32, 8, 37, 5, 5);

@@ -23,6 +23,7 @@ from Boardgamebox.Board import Board
 from Boardgamebox.Game import Game
 from Boardgamebox.Player import Player
 from Boardgamebox.State import State
+from PlayerStats import PlayerStats
 
 from collections import namedtuple
 
@@ -862,3 +863,34 @@ def command_info(bot, update):
 				bot.send_message(cid, "Debes ser un jugador del partido para obtener informacion.")
 		else:
 			bot.send_message(cid, "No hay juego creado en este chat")
+
+def command_show_stats(bot, update, args):
+	cid, uid = update.message.chat_id, update.message.from_user.id
+	user_stats = MainController.load_player_stats(uid)
+	if user_stats:
+		bot.send_message(cid, user_stats)
+	else:
+		bot.send_message(cid, "El usuario no tiene stats")
+
+def command_change_stats(bot, update, args):
+	cid, uid = update.message.chat_id, update.message.from_user.id
+	
+	if len(args) > 1:
+		stat_name = args[0]
+		amount = int(args[1])
+	else:
+		stat_name = "Partidas Jugadas"
+		amount = 6
+
+	try:	
+		user_stats = MainController.load_player_stats(uid)
+		
+		# Si no tiene registro, lo creo
+		if user_stats is None:
+			user_stats = PlayerStats(uid)
+		
+		user_stats.change_data_stat("SecretHitler", stat_name, amount)
+		MainController.save_player_stats(uid, user_stats)
+		bot.send_message(cid, "Stats actualizados")
+	except Exception as e:
+		bot.send_message(cid, 'No se ejecuto el comando debido a: '+str(e))
