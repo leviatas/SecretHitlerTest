@@ -171,9 +171,9 @@ def vote(bot, game):
 				Commands.print_board(bot, game, uid)
 			groupName = ""		
 			if hasattr(game, 'groupName'):
-				groupName += "En el grupo {}\n".format(game.groupName)
-			msg = "{}Quieres elegir al Presidente {} y al canciller {}?".format(groupName, game.board.state.nominated_president.name, game.board.state.nominated_chancellor.name)
-			bot.send_message(uid, msg,	reply_markup=voteMarkup)
+				groupName += "*En el grupo {}*\n".format(game.groupName)
+			msg = "{}Quieres elegir al Presidente *{}* y al canciller *{}*?".format(groupName, game.board.state.nominated_president.name, game.board.state.nominated_chancellor.name)
+			bot.send_message(uid, msg,	reply_markup=voteMarkup, parse_mode=ParseMode.MARKDOWN)
 
 
 def handle_voting(bot, update):
@@ -207,10 +207,10 @@ def handle_voting(bot, update):
 		groupName = ""
 		
 		if hasattr(game, 'groupName'):
-			groupName += "En el grupo {}\n".format(game.groupName)
+			groupName += "*En el grupo {}*\n".format(game.groupName)
 
-		msg = "{}\nPuedes cambiar tu voto aquí.\nQuieres elegir al Presidente {} y al canciller {}?".format(groupName, game.board.state.nominated_president.name, game.board.state.nominated_chancellor.name)
-		bot.send_message(uid, msg, reply_markup=voteMarkup)
+		msg = "{}\nPuedes cambiar tu voto aquí.\nQuieres elegir al Presidente *{}* y al canciller *{}*?".format(groupName, game.board.state.nominated_president.name, game.board.state.nominated_chancellor.name)
+		bot.send_message(uid, msg, reply_markup=voteMarkup, parse_mode=ParseMode.MARKDOWN)
 		Commands.save_game(game.cid, "Saved Round %d" % (game.board.state.currentround), game)
 		if len(game.board.state.last_votes) == len(game.player_sequence):
 			count_votes(bot, game)
