@@ -808,6 +808,14 @@ def save_game_details(bot, print_roles, game_endcode, liberal_track, fascist_tra
 		conn.rollback()
 		bot.send_message(ADMIN, 'No se ejecuto el comando save_game_details debido a: '+str(e))
 
+def change_stats(uid, tipo_juego, stat_name, amount):
+	user_stats = load_player_stats(uid)		
+	# Si no tiene registro, lo creo
+	if user_stats is None:
+		user_stats = PlayerStats(uid)	
+	user_stats.change_data_stat(tipo_juego, stat_name, amount)
+	save_player_stats(uid, user_stats)	
+
 def save_player_stats(uid, data):
 	#Check if game is in DB first
 	cur = conn.cursor()			

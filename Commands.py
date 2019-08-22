@@ -883,16 +883,8 @@ def command_change_stats(bot, update, args):
 	else:
 		stat_name = "Partidas Jugadas"
 		amount = 6
-
-	try:	
-		user_stats = MainController.load_player_stats(uid)
-		
-		# Si no tiene registro, lo creo
-		if user_stats is None:
-			user_stats = PlayerStats(uid)
-		
-		user_stats.change_data_stat("SecretHitler", stat_name, amount)
-		MainController.save_player_stats(uid, user_stats)
+	try:
+		MainController.change_stats(uid, "SecretHitler", stat_name, amount)
 		bot.send_message(cid, "Stats actualizados")
 	except Exception as e:
 		bot.send_message(cid, 'No se ejecuto el comando debido a: '+str(e))
