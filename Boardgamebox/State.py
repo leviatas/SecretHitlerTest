@@ -18,3 +18,4 @@ class State(object):
         self.not_hitlers = []
         self.currentround = -1
         self.votes_anarquia = {}
+        self.fase = None

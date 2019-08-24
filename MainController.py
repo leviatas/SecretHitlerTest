@@ -125,6 +125,8 @@ def choose_chancellor(bot, game):
 			groupName += "*En el grupo {}*\n".format(game.groupName)
 		msg = '{}Por favor nomina a tu canciller!'.format(groupName)
 		bot.send_message(game.board.state.nominated_president.uid, msg, reply_markup=chancellorMarkup)
+
+	game.board.state.fase = "choose_chancellor"
 	Commands.save_game(game.cid, "choose_chancellor Round %d" % (game.board.state.currentround), game)
 
 def nominate_chosen_chancellor(bot, update):
@@ -153,6 +155,9 @@ def nominate_chosen_chancellor(bot, update):
 					"El presidente %s nominó a %s como canciller. Por favor, vota ahora!" % (
 					game.board.state.nominated_president.name, game.board.state.nominated_chancellor.name))
 		vote(bot, game)
+		# Save after voting buttons send and set phase voting
+		game.board.state.fase = "vote"
+		Commands.save_game(game.cid, "vote Round %d" % (game.board.state.currentround), game)
 	except AttributeError as e:
 		log.error("nominate_chosen_chancellor: Game or board should not be None! Eror: " + str(e))
 	except Exception as e:
@@ -215,7 +220,7 @@ def handle_voting(bot, update):
 
 		msg = "{}\nPuedes cambiar tu voto aquí.\nQuieres elegir al Presidente *{}* y al canciller *{}*?".format(groupName, game.board.state.nominated_president.name, game.board.state.nominated_chancellor.name)
 		bot.send_message(uid, msg, reply_markup=voteMarkup, parse_mode=ParseMode.MARKDOWN)
-		Commands.save_game(game.cid, "Saved Round %d" % (game.board.state.currentround), game)
+		Commands.save_game(game.cid, "vote Round %d" % (game.board.state.currentround), game)
 		if len(game.board.state.last_votes) == len(game.player_sequence):
 			count_votes(bot, game)
 	except Exception as e:
@@ -276,10 +281,9 @@ def voting_aftermath(bot, game, voting_success):
 			# fascists win, because Hitler was elected as chancellor after 3 fascist policies
 			game.board.state.game_endcode = -2
 			end_game(bot, game, game.board.state.game_endcode)
-		elif game.board.state.fascist_track >= 3 and game.board.state.chancellor.role != "Hitler" and game.board.state.chancellor not in game.board.state.not_hitlers:
-			game.board.state.not_hitlers.append(game.board.state.chancellor)
-			draw_policies(bot, game)
 		else:
+			if game.board.state.fascist_track >= 3 and game.board.state.chancellor.role != "Hitler" and game.board.state.chancellor not in game.board.state.not_hitlers:
+				game.board.state.not_hitlers.append(game.board.state.chancellor)
 			# voting was successful and Hitler was not nominated as chancellor after 3 fascist policies
 			draw_policies(bot, game)
 	else:
@@ -310,7 +314,8 @@ def draw_policies(bot, game):
 	else:
 		bot.send_message(ADMIN, "Has robado las siguientes 3 politicas. Cual quieres descartar?",
 			reply_markup=choosePolicyMarkup)
-
+	game.board.state.fase = "legislating president discard"
+	Commands.save_game(game.cid, "legislating president discard Round %d" % (game.board.state.currentround), game)
 
 def choose_policy(bot, update):
 	log.info('choose_policy called')
@@ -319,10 +324,7 @@ def choose_policy(bot, update):
 	cid = int(regex.group(1))
 	answer = regex.group(2)
 	try:
-		game = Commands.get_game(cid)
-		
-		#TODO deberia hacer alguna verificacion?
-		
+		game = Commands.get_game(cid)	
 		strcid = str(game.cid)
 		uid = callback.from_user.id
 
@@ -413,77 +415,77 @@ def pass_two_policies(bot, game):
 		else:
 			bot.send_message(ADMIN,
 				"El Presidente %s te entregó las siguientes 2 políticas. Cuál quieres promulgar?" % game.board.state.president.name,
-				reply_markup=choosePolicyMarkup)
-	#Commands.save_game(game.cid, "Pass Two Policies %d" % (game.board.state.currentround), game)
+				reply_markup=choosePolicyMarkup)	
 	
-
+	game.board.state.fase = "legislating choose chancellor"
+	Commands.save_game(game.cid, "legislating choose chancellor Round %d" % (game.board.state.currentround), game)
 
 def enact_policy(bot, game, policy, anarchy):
-    log.info('enact_policy called')
-    if policy == "liberal":
-        game.board.state.liberal_track += 1
-    elif policy == "fascista":
-        game.board.state.fascist_track += 1
-    game.board.state.failed_votes = 0  # reset counter
-    if not anarchy:
-        bot.send_message(game.cid,
-                         "El Presidente %s y el Canciller %s promulgaron una política %s!" % (
-                             game.board.state.president.name, game.board.state.chancellor.name, policy))
-        game.history.append("El Presidente %s y el Canciller %s promulgaron una política %s!" % (
-                             game.board.state.president.name, game.board.state.chancellor.name, policy))
-    else:
-        bot.send_message(game.cid,
-                         "La política en la cima del mazo ha sido promulgada y es %s" % policy)
-        game.history.append("La política en la cima del mazo ha sido promulgada y es %s" % policy)
-    sleep(3)    
-    # end of round
-    if game.board.state.liberal_track == 5:
-        game.board.state.game_endcode = 1
-        end_game(bot, game, game.board.state.game_endcode)  # liberals win with 5 liberal policies
-    if game.board.state.fascist_track == 6:
-        game.board.state.game_endcode = -1
-        end_game(bot, game, game.board.state.game_endcode)  # fascists win with 6 fascist policies
-    sleep(3)
-    # End of legislative session, shuffle if necessary 
-    shuffle_policy_pile(bot, game)    
-    if not anarchy:
-        if policy == "fascista":
-            action = game.board.fascist_track_actions[game.board.state.fascist_track - 1]
-            if action is None and game.board.state.fascist_track == 6:
-                pass
-            elif action == None:
-                start_next_round(bot, game)
-            elif action == "policy":
-                bot.send_message(game.cid,
-                                 "Poder Presidencial habilitado: Investigar Políticas " + u"\U0001F52E" + "\nEl Presidente %s ahora conoce las proximas tres políticas "
-                                                                                              "en el mazo. El Presidente puede compartir "
-                                                                                              "(o mentir al respecto!) los resultados de su "
-                                                                                              "investigación a su propia discreción." % game.board.state.president.name)
-                game.history.append("El presidente %s ahora conoce las proximas 3 políticas en el mazo." % game.board.state.president.name)
-                action_policy(bot, game)                
-            elif action == "kill":
-                bot.send_message(game.cid,
-                                 "Poder Presidencial habilitado: Ejecución " + u"\U0001F5E1" + "\nEl Presidente %s tiene que matar a ua persona. Pueden discutir "
-                                                                                            "la desición ahora pero el "
-                                                                                            "Presidente tiene la última palabra." % game.board.state.president.name)
-                action_kill(bot, game)
-            elif action == "inspect":
-                bot.send_message(game.cid,
-                                 "Poder Presidencial habilitado: Investigar Afiliación Política " + u"\U0001F50E" + "\nEl Presidente %s puede ver la afiliación política de un "
-                                                                                                      "jugador. El Presidente puede compartir "
-                                                                                                      "(o mentir al respecto!) los resultados de su "
-                                                                                                      "investigación a su propia discreción." % game.board.state.president.name)
-                action_inspect(bot, game)
-            elif action == "choose":
-                bot.send_message(game.cid,
-                                 "Poder Presidencial habilitado: Llamar a Elección Especial " + u"\U0001F454" + "\nEl Presidente %s puede elegir al próximo candidato presidencial. "
-                                                                                                        "Despúes el orden continua "
-                                                                                                        "normalmente." % game.board.state.president.name)
-                action_choose(bot, game)
-        else:
-            start_next_round(bot, game)
-    else:
-        start_next_round(bot, game)
+	log.info('enact_policy called')
+	if policy == "liberal":
+		game.board.state.liberal_track += 1
+	elif policy == "fascista":
+		game.board.state.fascist_track += 1
+	game.board.state.failed_votes = 0  # reset counter
+	if not anarchy:
+		bot.send_message(game.cid, "El Presidente %s y el Canciller %s promulgaron una política %s!" % (game.board.state.president.name, game.board.state.chancellor.name, policy))
+		game.history.append("El Presidente %s y el Canciller %s promulgaron una política %s!" % (game.board.state.president.name, game.board.state.chancellor.name, policy))
+	else:
+		bot.send_message(game.cid, "La política en la cima del mazo ha sido promulgada y es %s" % policy)
+		game.history.append("La política en la cima del mazo ha sido promulgada y es %s" % policy)
+	sleep(3)    
+	# end of round
+	if game.board.state.liberal_track == 5:
+		game.board.state.game_endcode = 1
+		end_game(bot, game, game.board.state.game_endcode)  # liberals win with 5 liberal policies
+	if game.board.state.fascist_track == 6:
+		game.board.state.game_endcode = -1
+		end_game(bot, game, game.board.state.game_endcode)  # fascists win with 6 fascist policies
+	sleep(3)
+	# End of legislative session, shuffle if necessary 
+	shuffle_policy_pile(bot, game)    
+	if not anarchy:
+		if policy == "fascista":
+			action = game.board.fascist_track_actions[game.board.state.fascist_track - 1]
+			if action is None and game.board.state.fascist_track == 6:
+				pass
+			elif action == None:
+				start_next_round(bot, game)
+			elif action == "policy":
+				bot.send_message(game.cid,
+					"Poder Presidencial habilitado: Investigar Políticas " + u"\U0001F52E" + "\nEl Presidente %s ahora conoce las proximas tres políticas "
+					"en el mazo. El Presidente puede compartir "
+					"(o mentir al respecto!) los resultados de su "
+					"investigación a su propia discreción." % game.board.state.president.name)
+				game.history.append("El presidente %s ahora conoce las proximas 3 políticas en el mazo." % game.board.state.president.name)
+				action_policy(bot, game)                
+			elif action == "kill":
+				msg = "Poder Presidencial habilitado: Ejecución " + u"\U0001F5E1" + "\nEl Presidente %s tiene que matar a ua persona. Pueden discutir la desición ahora pero el Presidente tiene la última palabra." % game.board.state.president.name
+				bot.send_message(game.cid, msg)
+				game.board.state.fase = "legislating power kill"
+				Commands.save_game(game.cid, "legislating power kill Round %d" % (game.board.state.currentround), game)
+				action_kill(bot, game)				
+			elif action == "inspect":
+				bot.send_message(game.cid,
+					"Poder Presidencial habilitado: Investigar Afiliación Política " + u"\U0001F50E" + "\nEl Presidente %s puede ver la afiliación política de un "
+					"jugador. El Presidente puede compartir "
+					"(o mentir al respecto!) los resultados de su "
+					"investigación a su propia discreción." % game.board.state.president.name)
+				game.board.state.fase = "legislating power inspect"
+				Commands.save_game(game.cid, "legislating power inspect Round %d" % (game.board.state.currentround), game)				
+				action_inspect(bot, game)
+			elif action == "choose":
+				bot.send_message(game.cid,
+					"Poder Presidencial habilitado: Llamar a Elección Especial " + u"\U0001F454" + "\nEl Presidente %s puede elegir al próximo candidato presidencial. "
+					"Despúes el orden continua "
+					"normalmente." % game.board.state.president.name)
+				game.board.state.fase = "legislating power choose"
+				Commands.save_game(game.cid, "legislating power choose Round %d" % (game.board.state.currentround), game)
+				action_choose(bot, game)
+		else:
+			start_next_round(bot, game)
+	else:
+		start_next_round(bot, game)
 
 
 def choose_veto(bot, update):
