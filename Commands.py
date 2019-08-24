@@ -501,6 +501,7 @@ def command_claim(bot, update, args):
 						claimtexttohistory = "El jugador %s declara: %s" % (game.playerlist[uid].name, claimtext)
 						bot.send_message(cid, "Tu declaración: %s fue agregada al historial." % (claimtext))
 						game.history.append("%s" % (claimtexttohistory))
+						save_game(cid, "Game in join state", game)
 					else:					
 						bot.send_message(cid, "Debes mandar un mensaje para hacer una declaración.")
 
