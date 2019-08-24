@@ -433,7 +433,7 @@ def enact_policy(bot, game, policy, anarchy):
 	else:
 		bot.send_message(game.cid, "La política en la cima del mazo ha sido promulgada y es %s" % policy)
 		game.history.append("La política en la cima del mazo ha sido promulgada y es %s" % policy)
-	sleep(3)    
+	#sleep(2)    
 	# end of round
 	if game.board.state.liberal_track == 5:
 		game.board.state.game_endcode = 1
@@ -441,7 +441,7 @@ def enact_policy(bot, game, policy, anarchy):
 	if game.board.state.fascist_track == 6:
 		game.board.state.game_endcode = -1
 		end_game(bot, game, game.board.state.game_endcode)  # fascists win with 6 fascist policies
-	sleep(3)
+	#sleep(3)
 	# End of legislative session, shuffle if necessary 
 	shuffle_policy_pile(bot, game)    
 	if not anarchy:
