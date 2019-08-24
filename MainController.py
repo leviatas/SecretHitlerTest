@@ -325,7 +325,15 @@ def choose_policy(bot, update):
 		
 		strcid = str(game.cid)
 		uid = callback.from_user.id
-		if len(game.board.state.drawn_policies) == 3:
+
+		# Solo el presidente y el canciller pueden elegir politica.
+		if uid not in [game.board.state.chancellor.uid, game.board.state.president.uid]:
+			msg = "No eres ni el presidente ni el canciller actual!"
+			bot.edit_message_text(msg, uid,	callback.message.message_id)
+			return
+
+		# Si hay 3 politicas veo que sea el presidente el que descarte.
+		if len(game.board.state.drawn_policies) == 3 and uid == game.board.state.president.uid:
 			log.info("Player %s (%d) discarded %s" % (callback.from_user.first_name, uid, answer))
 			bot.edit_message_text("La política %s va a ser descartada!" % answer, uid,
 			callback.message.message_id)
@@ -337,10 +345,11 @@ def choose_policy(bot, update):
 					game.board.discards.append(game.board.state.drawn_policies.pop(i))                                
 					break
 			pass_two_policies(bot, game)
-		elif len(game.board.state.drawn_policies) == 2:
-			if answer == "veto":
+		elif len(game.board.state.drawn_policies) == 2 and uid == game.board.state.chancellor.uid:
+			# Si el canciller elije el boton de veto
+			if answer == "veto" :
 				log.info("Player %s (%d) suggested a veto" % (callback.from_user.first_name, uid))
-				bot.edit_message_text("Has sugerido vetas al Presidente %s" % game.board.state.president.name, uid,
+				bot.edit_message_text("Has sugerido vetar al Presidente %s" % game.board.state.president.name, uid,
 					callback.message.message_id)
 				bot.send_message(game.cid,
 					"El canciller %s sugirío Vetar al Presidente %s." % (
@@ -354,6 +363,7 @@ def choose_policy(bot, update):
 					"El canciller %s te sugirío Vetar. Quieres vetar (descartar) estas cartas?" % game.board.state.chancellor.name,
 					reply_markup=vetoMarkup)
 			else:
+				# Si el canciller promulga...
 				log.info("Player %s (%d) chose a %s policy" % (callback.from_user.first_name, uid, answer))
 				bot.edit_message_text("La politica %s será promulgada!" % answer, uid,
 				callback.message.message_id)
