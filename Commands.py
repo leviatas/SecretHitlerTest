@@ -444,6 +444,9 @@ def command_calltovote(bot, update):
 						# If the player is not in last_votes send him reminder
 						if player.uid not in game.board.state.last_votes:
 							history_text += "Es hora de votar [%s](tg://user?id=%d)!\n" % (game.playerlist[player.uid].name, player.uid)
+							groupName = "*En el grupo {}*\n".format(game.groupName)
+							msg = "{}Quieres elegir al Presidente *{}* y al canciller *{}*?".format(groupName, game.board.state.nominated_president.name, game.board.state.nominated_chancellor.name)
+							bot.send_message(player.uid, msg, reply_markup=voteMarkup, parse_mode=ParseMode.MARKDOWN)
 					bot.send_message(cid, text=history_text, parse_mode=ParseMode.MARKDOWN)
 				else:
 					bot.send_message(cid, "Cinco minutos deben pasar para pedir que se vote!") 
