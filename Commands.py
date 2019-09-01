@@ -434,6 +434,11 @@ def command_calltovote(bot, update):
 				bot.send_message(cid, "La votación no ha comenzado todavia!")
 			else:
 				#If there is a time, compare it and send history of votes.
+				strcid = str(game.cid)
+				btns = [[InlineKeyboardButton("Ja", callback_data=strcid + "_Ja"),
+				InlineKeyboardButton("Nein", callback_data=strcid + "_Nein")]]
+				voteMarkup = InlineKeyboardMarkup(btns)
+				
 				start = game.dateinitvote
 				stop = datetime.datetime.now()          
 				elapsed = stop - start
