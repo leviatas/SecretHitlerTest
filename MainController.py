@@ -1083,14 +1083,16 @@ def main():
 	cur.execute(query)
 	'''
 
-	#PORT = int(os.environ.get('PORT', '5000'))
+	'''
 	updater = Updater(get_TOKEN())
 	'''
+
+	PORT = int(os.environ.get('PORT', '8443'))
+	updater = Updater(get_TOKEN())
 	updater.start_webhook(listen="0.0.0.0",
-	      port=PORT,
-	      url_path=TOKEN)
-	updater.bot.set_webhook("https://secrethitlertest.herokuapp.com/" + TOKEN)
-	'''
+                      port=PORT,
+                      url_path=TOKEN)
+	updater.bot.set_webhook("https://secrethitler.herokuapp.com/" + TOKEN)
 
 	# Get the dispatcher to register handlers
 	dp = updater.dispatcher
@@ -1146,13 +1148,16 @@ def main():
 	# log all errors
 	dp.add_error_handler(error)
 
+	updater.idle()
+
+	'''
 	# Start the Bot
 	updater.start_polling()
-
 	# Run the bot until the you presses Ctrl-C or the process receives SIGINT,
 	# SIGTERM or SIGABRT. This should be used most of the time, since
 	# start_polling() is non-blocking and will stop the bot gracefully.
 	updater.idle()
+	'''
 
 
 
