@@ -1093,8 +1093,8 @@ def main():
 	updater = Updater(get_TOKEN())
 	updater.start_webhook(listen="0.0.0.0",
                       port=PORT,
-                      url_path=TOKEN)
-	updater.bot.set_webhook("https://secrethitler.herokuapp.com/" + TOKEN)
+                      url_path=get_TOKEN())
+	updater.bot.set_webhook("https://secrethitler.herokuapp.com/" + get_TOKEN())
 	
 	# Get the dispatcher to register handlers
 	dp = updater.dispatcher
