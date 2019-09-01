@@ -1,1 +1,1 @@
-bot: python MainController.py
+web: python MainController.py
