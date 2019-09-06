@@ -153,7 +153,7 @@ def command_ping(bot, update):
 
 
 def get_stat_query(query, partidas_totales, partidas_fascista, partidas_hitler, partidas_liberal, partidas_murio, partidas_fascista_gano, partidas_hitler_gano, partidas_liberal_gano):
-	replace_dead = "regexp_replace(playerlist, ' \(dead\)| \(muerto\)', '', 'g')"
+	
 	cursor = conn.cursor()
 	cursor.execute(query)
 	if cursor.rowcount > 0:
