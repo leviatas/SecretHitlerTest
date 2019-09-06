@@ -1056,9 +1056,8 @@ def getGamesByTipo(opcion):
 			games = GamesController.games		
 	return games
 
-def error(bot, update, error):
-    #bot.send_message(387393551, 'Update "%s" caused error "%s"' % (update, error) ) 
-    logger.warning('Update "%s" caused error "%s"' % (update, error))
+def error_callback(update, context):
+    logger.warning('Update "%s" caused error "%s"', update, context.error)
 
 def change_groupname(bot, update):
 	cid = update.message.chat.id
@@ -1105,7 +1104,7 @@ def main():
 	# Pruebas de HOOKS
 	
 	PORT = int(os.environ.get('PORT', '8443'))
-	updater = Updater(get_TOKEN())
+	updater = Updater(get_TOKEN(), use_context=True)
 	updater.start_webhook(listen="0.0.0.0",
                       port=PORT,
                       url_path=get_TOKEN())
@@ -1164,7 +1163,7 @@ def main():
 	dp.add_handler(MessageHandler(Filters.status_update.new_chat_title, change_groupname))
 	
 	# log all errors
-	dp.add_error_handler(error)
+	dp.add_error_handler(error_callback)
 
 	# pruebas de hooks
 	updater.idle()

@@ -8,7 +8,8 @@ import psycopg2
 from psycopg2 import sql
 import urllib.parse
 
-from telegram import InlineKeyboardButton, InlineKeyboardMarkup, ParseMode
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup, ParseMode, Update
+from telegram.ext import (CallbackContext)
 
 import MainController
 import GamesController
@@ -87,15 +88,17 @@ def get_game(cid):
 		else:
 			None
 
-def command_symbols(bot, update):
-    cid = update.message.chat_id
-    symbol_text = "Los siguientes símbolos aparecen en el tablero: \n"
-    for i in symbols:
-        symbol_text += i + "\n"
-    bot.send_message(cid, symbol_text)
+def command_symbols(update: Update, context: CallbackContext):
+	bot = context.bot
+	cid = update.message.chat_id
+	symbol_text = "Los siguientes símbolos aparecen en el tablero: \n"
+	for i in symbols:
+		symbol_text += i + "\n"
+	bot.send_message(cid, symbol_text)
 
 
-def command_board(bot, update):
+def command_board(update: Update, context: CallbackContext):
+	bot = context.bot
 	cid = update.message.chat_id
 	game = get_game(cid)
 	if game:		
@@ -109,7 +112,9 @@ def command_board(bot, update):
 def print_board(bot, game, target):
 	bot.send_message(target, game.board.print_board(game.player_sequence), ParseMode.MARKDOWN)
 		
-def command_start(bot, update):
+def command_start(update: Update, context: CallbackContext):
+	bot = context.bot
+
 	cid = update.message.chat_id
 	bot.send_message(cid,
 		     "\"Secret Hitler es un juego de deducción social para 5-10 jugadores "
@@ -125,7 +130,8 @@ def command_start(bot, update):
 	command_help(bot, update)
 
 
-def command_rules(bot, update):
+def command_rules(update: Update, context: CallbackContext):
+	bot = context.bot
 	cid = update.message.chat_id	
 	msg = """En cada turno el jugador activo, *Presidente* de ahora en más, elige un jugador como su *canciller*.
 	Luego todos los jugadores votan si aceptan la formula elegida.
@@ -147,9 +153,10 @@ def command_rules(bot, update):
 
 
 # pings the bot
-def command_ping(bot, update):
-    cid = update.message.chat_id
-    bot.send_message(cid, 'pong - v0.3')
+def command_ping(update: Update, context: CallbackContext):
+	bot = context.bot
+	cid = update.message.chat_id
+	bot.send_message(cid, 'pong - v0.3')
 
 
 def get_stat_query(query, partidas_totales, partidas_fascista, partidas_hitler, partidas_liberal, partidas_murio, partidas_fascista_gano, partidas_hitler_gano, partidas_liberal_gano):
@@ -174,7 +181,9 @@ def get_stat_query(query, partidas_totales, partidas_fascista, partidas_hitler, 
 	return partidas_totales, partidas_fascista, partidas_hitler, partidas_liberal, partidas_murio, partidas_fascista_gano, partidas_hitler_gano, partidas_liberal_gano
 	
 # prints statistics, only ADMIN
-def command_stats(bot, update, args):
+def command_stats(update: Update, context: CallbackContext):
+	bot = context.bot
+	args = context.args
 	cid, uid = update.message.chat_id, update.message.from_user.id	
 	
 	if len(args) > 0:
@@ -259,14 +268,18 @@ def command_stats(bot, update, args):
 		bot.send_message(cid, stattext, ParseMode.MARKDOWN)
 		
 # help page
-def command_help(bot, update):
-    cid = update.message.chat_id
-    help_text = "Los siguientes comandos están disponibles:\n"
-    for i in commands:
-        help_text += i + "\n"
-    bot.send_message(cid, help_text)
+def command_help(update: Update, context: CallbackContext):
+	bot = context.bot
+	args = context.args
+	cid = update.message.chat_id
+	help_text = "Los siguientes comandos están disponibles:\n"
+	for i in commands:
+		help_text += i + "\n"
+	bot.send_message(cid, help_text)
 
-def command_newgame(bot, update):  
+def command_newgame(update: Update, context: CallbackContext):
+	bot = context.bot
+	args = context.args
 	cid = update.message.chat_id
 	groupName = update.message.chat.title	
 	try:
@@ -284,7 +297,9 @@ def command_newgame(bot, update):
 		bot.send_message(cid, str(e))
 
 
-def command_join(bot, update, args):
+def command_join(update: Update, context: CallbackContext):
+	bot = context.bot
+	args = context.args
 	# I use args for testing. // Remove after?
 	groupName = update.message.chat.title
 	cid = update.message.chat_id
@@ -342,7 +357,9 @@ def command_join(bot, update, args):
 				fname + ", No te puedo enviar un mensaje privado. Por favor, ve a @secrethitlertestlbot y has pincha \"Start\".\nLuego necesitas escribir /join de nuevo.")
 
 
-def command_startgame(bot, update):
+def command_startgame(update: Update, context: CallbackContext):
+	bot = context.bot
+	args = context.args
 	log.info('command_startgame called')
 	groupName = update.message.chat.title
 	cid = update.message.chat_id
@@ -370,7 +387,8 @@ def command_startgame(bot, update):
 		MainController.start_round(bot, game)
 		#save_game(cid, groupName, game)
 
-def command_cancelgame(bot, update):
+def command_cancelgame(update: Update, context: CallbackContext):
+	bot = context.bot
 	log.info('command_cancelgame called')
 	cid = update.message.chat_id	
 	#Always try to delete in DB
@@ -387,7 +405,8 @@ def command_cancelgame(bot, update):
 	else:
 		bot.send_message(cid, "No hay juego en este chat. Crea un nuevo juego con /newgame")
 
-def command_votes(bot, update):
+def command_votes(update: Update, context: CallbackContext):
+	bot = context.bot
 	try:
 		#Send message of executing command   
 		cid = update.message.chat_id
@@ -419,7 +438,8 @@ def command_votes(bot, update):
 	except Exception as e:
 		bot.send_message(cid, str(e))
 
-def command_calltovote(bot, update):
+def command_calltovote(update: Update, context: CallbackContext):
+	bot = context.bot
 	try:
 		#Send message of executing command   
 		cid = update.message.chat_id
@@ -458,7 +478,8 @@ def command_calltovote(bot, update):
 	except Exception as e:
 		bot.send_message(cid, str(e))
         
-def command_showhistory(bot, update):
+def command_showhistory(update: Update, context: CallbackContext):
+	bot = context.bot
 	#game.pedrote = 3
 	try:
 		#Send message of executing command   
@@ -490,7 +511,9 @@ def command_showhistory(bot, update):
 		bot.send_message(cid, str(e))
 		log.error("Unknown error: " + str(e))  
 		
-def command_claim(bot, update, args):
+def command_claim(update: Update, context: CallbackContext):
+	bot = context.bot
+	args = context.args
 	#game.pedrote = 3
 	try:
 		#Send message of executing command   
@@ -523,7 +546,9 @@ def command_claim(bot, update, args):
 		log.error("Unknown error: " + str(e))    
 
 		
-def command_claim_oculto(bot, update, args):
+def command_claim_oculto(update: Update, context: CallbackContext):
+	bot = context.bot
+	args = context.args
 	try:
 		#Send message of executing command   
 		cid = update.message.chat_id
@@ -616,7 +641,8 @@ def delete_game(cid):
 	
 	
 #Testing commands
-def command_ja(bot, update):
+def command_ja(update: Update, context: CallbackContext):
+	bot = context.bot
 	uid = update.message.from_user.id
 	if uid == ADMIN:
 		cid = update.message.chat_id
@@ -627,7 +653,8 @@ def command_ja(bot, update):
 		MainController.count_votes(bot, game)
 	
 
-def command_nein(bot, update):	
+def command_nein(update: Update, context: CallbackContext):
+	bot = context.bot	
 	uid = update.message.from_user.id
 	if uid == ADMIN:
 		cid = update.message.chat_id
@@ -637,7 +664,8 @@ def command_nein(bot, update):
 			game.board.state.last_votes[uid] = answer
 		MainController.count_votes(bot, game)
 		
-def command_reloadgame(bot, update):  
+def command_reloadgame(update: Update, context: CallbackContext):
+	bot = context.bot  
 	cid = update.message.chat_id
 	
 	try:
@@ -673,7 +701,8 @@ def command_reloadgame(bot, update):
 	except Exception as e:
 		bot.send_message(cid, str(e))
 	
-def command_anarquia(bot, update):	
+def command_anarquia(update: Update, context: CallbackContext):
+	bot = context.bot	
 	try:
 		#Send message of executing command   
 		cid = update.message.chat_id
@@ -697,7 +726,8 @@ def command_anarquia(bot, update):
 		bot.send_message(cid, str(e))
 		log.error("Unknown error: " + str(e))    
 		
-def command_prueba(bot, update):	
+def command_prueba(update: Update, context: CallbackContext):
+	bot = context.bot	
 	uid = update.message.from_user.id
 	log.info("Ingreso en FIX")
 	if uid == ADMIN:
@@ -741,7 +771,8 @@ def command_prueba(bot, update):
 		bot.send_message(ADMIN, history_text, ParseMode.MARKDOWN)
 		'''
 		
-def command_toggle_debugging(bot, update):
+def command_toggle_debugging(update: Update, context: CallbackContext):
+	bot = context.bot
 	uid = update.message.from_user.id
 	if uid == ADMIN:
 		cid = update.message.chat_id
@@ -750,7 +781,8 @@ def command_toggle_debugging(bot, update):
 		game.is_debugging = True if not game.is_debugging else False
 		bot.send_message(cid, "Debug Mode: ON" if game.is_debugging else "Debug Mode: OFF")
 
-def command_jugadores(bot, update):	
+def command_jugadores(update: Update, context: CallbackContext):
+	bot = context.bot	
 	uid = update.message.from_user.id
 	cid = update.message.chat_id
 	
@@ -761,7 +793,9 @@ def command_jugadores(bot, update):
 					
 	bot.send_message(game.cid, jugadoresActuales, ParseMode.MARKDOWN)	
 		
-def command_newgame_sql_command(bot, update, args):
+def command_newgame_sql_command(update: Update, context: CallbackContext):
+	bot = context.bot
+	args = context.args
 	cid, uid = update.message.chat_id, update.message.from_user.id
 	if uid == ADMIN:
 		try:
@@ -798,7 +832,8 @@ def command_newgame_sql_command(bot, update, args):
 			bot.send_message(cid, 'No se ejecuto el comando debido a: '+str(e))
 			conn.rollback()
 
-def command_choose_posible_role(bot, update):
+def command_choose_posible_role(update: Update, context: CallbackContext):
+	bot = context.bot
 	cid, uid = update.message.chat_id, update.message.from_user.id
 	choose_posible_role(bot, cid, uid)
 	
@@ -808,7 +843,8 @@ def choose_posible_role(bot, cid, uid):
 	chat_donde_se_pregunta = uid
 	multipurpose_choose_buttons(bot, cid, uid, chat_donde_se_pregunta, frase_regex, pregunta_arriba_botones, opciones_choose_posible_role)
 
-def callback_choose_posible_role(bot, update):
+def callback_choose_posible_role(update: Update, context: CallbackContext):
+	bot = context.bot
 	callback = update.callback_query
 	log.info('callback_choose_posible_role called: %s' % callback.data)	
 	regex = re.search("(-[0-9]*)\*chooserole\*(.*)\*([0-9]*)", callback.data)
@@ -856,7 +892,8 @@ def multipurpose_choose_buttons(bot, cid, uid, chat_donde_se_pregunta, comando_c
 	#for uid in game.playerlist:
 	bot.send_message(chat_donde_se_pregunta, mensaje_pregunta, reply_markup=btnMarkup)
 
-def command_info(bot, update):
+def command_info(update: Update, context: CallbackContext):
+	bot = context.bot
 	cid, uid, groupType = update.message.chat_id, update.message.from_user.id, update.message.chat.type
 	
 	if groupType not in ['group', 'supergroup']:
@@ -881,7 +918,8 @@ def command_info(bot, update):
 		else:
 			bot.send_message(cid, "No hay juego creado en este chat")
 
-def callback_info(bot, update):
+def callback_info(update: Update, context: CallbackContext):
+	bot = context.bot
 	log.info('callback_info called')
 	callback = update.callback_query
 	
@@ -899,7 +937,9 @@ def callback_info(bot, update):
 		bot.send_message(uid, "Debes ser un jugador del partido para obtener informacion.")
 
 
-def command_show_stats(bot, update, args):
+def command_show_stats(update: Update, context: CallbackContext):
+	bot = context.bot
+	args = context.args
 	cid, uid = update.message.chat_id, update.message.from_user.id
 	user_stats = MainController.load_player_stats(uid)
 	if user_stats:
@@ -909,7 +949,9 @@ def command_show_stats(bot, update, args):
 	else:
 		bot.send_message(cid, "El usuario no tiene stats")
 
-def command_change_stats(bot, update, args):
+def command_change_stats(update: Update, context: CallbackContext):
+	bot = context.bot
+	args = context.args
 	cid, uid = update.message.chat_id, update.message.from_user.id
 	
 	if len(args) > 1:
