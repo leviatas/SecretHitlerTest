@@ -62,13 +62,3 @@ class Game(object):
 				return rtext
 		except Exception as e:
 			rtext += str(e)
-
-	def encode_all(obj):
-		if isinstance(obj, Player):
-			return obj.__dict__
-		if isinstance(obj, Board):
-			return obj.__dict__            
-		return obj
-    
-	def jsonify(self):
-		return json.dumps(self.__dict__, default= encode_all)

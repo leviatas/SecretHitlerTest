@@ -54,14 +54,6 @@ cur.execute(query)
 
 
 
-def initialize_testdata():
-    # Sample game for quicker tests
-    testgame = Game(-1001113216265, 15771023)
-    GamesController.games[-1001113216265] = testgame
-    players = [Player("Александр", 320853702), Player("Gustav", 305333239), Player("Rene", 318940765), Player("Susi", 290308460), Player("Renate", 312027975)]
-    for player in players:
-        testgame.add_player(player.uid, player)
-
 ##
 #
 # Beginning of round
@@ -920,7 +912,7 @@ def showHiddenhistory(bot, game):
 			history_text += x + "\n"
 		bot.send_message(game.cid, history_text, ParseMode.MARKDOWN)
 	except Exception as e:
-		bot.send_message(cid, str(e))
+		bot.send_message(game.cid, str(e))
 		log.error("Unknown error: " + str(e)) 
         
 def inform_players(bot, game, cid, player_number):
@@ -1039,6 +1031,30 @@ def shuffle_policy_pile(bot, game):
 		bot.send_message(game.cid,
 			"No habia cartas suficientes en el mazo de políticas asi que he mezclado el resto con el mazo de descarte!")
 
+def getGamesByTipo(opcion):
+	games = None
+	cursor = conn.cursor()			
+	log.info("Executing in DB")
+	if opcion != "Todos":
+		query = "select * from games g where g.tipojuego = '{0}'".format(opcion)
+	else:
+		query = "select * from games g"
+	
+	cursor.execute(query)
+	if cursor.rowcount > 0:
+		# Si encuentro juegos los busco a todos y los cargo en memoria
+		for table in cursor.fetchall():
+			if table[0] not in GamesController.games.keys():
+				Commands.get_game(table[0])
+		# En el futuro hacer que pueda hacer anuncios globales a todos los juegos ?
+		games_restriction = [opcion]
+		#bot.send_message(uid, "Obtuvo esta cantidad de juegos: {0}".format(len(GamesController.games)))
+		# Luego aplico
+		if opcion != "Todos":
+			games = {key:val for key, val in GamesController.games.items() if val.tipo in games_restriction}
+		else:
+			games = GamesController.games		
+	return games
 
 def error(bot, update, error):
     #bot.send_message(387393551, 'Update "%s" caused error "%s"' % (update, error) ) 
@@ -1061,7 +1077,6 @@ def get_TOKEN():
 	
 def main():
 	GamesController.init() #Call only once
-	#initialize_testdata()
 
 	#Init DB Create tables if they don't exist   
 	log.info('Init DB')
@@ -1121,6 +1136,7 @@ def main():
 	dp.add_handler(CommandHandler("prueba", Commands.command_prueba))
 	dp.add_handler(CommandHandler("claimoculto", Commands.command_claim_oculto, pass_args = True))
 	dp.add_handler(CommandHandler("info", Commands.command_info))
+	dp.add_handler(CallbackQueryHandler(pattern=r"(-?[0-9]*)\*chooseGameInfo\*(.*)\*(-?[0-9]*)", callback=Commands.callback_info))
 	dp.add_handler(CommandHandler("jugadores", Commands.command_jugadores))
 
 	#Testing commands

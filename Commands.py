@@ -126,9 +126,7 @@ def command_start(bot, update):
 
 
 def command_rules(bot, update):
-	cid = update.message.chat_id
-	btn = [[InlineKeyboardButton("Rules", url="http://www.secrethitler.com/assets/Secret_Hitler_Rules.pdf")]]
-	rulesMarkup = InlineKeyboardMarkup(btn)
+	cid = update.message.chat_id	
 	msg = """En cada turno el jugador activo, *Presidente* de ahora en más, elige un jugador como su *canciller*.
 	Luego todos los jugadores votan si aceptan la formula elegida.
 	Si hay mayoria de votos *JA!* (positivos) la formula se convierte en activa.
@@ -862,7 +860,13 @@ def command_info(bot, update):
 	cid, uid, groupType = update.message.chat_id, update.message.from_user.id, update.message.chat.type
 	
 	if groupType not in ['group', 'supergroup']:
-		bot.send_message(cid, "El comando solo sirve en chats que tienen un juego creado!")
+		# En caso de no estar en un grupo y en privado con el bot muestro todos los juegos donde esta el jugador.
+		# Independeinte de si pide todos, tengo que obtenerlos a todos para preguntarle cualquier quiere tener info
+		all_games_unfiltered = MainController.getGamesByTipo("Todos")	
+		# Me improtan los juegos que; Este el jugador, hayan sido iniciados, datinivote no sea null y que cumpla reglas del tipo de juego en particular
+		all_games = {key: "{}: {}".format(game.groupName, game.tipo) for key, game in all_games_unfiltered.items() if uid in game.playerlist and game.board != None }
+		msg = "Elija el juego para obtener /info en privado"
+		simple_choose_buttons(bot, cid, uid, uid, "chooseGameInfo", msg, all_games)
 	else:
 		groupName = update.message.chat.title
 		game = get_game(cid)
@@ -876,6 +880,24 @@ def command_info(bot, update):
 				bot.send_message(cid, "Debes ser un jugador del partido para obtener informacion.")
 		else:
 			bot.send_message(cid, "No hay juego creado en este chat")
+
+def callback_info(bot, update):
+	log.info('callback_info called')
+	callback = update.callback_query
+	
+	regex = re.search(r"(-?[0-9]*)\*chooseGameInfo\*(.*)\*(-?[0-9]*)", callback.data)
+	opcion, uid = regex.group(2), int(regex.group(3))
+	
+	game = get_game(int(opcion))
+	
+	if uid in game.playerlist:								
+		player = game.playerlist[uid]
+		msg = "--- *Info del grupo {}* ---\n".format(game.groupName)
+		msg += player.get_private_info(game)
+		bot.send_message(uid, msg, ParseMode.MARKDOWN)				
+	else:
+		bot.send_message(uid, "Debes ser un jugador del partido para obtener informacion.")
+
 
 def command_show_stats(bot, update, args):
 	cid, uid = update.message.chat_id, update.message.from_user.id
@@ -901,3 +923,44 @@ def command_change_stats(bot, update, args):
 		bot.send_message(cid, "Stats actualizados")
 	except Exception as e:
 		bot.send_message(cid, 'No se ejecuto el comando debido a: '+str(e))
+
+def simple_choose_buttons(bot, cid, uid, chat_donde_se_pregunta, comando_callback, mensaje_pregunta, opciones_botones, one_line = True, items_each_line = 3):
+	
+	#sleep(3)
+	btns = []
+	# Creo los botones para elegir al usuario
+	if one_line:
+		for key, value in opciones_botones.items():
+			txtBoton = value
+			datos = str(cid) + "*" + comando_callback + "*" + str(key) + "*" + str(uid)
+			#if comando_callback == "announce":
+			#	bot.send_message(ADMIN[0], datos)
+			btns.append([InlineKeyboardButton(txtBoton, callback_data=datos)])
+	else:
+		btn_group = []
+		for key, value in opciones_botones.items():
+			txtBoton = value
+			datos = str(cid) + "*" + comando_callback + "*" + str(key) + "*" + str(uid)
+			#if comando_callback == "announce":
+			#	bot.send_message(ADMIN[0], datos)
+			btn_group.append(InlineKeyboardButton(txtBoton, callback_data=datos))
+			if len(btn_group) == items_each_line:				
+				btns.append(btn_group)
+				btn_group = []
+		# Si no completa en multiplo de items_each_line agrego los que faltan.
+		if len(btn_group) > 0:
+			btns.append(btn_group)
+	btnMarkup = InlineKeyboardMarkup(btns)
+
+	try:	
+		#for uid in game.playerlist:
+		bot.send_message(chat_donde_se_pregunta, mensaje_pregunta, reply_markup=btnMarkup, parse_mode=ParseMode.MARKDOWN)
+		GamesController.simple_choose_buttons_retry = False
+	except Exception as e:
+		# Si tira error y estoy debugeando intento mandar de nuevo pero si no intente anteriormente
+		game = get_game(cid)
+		if game.is_debugging and not GamesController.simple_choose_buttons_retry:
+			GamesController.simple_choose_buttons_retry = True
+			simple_choose_buttons(bot, cid, ADMIN, ADMIN, comando_callback, mensaje_pregunta, opciones_botones, one_line, items_each_line)
+		else:
+			bot.send_message(ADMIN, 'Error en simple_choose_buttons {}'.format(e))
