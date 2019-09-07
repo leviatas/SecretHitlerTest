@@ -1130,20 +1130,20 @@ def main():
 	dp.add_handler(CommandHandler("rules", Commands.command_rules))
 	dp.add_handler(CommandHandler("ping", Commands.command_ping))
 	dp.add_handler(CommandHandler("symbols", Commands.command_symbols))
-	dp.add_handler(CommandHandler("stats", Commands.command_stats, pass_args = True))
+	dp.add_handler(CommandHandler("stats", Commands.command_stats))
 	dp.add_handler(CommandHandler("newgame", Commands.command_newgame))
 	dp.add_handler(CommandHandler("startgame", Commands.command_startgame))
 	dp.add_handler(CommandHandler("cancelgame", Commands.command_cancelgame))
-	dp.add_handler(CommandHandler("join", Commands.command_join, pass_args = True))
+	dp.add_handler(CommandHandler("join", Commands.command_join))
 	dp.add_handler(CommandHandler("history", Commands.command_showhistory))
 	dp.add_handler(CommandHandler("votes", Commands.command_votes))
 	dp.add_handler(CommandHandler("calltovote", Commands.command_calltovote))	
-	dp.add_handler(CommandHandler("claim", Commands.command_claim, pass_args = True))
+	dp.add_handler(CommandHandler("claim", Commands.command_claim))
 	dp.add_handler(CommandHandler("reload", Commands.command_reloadgame))
 	dp.add_handler(CommandHandler("debug", Commands.command_toggle_debugging))
 	dp.add_handler(CommandHandler("anarchy", Commands.command_anarquia))
 	dp.add_handler(CommandHandler("prueba", Commands.command_prueba))
-	dp.add_handler(CommandHandler("claimoculto", Commands.command_claim_oculto, pass_args = True))
+	dp.add_handler(CommandHandler("claimoculto", Commands.command_claim_oculto))
 	dp.add_handler(CommandHandler("info", Commands.command_info))
 	dp.add_handler(CallbackQueryHandler(pattern=r"(-?[0-9]*)\*chooseGameInfo\*(.*)\*(-?[0-9]*)", callback=Commands.callback_info))
 	dp.add_handler(CommandHandler("jugadores", Commands.command_jugadores))
@@ -1161,14 +1161,14 @@ def main():
 	dp.add_handler(CallbackQueryHandler(pattern="(-[0-9]*)_(Ja|Nein)", callback=handle_voting))
 	dp.add_handler(CallbackQueryHandler(pattern="(-[0-9]*)_(SiAna|NoAna)", callback=handle_voting_anarquia))
 	
-	dp.add_handler(CommandHandler("comando", Commands.command_newgame_sql_command, pass_args = True))
+	dp.add_handler(CommandHandler("comando", Commands.command_newgame_sql_command))
 	
 	# Comandos para elegir rol al unirse a la partida
 	dp.add_handler(CommandHandler("role", Commands.command_choose_posible_role))
-	dp.add_handler(CallbackQueryHandler(pattern="(-[0-9]*)\*chooserole\*(.*)\*([0-9]*)", callback=Commands.callback_choose_posible_role))
+	dp.add_handler(CallbackQueryHandler(pattern=r"(-[0-9]*)\*chooserole\*(.*)\*([0-9]*)", callback=Commands.callback_choose_posible_role))
 
-	dp.add_handler(CommandHandler("showstats", Commands.command_show_stats, pass_args = True))
-	dp.add_handler(CommandHandler("changestats", Commands.command_change_stats, pass_args = True))
+	dp.add_handler(CommandHandler("showstats", Commands.command_show_stats))
+	dp.add_handler(CommandHandler("changestats", Commands.command_change_stats))
 
 	dp.add_handler(MessageHandler(Filters.status_update.new_chat_title, change_groupname))
 	
