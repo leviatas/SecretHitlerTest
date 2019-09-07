@@ -121,7 +121,8 @@ def choose_chancellor(bot, game):
 	game.board.state.fase = "choose_chancellor"
 	Commands.save_game(game.cid, "choose_chancellor Round %d" % (game.board.state.currentround), game)
 
-def nominate_chosen_chancellor(bot, update):
+def nominate_chosen_chancellor(update: Update, context: CallbackContext):
+	bot = context.bot
 	log.info('nominate_chosen_chancellor called')
 	log.info(update.callback_query.data)
 	callback = update.callback_query
@@ -177,7 +178,8 @@ def vote(bot, game):
 			bot.send_message(uid, msg,	reply_markup=voteMarkup, parse_mode=ParseMode.MARKDOWN)
 
 
-def handle_voting(bot, update):
+def handle_voting(update: Update, context: CallbackContext):
+	bot = context.bot
 	callback = update.callback_query
 	log.info('handle_voting called: %s' % callback.data)
 	regex = re.search("(-[0-9]*)_(.*)", callback.data)
@@ -309,7 +311,8 @@ def draw_policies(bot, game):
 	game.board.state.fase = "legislating president discard"
 	Commands.save_game(game.cid, "legislating president discard Round %d" % (game.board.state.currentround), game)
 
-def choose_policy(bot, update):
+def choose_policy(update: Update, context: CallbackContext):
+	bot = context.bot
 	log.info('choose_policy called')
 	callback = update.callback_query
 	regex = re.search("(-[0-9]*)_(.*)", callback.data)
@@ -480,8 +483,10 @@ def enact_policy(bot, game, policy, anarchy):
 		start_next_round(bot, game)
 
 
-def choose_veto(bot, update):
-    log.info('choose_veto called')
+def choose_veto(update: Update, context: CallbackContext):
+	
+    bot = context.bot
+
     callback = update.callback_query
     regex = re.search("(-[0-9]*)_(.*)", callback.data)
     cid = int(regex.group(1))
@@ -555,8 +560,9 @@ def action_kill(bot, game):
 		reply_markup=killMarkup)
 
 
-def choose_kill(bot, update):
-    log.info('choose_kill called')
+def choose_kill(update: Update, context: CallbackContext):
+	
+    bot = context.bot
     callback = update.callback_query
     regex = re.search("(-[0-9]*)_kill_(.*)", callback.data)
     cid = int(regex.group(1))
@@ -603,8 +609,9 @@ def action_choose(bot, game):
                      reply_markup=inspectMarkup)
 
 
-def choose_choose(bot, update):
-    log.info('choose_choose called')
+def choose_choose(update: Update, context: CallbackContext):
+	
+    bot = context.bot
     callback = update.callback_query
     regex = re.search("(-[0-9]*)_choo_(.*)", callback.data)
     cid = int(regex.group(1))
@@ -643,8 +650,9 @@ def action_inspect(bot, game):
                      reply_markup=inspectMarkup)
 
 
-def choose_inspect(bot, update):
-    log.info('choose_inspect called')
+def choose_inspect(update: Update, context: CallbackContext):
+	
+    bot = context.bot
     callback = update.callback_query
     regex = re.search("(-[0-9]*)_insp_(.*)", callback.data)
     cid = int(regex.group(1))
@@ -696,7 +704,8 @@ def decide_anarquia(bot, game):
 			bot.send_message(ADMIN, game.board.print_board(game.player_sequence))
 			bot.send_message(ADMIN, "¿Quieres ir a anarquia? (CUIDADO si la mitad de los jugadores elige SI no se espera)", reply_markup=voteMarkup)
 			
-def handle_voting_anarquia(bot, update):
+def handle_voting_anarquia(update: Update, context: CallbackContext):
+	bot = context.bot
 	callback = update.callback_query
 	log.info('handle_voting_anarquia called: %s' % callback.data)
 	regex = re.search("(-[0-9]*)_(.*)", callback.data)
