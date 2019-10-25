@@ -1112,9 +1112,9 @@ def main():
 	updater = Updater(get_TOKEN())
 	'''
 	# Pruebas de HOOKS
-	
+	token = os.environ.get('bot_token', None)
 	PORT = int(os.environ.get('PORT', '8443'))
-	updater = Updater(get_TOKEN(), use_context=True)
+	updater = Updater(token, use_context=True)
 	updater.start_webhook(listen="0.0.0.0",
                       port=PORT,
                       url_path=get_TOKEN())
