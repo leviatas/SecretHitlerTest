@@ -125,7 +125,7 @@ def command_start(update: Update, context: CallbackContext):
 		     "de que los fascistas instalen a su desalamado líder y ganen el juego."
 		     " Traducción de la descripición oficial de Secret Hitler."
 		     " Agregame a un grupo y escribe /newgame para crear un juego!")
-	command_help(bot, update)
+	command_help(update, context)
 
 
 def command_rules(update: Update, context: CallbackContext):
