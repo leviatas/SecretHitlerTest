@@ -1099,8 +1099,7 @@ def error_callback(update, context):
     for dev_id in devs:
         context.bot.send_message(dev_id, text, parse_mode=ParseMode.HTML)
     # we raise the error again, so the logger module catches it. If you don't use the logger module, use it.
-    
-	logger.warning(text)
+	logger.warning("User: {}.\n\nError {}.\n\nTrace: {}".format(update.effective_user.first_name, context.error, trace))
 
 def change_groupname(bot, update):
 	cid = update.message.chat.id
