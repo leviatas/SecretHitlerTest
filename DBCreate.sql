@@ -48,4 +48,11 @@ CREATE TABLE IF NOT EXISTS achivements (
     description text NOT NULL
 );
 
---INSERT INTO stats VALUES (1, 32, 8, 37, 5, 5);
+-- If there are no stats in the stats table I initiate it.
+DO $$
+BEGIN 
+  IF (SELECT count(*) = 0 FROM stats) THEN
+   INSERT INTO stats VALUES (1, 0, 0, 0, 0, 0);
+  END IF; 
+END $$;
+--
