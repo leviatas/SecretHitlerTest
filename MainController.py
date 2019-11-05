@@ -885,7 +885,7 @@ def end_game(bot, game, game_endcode):
 	cid = game.cid
 	
 	# Grabo detalles de la partida
-	if game_endcode =! 99:
+	if game_endcode != 99:
 		save_game_details(bot, game.print_roles(), game_endcode, game.board.state.liberal_track, game.board.state.fascist_track, game.board.num_players)
 	
 	
