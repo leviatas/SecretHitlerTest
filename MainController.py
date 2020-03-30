@@ -113,14 +113,14 @@ def choose_chancellor(bot, game):
 
 	if game.is_debugging:
 		Commands.print_board(bot, game, ADMIN)
-		bot.send_message(ADMIN, 'Por favor nomina a tu canciller!', reply_markup=chancellorMarkup)      
+		bot.send_message(ADMIN, 'Por favor nomina a tu canciller!', parse_mode=ParseMode.MARKDOWN, reply_markup=chancellorMarkup)      
 	else:
 		Commands.print_board(bot, game, game.board.state.nominated_president.uid)
 		groupName = ""
 		if hasattr(game, 'groupName'):
 			groupName += "*En el grupo {}*\n".format(game.groupName)
 		msg = '{}Por favor nomina a tu canciller!'.format(groupName)
-		bot.send_message(game.board.state.nominated_president.uid, msg, reply_markup=chancellorMarkup)
+		bot.send_message(game.board.state.nominated_president.uid, msg, parse_mode=ParseMode.MARKDOWN, reply_markup=chancellorMarkup)
 
 	game.board.state.fase = "choose_chancellor"
 	Commands.save_game(game.cid, "choose_chancellor Round %d" % (game.board.state.currentround), game)
