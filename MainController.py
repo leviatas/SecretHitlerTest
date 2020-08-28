@@ -1206,7 +1206,10 @@ def main():
 	
 	# log all errors
 	dp.add_error_handler(error_callback)
-
+	
+	# Comentar linea de abajo si se quiere usar web deploy
+	updater.start_polling(timeout=30)
+	
 	# pruebas de hooks
 	updater.idle()
 	
