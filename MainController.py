@@ -1147,10 +1147,14 @@ def main():
 	token = os.environ.get('bot_token', None)
 	PORT = int(os.environ.get('PORT', '8443'))
 	updater = Updater(token, use_context=True)
+	
+	# Lo de abajo se usa para web deploy son web hooks
+	'''
 	updater.start_webhook(listen="0.0.0.0",
                       port=PORT,
                       url_path=token)
 	updater.bot.set_webhook("https://secrethitler.herokuapp.com/{0}".format(token))
+	'''
 	
 	# Get the dispatcher to register handlers
 	dp = updater.dispatcher
