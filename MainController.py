@@ -459,7 +459,7 @@ def enact_policy(bot, game, policy, anarchy):
 				game.history.append("El presidente %s ahora conoce las proximas 3 políticas en el mazo." % game.board.state.president.name)
 				action_policy(bot, game)                
 			elif action == "kill":
-				msg = "Poder Presidencial habilitado: Ejecución " + u"\U0001F5E1" + "\nEl Presidente %s tiene que matar a ua persona. Pueden discutir la desición ahora pero el Presidente tiene la última palabra." % game.board.state.president.name
+				msg = "Poder Presidencial habilitado: Ejecución " + u"\U0001F5E1" + "\nEl Presidente %s tiene que matar a una persona. Pueden discutir la decisión ahora pero el Presidente tiene la última palabra." % game.board.state.president.name
 				bot.send_message(game.cid, msg)
 				game.board.state.fase = "legislating power kill"
 				Commands.save_game(game.cid, "legislating power kill Round %d" % (game.board.state.currentround), game)
